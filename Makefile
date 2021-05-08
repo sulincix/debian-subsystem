@@ -16,6 +16,7 @@ install-core:
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	install core/debrun.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/variable.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
 

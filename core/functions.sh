@@ -48,6 +48,7 @@ umount_all(){
 run(){
     p=${PATH}
     d=${DISPLAY}
+    s=${SHELL}
     cp -prf debrun.sh ${DESTDIR}/bin/debrun
     xhost + &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do
@@ -55,6 +56,7 @@ run(){
     done
     export PATH=${p}
     export DISPLAY=${d}
+    export SHELL=${s}
     export TERM=linux
     if [[ $# -eq 0 ]] ; then
         chroot ${DESTDIR} debrun /bin/bash
