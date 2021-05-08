@@ -31,7 +31,7 @@ debian_check(){
         debian_init
     fi
     #umount_all
-    for i in dev sys proc tmp dev/pts ; do
+    for i in run dev sys proc tmp dev/pts ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             mount --make-private --bind /$i "${DESTDIR}/$i"
         fi
@@ -46,9 +46,6 @@ debian_check(){
     if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
         mount -t tmpfs tmpfs ${DESTDIR}/run
     fi
-    if ! mount | grep "${DESTDIR}/run/user" &>/dev/null ; then
-        mount --bind "/run/user" "${DESTDIR}/run/user"
-    fi
     mkdir -p ${DESTDIR}/usr/share/applications/ &>/dev/null || true
     cp -pf /usr/lib/sulin/dsl/d-term.desktop ${DESTDIR}/usr/share/applications/
 
@@ -60,11 +57,24 @@ umount_all(){
         done
     done
 }
+
+sync_gid(){
+    cat /etc/group | while read line ; do
+        group=$(echo $line | cut -f 1 -d ":") &>/dev/null
+        gid=$(echo $line | cut -f 3 -d ":") &>/dev/null
+        if grep "$group" "${DESTDIR}/etc/group" &>/dev/null ; then
+            ogid=$(grep "$group" "${DESTDIR}/etc/group" | cut -f 3 -d ":")
+            sed -i "s/$group:x:$ogid:/$group:x:$gid:/g" "${DESTDIR}/etc/group" &>/dev/null || true
+        fi
+    done
+}
+
 run(){
     p=${PATH}
     d=${DISPLAY}
     s=${SHELL}
     cp -prf debrun.sh ${DESTDIR}/bin/debrun
+    sync_gid
     xhost +localhost &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do
         unset "$e" &>/dev/null
