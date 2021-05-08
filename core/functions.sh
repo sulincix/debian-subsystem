@@ -47,6 +47,9 @@ debian_check(){
     if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
         mount -t tmpfs tmpfs ${DESTDIR}/run
     fi
+    if ! mount | grep "${DESTDIR}/run/user" &>/dev/null ; then
+        mount --bind "/run/user" "${DESTDIR}/run/user"
+    fi
 }
 umount_all(){
     for i in dev/pts dev/shm dev sys proc run tmp home/debian ; do
