@@ -7,19 +7,17 @@ Type=Application
 Version=1.0
 
 # The name of the application
-Name=Debian
+Name=d-term (hosts)
 
 # A comment which can/will be used as a tooltip
-Comment=Debian subsystem
+Comment=create d-term from host system
 
-# The path to the folder in which the executable is run
-Path=/usr/lib/sulin/dsl
 
 # The executable of the application, possibly with arguments.
-Exec=/usr/bin/d-term pkexec /usr/lib/sulin/dsl/dsl.sh
+Exec=sh -c "echo d-term > /tmp/hostctl"
 
 # The name of the icon that will be used to display this entry
-Icon=/usr/lib/sulin/dsl/debian.svg
+Icon=terminal
 
 # Describes whether this application needs to be run in a terminal or not
 Terminal=false

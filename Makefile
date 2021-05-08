@@ -20,11 +20,14 @@ install-core:
 	install core/variable.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/hostctl $(DESTDIR)/usr/bin/
 
 install-terminal:
 	mkdir -p $(DESTDIR)/usr/share/applications/ || true
+	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	mkdir -p $(DESTDIR)/usr/bin/ || true
-	install terminal/debian-term.py $(DESTDIR)/usr/bin/debian-term
+	install terminal/d-term.desktop $(DESTDIR)/usr/lib/sulin/dsl/
+	install terminal/d-term.py $(DESTDIR)/usr/bin/d-term
 	install terminal/debian.desktop $(DESTDIR)/usr/share/applications/
 
 install-session:

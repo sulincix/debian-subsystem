@@ -24,7 +24,6 @@ debian_init(){
     mkdir ${DESTDIR}/home/debian
     msg "Settings password for:" "root"
     chroot ${DESTDIR} passwd
-    chmod +x ${DESTDIR}/bin/debrun
 }
 debian_check(){
     if [[ ! -d ${DESTDIR} ]] ; then
@@ -50,6 +49,9 @@ debian_check(){
     if ! mount | grep "${DESTDIR}/run/user" &>/dev/null ; then
         mount --bind "/run/user" "${DESTDIR}/run/user"
     fi
+    mkdir -p ${DESTDIR}/usr/share/applications/ &>/dev/null || true
+    cp -pf /usr/lib/sulin/dsl/d-term.desktop ${DESTDIR}/usr/share/applications/
+
 }
 umount_all(){
     for i in dev/pts dev/shm dev sys proc run tmp home/debian ; do

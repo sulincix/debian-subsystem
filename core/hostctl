@@ -1,0 +1,9 @@
+#!/bin/bash
+mkfifo /var/debian/tmp/hostctl || true
+while true ; do
+    cat /var/debian/tmp/hostctl | while read line
+    do
+        $line &
+        sleep 0.3
+    done
+done

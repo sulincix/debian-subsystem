@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+umask 022
 cd /usr/lib/sulin/dsl
 setenforce 0 &>/dev/null || true
 source variable.sh
