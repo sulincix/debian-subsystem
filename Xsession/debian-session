@@ -1,0 +1,6 @@
+#!/bin/bash
+if [[ -f /var/debian/etc/alternatives/x-session-manager ]] ; then
+    exec pkexec /usr/lib/sulin/dsl/dsl.sh /etc/X11/Xsession
+else
+    exec xterm -e "pkexec /usr/lib/sulin/dsl/dsl.sh"
+fi

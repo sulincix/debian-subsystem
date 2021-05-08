@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Debian
+Comment=Debian subsystem session
+Exec=/usr/bin/debian-session
+TryExec=/usr/bin/debian-session
+Icon=/usr/lib/sulin/dsl/debian.svg
+Type=Application
+X-Ubuntu-Gettext-Domain=debian
+X-GNOME-Provides=debian
+
