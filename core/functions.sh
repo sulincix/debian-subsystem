@@ -31,15 +31,25 @@ debian_check(){
         echo "Debian installation not found."
         debian_init
     fi
-    umount_all
-    for i in dev sys proc tmp ; do
-        mount --make-private --bind /$i ${DESTDIR}/$i
+    #umount_all
+    for i in dev sys proc tmp dev/pts ; do
+        if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
+            mount --make-private --bind /$i "${DESTDIR}/$i"
+        fi
     done
+    if ! mount | grep "${DESTDIR}/dev/shm" &>/dev/null ; then
+        mount -t tmpfs tmpfs "${DESTDIR}/dev/shm"
+    fi
     mkdir -p "${DESTDIR}/home" || true
-    mount --bind "/${HOMEDIR}" "${DESTDIR}/home/debian"
+    if ! mount | grep "${DESTDIR}/home" &>/dev/null ; then
+        mount --bind "/${HOMEDIR}" "${DESTDIR}/home/debian"
+    fi
+    if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
+        mount -t tmpfs tmpfs ${DESTDIR}/run
+    fi
 }
 umount_all(){
-    for i in dev/pts dev sys proc run tmp home/debian ; do
+    for i in dev/pts dev/shm dev sys proc run tmp home/debian ; do
         while umount -lf -R ${DESTDIR}/$i/ &>/dev/null ; do
            true
         done
@@ -50,7 +60,7 @@ run(){
     d=${DISPLAY}
     s=${SHELL}
     cp -prf debrun.sh ${DESTDIR}/bin/debrun
-    xhost + &>/dev/null || true
+    xhost +localhost &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do
         unset "$e" &>/dev/null
     done
@@ -59,10 +69,8 @@ run(){
     export SHELL=${s}
     export TERM=linux
     if [[ $# -eq 0 ]] ; then
-        chroot ${DESTDIR} debrun /bin/bash
+        exec chroot ${DESTDIR} debrun /bin/bash
     else
-        chroot ${DESTDIR} debrun "$*"
+        exec chroot ${DESTDIR} debrun "$*"
     fi
-    xhost - &>/dev/null || true
-    umount_all
 }
