@@ -1,7 +1,13 @@
 msg(){
     echo -e "\033[32;1m$1\033[;0m$2"
 }
-
+wsl_block(){
+    var=$(uname -r)
+    if [[ "$var" == *Microsoft* || "$var" == "*WSL*" ]]
+    then
+        exit 1
+    fi
+}
 debian_init(){
     [[ -d ${DESTDIR} ]] && echo "Debian already installed" && exit 0
     if ! which debootstrap &>/dev/null; then
@@ -73,7 +79,7 @@ run(){
     p=${PATH}
     d=${DISPLAY}
     s=${SHELL}
-    cp -prf debrun.sh ${DESTDIR}/bin/debrun
+    cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
     sync_gid
     xhost +localhost &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do
@@ -88,8 +94,8 @@ run(){
     fi
     export TERM=linux
     if [[ $# -eq 0 ]] ; then
-        exec chroot ${DESTDIR} debrun /bin/bash
+        exec busybox chroot ${DESTDIR} debrun /bin/bash
     else
-        exec chroot ${DESTDIR} debrun "$*"
+        exec busybox chroot ${DESTDIR} debrun "$*"
     fi
 }

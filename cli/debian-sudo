@@ -4,4 +4,4 @@ cmd=""
 for arg in "$@" ; do
     cmd+="\"$arg\" "
 done
-exec pkexec /usr/lib/sulin/dsl/dsl.sh "$cmd"
+exec pkexec /usr/lib/sulin/dsl/dsl.sh su -c "'"$cmd"'"

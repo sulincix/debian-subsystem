@@ -3,6 +3,7 @@ set -e
 if [[ ! -f /run/debian ]] ; then
     which systemd-tmpfiles &>/dev/null && systemd-tmpfiles --create
     which tmpfiles &>/dev/null && tmpfiles --create
+    touch /run/debian
 fi
 export USER=debian
 export HOME=/home/debian
