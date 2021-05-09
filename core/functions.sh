@@ -9,30 +9,30 @@ wsl_block(){
     fi
 }
 debian_init(){
-    [[ -d ${DESTDIR} ]] && echo "Debian already installed" && exit 0
+    [[ -f ${DESTDIR}/etc/os-release ]] && echo "Debian already installed" && exit 0
     if ! which debootstrap &>/dev/null; then
         msg "Installing:" "debootstrap"
         cd /tmp
-        wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip
+        wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip || fail_exit "Failed to fetch debootstrap source"
         unzip debootstrap.zip  &>/dev/null
         cd debootstrap-master
-        make &>/dev/null
-        make install  &>/dev/null
+        make &>/dev/null || fail_exit "Failed to install debootstrap"
+        make install  &>/dev/null || fail_exit "Failed to install debootstrap"
         rm -rf /tmp/debootstrap-master
     fi
     [[ $(uname -m) == "x86_64" ]] && arch=amd64
     [[ $(uname -m) == "aarch64" ]] && arch=arm64
     [[ $(uname -m) == "i686" ]] && arch=i386
     [[ "$arch" == "" ]] && echo "Unsupported arch $(uname -m)" && exit 1
-    debootstrap --arch=$arch --extractor=ar --no-merged-usr ${DIST} ${DESTDIR} ${REPO}
+    debootstrap --arch=$arch --extractor=ar --no-merged-usr ${DIST} ${DESTDIR} ${REPO} || fail_exit "Failed to install debian chroot"
     msg "Creating user:" "debian"
-    chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash
+    chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir ${DESTDIR}/home/debian
     msg "Settings password for:" "root"
-    chroot ${DESTDIR} passwd
+    chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 debian_check(){
-    if [[ ! -d ${DESTDIR} ]] ; then
+    if [[ ! -f ${DESTDIR}/etc/os-release ]] ; then
         echo "Debian installation not found."
         debian_init
     fi
@@ -98,4 +98,10 @@ run(){
     else
         exec busybox chroot ${DESTDIR} debrun "$*"
     fi
+}
+
+fail_exit(){
+    echo -e "\033[31;1mError: \033[;0m$*"
+    echo -n "    => Press any key to exit"
+    read -s -n 1 && exit 1
 }
