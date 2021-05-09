@@ -11,7 +11,7 @@ if len(sys.argv) > 1:
     if "--" not in sys.argv[1]:
         cmd+=sys.argv[1]
     for i in sys.argv[2:]:
-        cmd+=i+" "
+        cmd+="\""+i+"\" "
 if cmd == "":
   cmd = os.environ["SHELL"]
 print(cmd)
