@@ -7,7 +7,7 @@ debian_init(){
     if ! which debootstrap &>/dev/null; then
         msg "Installing:" "debootstrap"
         cd /tmp
-        busybox wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip
+        wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip
         unzip debootstrap.zip  &>/dev/null
         cd debootstrap-master
         make &>/dev/null
@@ -81,7 +81,11 @@ run(){
     done
     export PATH=${p}
     export DISPLAY=${d}
-    export SHELL=${s}
+    if [[ -f ${DESTDIR}/${SHELL} ]] ; then
+        export SHELL=${s}
+    else
+        export SHELL=/bin/bash
+    fi
     export TERM=linux
     if [[ $# -eq 0 ]] ; then
         exec chroot ${DESTDIR} debrun /bin/bash
