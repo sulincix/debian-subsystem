@@ -2,7 +2,7 @@
 if ls /var/debian/usr/bin/x-terminal-emulator &>/dev/null ; then
     pkexec /usr/lib/sulin/dsl/dsl.sh x-terminal-emulator
 elif [[ -f /usr/lib/sulin/dsl/d-term ]] ; then
-    /usr/lib/sulin/dsl/d-term pkexec /usr/lib/sulin/dsl/dsl.sh
+    /usr/lib/sulin/dsl/d-term --fullscreen pkexec /usr/lib/sulin/dsl/dsl.sh
 elif which xterm &>/dev/null ; then
     xterm -e "pkexec /usr/lib/sulin/dsl/dsl.sh"
 fi
