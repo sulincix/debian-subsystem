@@ -14,7 +14,7 @@ Comment=create d-term from host system
 
 
 # The executable of the application, possibly with arguments.
-Exec=sh -c "echo d-term > /tmp/hostctl"
+Exec=sh -c "echo /usr/lib/sulin/dsl/d-term > /tmp/hostctl"
 
 # The name of the icon that will be used to display this entry
 Icon=terminal

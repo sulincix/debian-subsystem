@@ -18,3 +18,10 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 
 ### Install:
 `make install DESTDIR=/`
+
+### Components
+`debian`           : run command in subsystem
+`debian-sudo`      : run command in subsystem as root
+`debian-session`   : run Xsession on subsystem
+`debian-terminal`  : open a subsystem terminal
+`debian-umount`    : umount all binding os subsystem

@@ -1,0 +1,11 @@
+#!/bin/bash
+for arg in "$@" ; do
+    curdir=$(pwd)
+    file="$(realpath $arg)"
+    if ! ls "$file" &>/dev/null ; then
+        echo "File $file not found"
+    else
+        cd /usr/lib/sulin/dsl
+        pkexec /usr/lib/sulin/dsl/dsl.sh "xdg-open \"/system/$file\" &"
+    fi
+done

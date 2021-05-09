@@ -52,12 +52,20 @@ debian_check(){
     if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
         mount -t tmpfs tmpfs ${DESTDIR}/run
     fi
-    mkdir -p ${DESTDIR}/usr/share/applications/ &>/dev/null || true
-    cp -pf /usr/lib/sulin/dsl/d-term.desktop ${DESTDIR}/usr/share/applications/
-
+    if [[ ! -d ${DESTDIR}/usr/share/applications/ ]] ; then
+        mkdir -p ${DESTDIR}/usr/share/applications/ &>/dev/null || true
+        cp -pf /usr/lib/sulin/dsl/d-term.desktop ${DESTDIR}/usr/share/applications/
+    fi
+    if [[ ! -d ${DESTDIR}/system ]] ; then
+        mkdir -p ${DESTDIR}/system || true
+    fi
+    if ! mount | grep "${DESTDIR}/system" &>/dev/null ; then
+        mount --make-private --bind / "${DESTDIR}/system"
+    fi
+    
 }
 umount_all(){
-    for i in dev/pts dev/shm dev sys proc run tmp home/debian ; do
+    for i in system dev/pts dev/shm dev sys proc run tmp home/debian ; do
         while umount -lf -R ${DESTDIR}/$i/ &>/dev/null ; do
            true
         done

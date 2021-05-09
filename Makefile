@@ -11,6 +11,7 @@ install-polkit:
 install-cli:
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	install cli/debian $(DESTDIR)/usr/bin/debian
+	install cli/debian-sudo $(DESTDIR)/usr/bin/debian-sudo
 	install cli/debian-umount $(DESTDIR)/usr/bin/debian-umount
 
 install-core:
@@ -27,11 +28,15 @@ install-terminal:
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	install terminal/d-term.desktop $(DESTDIR)/usr/lib/sulin/dsl/
-	install terminal/d-term.py $(DESTDIR)/usr/bin/d-term
+	install terminal/d-term.py $(DESTDIR)/usr/lib/sulin/dsl/d-term
+	install terminal/debian-terminal $(DESTDIR)/usr/bin/debian-terminal
 	install terminal/debian.desktop $(DESTDIR)/usr/share/applications/
 
 install-session:
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	mkdir -p $(DESTDIR)/usr/share/xsessions/ || true
+	mkdir -p $(DESTDIR)/usr/share/applications/ || true
 	install Xsession/debian-session $(DESTDIR)/usr/bin/
+	install Xsession/debian-xdg-open $(DESTDIR)/usr/bin/
 	install Xsession/debian-session.desktop $(DESTDIR)/usr/share/xsessions/
+	install Xsession/debian-xdg.desktop $(DESTDIR)/usr/share/applications/
