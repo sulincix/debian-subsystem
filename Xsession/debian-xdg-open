@@ -1,4 +1,11 @@
 #!/bin/bash
+if [[ ! -f /var/debian/etc/os-release ]] ; then
+    if [[ -f /usr/bin/d-term ]] ; then
+        /usr/bin/d-term pkexec /usr/lib/sulin/dsl/dsl.sh
+    else
+        xterm -e "pkexec /usr/lib/sulin/dsl/dsl.sh true"
+    fi
+fi
 for arg in "$@" ; do
     curdir=$(pwd)
     file="$(realpath $arg)"
