@@ -3,7 +3,7 @@
 if ls /var/debian/etc/alternatives/x-session-manager &>/dev/null ; then
     exec pkexec /usr/lib/sulin/dsl/dsl.sh /etc/X11/Xsession
 elif [[ -f /usr/lib/sulin/dsl/d-term ]] ; then
-    exec /usr/lib/sulin/dsl/d-term pkexec /usr/lib/sulin/dsl/dsl.sh
+    exec /usr/lib/sulin/dsl/d-term "pkexec /usr/lib/sulin/dsl/dsl.sh"
 else
     exec xterm -e "pkexec /usr/lib/sulin/dsl/dsl.sh"
 fi
