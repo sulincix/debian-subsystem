@@ -11,13 +11,19 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 * debootstrap (if does not exists will install from source)
 * wget (for install debootstrap from source)
 * polkit (for rootles chroot)
+* make (for self update)
 * busybox
 * vte-2.91 (for d-term)
 * gtk+-3.0 (for d-term)
 * pygobject (for d-term)
 
 ### Install:
-`make install DESTDIR=/`
+```shell
+git clone https://gitlab.com/sulincix/debian-subsystem
+cd debian-subsystem
+make
+make install DESTDIR=/
+```
 
 ### Components:
 
@@ -32,6 +38,18 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 `debian-umount`    : umount all binding os subsystem
 
 `debian-xdg-open`  : Open file with xdg-open from debian
+
+### Simple usage:
+You can use `debian` command to run debian subsystem shell. Subsystem shell pid value is 1 but /proc directory is common. So you can see host process in debian.
+
+If you want to run command on debian subsystem shell, you should use `debian <<< command` or `echo "command" | debian`. 
+
+If you want to run command on host system from debian subsystem, you should use `hostctl command` command. This command cannot generate any output and input.
+
+You should open `~/.local/hostctl.log` file to see hostctl logs.
+
+### Bug report:
+https://gitlab.com/sulincix/debian-subsystem
 
 ### Bugs:
 * pavucontrol not working (however alsamixer working)
