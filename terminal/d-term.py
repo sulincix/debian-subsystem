@@ -28,5 +28,5 @@ else:
 terminal.set_font_scale(0.9)
 win.set_title("d-term")
 win.show_all()
-terminal.spawn_sync(Vte.PtyFlags.DEFAULT, None, ["sh","-c",cmd], [], GLib.SpawnFlags.DO_NOT_REAP_CHILD, None, None)
+terminal.spawn_sync(Vte.PtyFlags.DEFAULT, None, ["/bin/bash","-c",cmd], [], GLib.SpawnFlags.DO_NOT_REAP_CHILD, None, None)
 Gtk.main()
