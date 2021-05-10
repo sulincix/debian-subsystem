@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Version=1.0
-Name=Debian
+Name=open with debian
 GenericName=Debian GNU/Linux
 Comment=Open with debian subsystem xdg-open
 Path=/usr/lib/sulin/dsl
@@ -9,4 +9,5 @@ Exec=debian-xdg-open %U
 Icon=/usr/lib/sulin/dsl/debian.svg
 Terminal=false
 NoDisplay=true
-MimeType=application/*;
+MimeType=application/*;text/*
+Categories=System;
