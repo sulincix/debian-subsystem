@@ -1,7 +1,8 @@
 DESTDIR=/
 build:
-	: Please run make install
-
+	make -C utils build
+clean:
+	make -C utils clean
 install: install-core install-polkit install-cli install-terminal install-session
 	
 install-polkit:
@@ -15,6 +16,7 @@ install-cli:
 	install cli/debian-umount $(DESTDIR)/usr/bin/debian-umount
 
 install-core:
+	make -C utils install
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	install core/debrun.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/

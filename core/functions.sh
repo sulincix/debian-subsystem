@@ -14,10 +14,10 @@ debian_init(){
         msg "Installing:" "debootstrap"
         cd /tmp
         wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip || fail_exit "Failed to fetch debootstrap source"
-        unzip debootstrap.zip  &>/dev/null
+        unzip debootstrap.zip  >/dev/null
         cd debootstrap-master
-        make &>/dev/null || fail_exit "Failed to install debootstrap"
-        make install  &>/dev/null || fail_exit "Failed to install debootstrap"
+        make >/dev/null || fail_exit "Failed to install debootstrap"
+        make install  >/dev/null || fail_exit "Failed to install debootstrap"
         rm -rf /tmp/debootstrap-master
     fi
     [[ $(uname -m) == "x86_64" ]] && arch=amd64
@@ -39,7 +39,7 @@ debian_check(){
     #umount_all
     for i in run dev sys proc tmp dev/pts ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
-            mount --make-private --bind /$i "${DESTDIR}/$i"
+            pidone mount --make-private --bind /$i "${DESTDIR}/$i"
         fi
     done
     if ! mount | grep "${DESTDIR}/dev/shm" &>/dev/null ; then
@@ -102,9 +102,9 @@ run(){
     fi
     export TERM=linux
     if [[ $# -eq 0 ]] ; then
-        exec busybox chroot ${DESTDIR} debrun /bin/bash
+        exec pidone busybox chroot ${DESTDIR} debrun /bin/bash
     else
-        exec busybox chroot ${DESTDIR} debrun "$*"
+        exec pidone busybox chroot ${DESTDIR} debrun "$*"
     fi
 }
 
