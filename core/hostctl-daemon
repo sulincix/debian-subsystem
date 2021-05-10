@@ -7,8 +7,7 @@ trim(){
     echo $line
 done
 }
-ps ax | grep -v grep | grep hostctl-daemon | grep -v "$$" |\
- trim | cut -f 1 -d " " | xargs kill -9 &>/dev/null || true
+ps ax | grep -v grep | grep "/usr/bin/hostctl-daemon$" | grep -v "$$" &>/dev/null && exit 0
 rm -f /var/debian/tmp/hostctl || true
 mkfifo /var/debian/tmp/hostctl &>/dev/null || true
  echo "##### $(LANG=C date) ##### CREATING DAEMON #####" >> ~/.local/hostctl.log
