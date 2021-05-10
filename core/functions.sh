@@ -1,5 +1,5 @@
 msg(){
-    echo -e "\033[32;1m$1\033[;0m$2"
+    echo -e "\033[32;1m$1\033[;0m $2"
 }
 wsl_block(){
     var=$(uname -r)
@@ -11,15 +11,15 @@ wsl_block(){
 check_update(){
     cd /tmp
     CHECK_URL="https://gitlab.com/sulincix/debian-subsystem"
-    wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver || return 0
-    if [[ "$(md5sum ver)" != "$(md5sum /usr/lib/sulin/dsl/version)" ]] ; then
+    timeout 3 wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver &>/dev/null || return 0
+    if [[ "$(md5sum ver)" != "$(md5sum /usr/lib/sulin/dsl/version)" ]] &>/dev/null ; then
         msg "Info" "new version available"
-        wget -c "${CHECK_URL}/-/archive/master/debian-subsystem-master.zip" -o debian-subsystem.zip || fail_exit "Failed to fetch debian-subsystem source"
-        unzip debian-subsystem.zip >/dev/null
+        wget -c "${CHECK_URL}/-/archive/master/debian-subsystem-master.zip" &>/dev/null || return 0
+        unzip debian-subsystem-master.zip >/dev/null
         cd debian-subsystem-master
-        make >/dev/null || fail_exit "Failed to install debian-subsystem"
-        make install  >/dev/null || fail_exit "Failed to install debian-subsystem"
-        rm -rf /tmp/debootstrap-master /tmp/ver
+        make >/dev/null || return 0
+        make install  >/dev/null || return 0
+        rm -rf /tmp/debian-subsystem-master /tmp/ver
         echo -e "\033[32;1mInfo: \033[;0mInstallation finished."
         echo -n "    => Press any key to exit"
         read -s -n 1 && exit 0

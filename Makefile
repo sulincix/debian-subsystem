@@ -19,6 +19,7 @@ install-core:
 	make -C utils install
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	install core/debrun.sh $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/version $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/variable.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
