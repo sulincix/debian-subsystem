@@ -20,4 +20,13 @@ debian_check || {
     echo "Press any key to exit"
     read -s -n 1 && exit 1
 }
-run $@
+if [[ "$1" == "--root" ]] ; then
+    run su
+elif [[ "$1" == "--xdg" ]] ; then
+    shift
+    nopidone=true
+    run xdg-open "$@"
+else
+    run /bin/bash
+fi
+

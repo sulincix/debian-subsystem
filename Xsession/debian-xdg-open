@@ -13,6 +13,6 @@ for arg in "$@" ; do
         echo "File $file not found"
     else
         cd /usr/lib/sulin/dsl
-        pkexec /usr/lib/sulin/dsl/dsl.sh "xdg-open \"/system/$file\" &"
+        pkexec /usr/lib/sulin/dsl/dsl.sh --xdg "/system/$file"
     fi
 done

@@ -102,10 +102,11 @@ run(){
         export SHELL=/bin/bash
     fi
     export TERM=linux
-    if [[ $# -eq 0 ]] ; then
-        exec pidone busybox chroot ${DESTDIR} debrun /bin/bash
+    if [[ ! -n $nopidone ]] ; then
+        exec pidone busybox chroot ${DESTDIR} debrun "$@"
     else
-        exec pidone busybox chroot ${DESTDIR} debrun "$*"
+        echo "Running without PID isolation"
+        exec busybox chroot ${DESTDIR} debrun "$@"
     fi
 }
 
