@@ -1,3 +1,4 @@
+![Debian logo](https://gitlab.com/sulincix/debian-subsystem/-/raw/master/core/debian.svg)
 # Debian subsystem for linux
 Debian subsystem integration for host distribution.
 
