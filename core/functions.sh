@@ -8,6 +8,23 @@ wsl_block(){
         exit 1
     fi
 }
+check_update(){
+    cd /tmp
+    CHECK_URL="https://gitlab.com/sulincix/debian-subsystem"
+    wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver || return 0
+    if [[ "$(md5sum ver)" != "$(md5sum /usr/lib/sulin/dsl/version)" ]] ; then
+        msg "Info" "new version available"
+        wget -c "${CHECK_URL}/-/archive/master/debian-subsystem-master.zip" -o debian-subsystem.zip || fail_exit "Failed to fetch debian-subsystem source"
+        unzip debian-subsystem.zip >/dev/null
+        cd debian-subsystem-master
+        make >/dev/null || fail_exit "Failed to install debian-subsystem"
+        make install  >/dev/null || fail_exit "Failed to install debian-subsystem"
+        rm -rf /tmp/debootstrap-master /tmp/ver
+        echo -e "\033[32;1mInfo: \033[;0mInstallation finished."
+        echo -n "    => Press any key to exit"
+        read -s -n 1 && exit 0
+    fi
+}
 debian_init(){
     [[ -f ${DESTDIR}/etc/os-release ]] && echo "Debian already installed" && exit 0
     if ! which debootstrap &>/dev/null; then
@@ -32,6 +49,7 @@ debian_init(){
     chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 debian_check(){
+    check_update
     if [[ ! -f ${DESTDIR}/etc/os-release ]] ; then
         echo "Debian installation not found."
         debian_init
