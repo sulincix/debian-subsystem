@@ -2,17 +2,21 @@
 if [[ ! -f /var/debian/etc/os-release ]] ; then
     exit 1
 fi
-if ps aux | grep -v grep | grep /var/debian/tmp/hostctl &>/dev/null ; then
-    exit 0
-fi
-if ! LANG=C file /var/debian/tmp/hostctl | grep pipe &>/dev/null ; then
-    rm -f /var/debian/tmp/hostctl
-fi
+trim(){
+    while read line ; do
+    echo $line
+done
+}
+ps ax | grep -v grep | grep hostctl-daemon | grep -v "$$" |\
+ trim | cut -f 1 -d " " | xargs kill -9 &>/dev/null || true
+rm -f /var/debian/tmp/hostctl || true
+mkfifo /var/debian/tmp/hostctl &>/dev/null || true
+ echo "##### $(LANG=C date) ##### CREATING DAEMON #####" >> ~/.local/hostctl.log
 while true ; do
-    mkfifo /var/debian/tmp/hostctl &>/dev/null || true    
-    cat /var/debian/tmp/hostctl | while read line
+    while read line < /var/debian/tmp/hostctl
     do
-        $line &
+        echo "##### $(LANG=C date) ##### $line #####" >> ~/.local/hostctl.log
+        $line &>> ~/.local/hostctl.log &
         sleep 0.3
     done
 done

@@ -7,5 +7,5 @@ trim(){
         echo $line
     done
 }
-ps ax  | grep -v grep | grep hostctl | trim | cut  -d " " -f 1 | xargs kill -9 &>/dev/null || true
+ps ax  | grep -v grep | grep hostctl-daemon | trim | cut  -d " " -f 1 | xargs kill -9 &>/dev/null || true
 umount_all
