@@ -8,21 +8,33 @@ wsl_block(){
         exit 1
     fi
 }
+trim(){
+    while read line ; do
+        echo $line
+    done
+}
 check_update(){
     cd /tmp
     CHECK_URL="https://gitlab.com/sulincix/debian-subsystem"
     timeout 3 wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver &>/dev/null || return 0
-    if [[ "$(md5sum ver)" != "$(md5sum /usr/lib/sulin/dsl/version)" ]] &>/dev/null ; then
-        msg "Info" "new version available"
+    if  [[ "$(md5sum ver | cut -f 1 -d ' ')" != "$(md5sum /usr/lib/sulin/dsl/version  | cut -f 1 -d ' ')" ]] ; then
+        msg "Info" "new version available."
+        msg "Info" "unmounting debian and stop hostctl"
+        umount_all
+        ps ax  | grep -v grep | grep hostctl-daemon | trim | cut  -d " " -f 1 | xargs kill -9 &>/dev/null || true
+        msg "Info" "downloading"
         wget -c "${CHECK_URL}/-/archive/master/debian-subsystem-master.zip" &>/dev/null || return 0
         unzip debian-subsystem-master.zip >/dev/null
         cd debian-subsystem-master
+        msg "Info" "installing"
         make >/dev/null || return 0
         make install  >/dev/null || return 0
+        msg "Info" "clearing"
         rm -rf /tmp/debian-subsystem-master /tmp/ver
-        echo -e "\033[32;1mInfo: \033[;0mInstallation finished."
-        echo -n "    => Press any key to exit"
-        read -s -n 1 && exit 0
+        msg "Info" "Installation finished."
+        cd /usr/lib/sulin/dsl
+        msg "Info" "Restarting"
+        exec $0 $@
     fi
 }
 debian_init(){
