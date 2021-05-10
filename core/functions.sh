@@ -103,13 +103,19 @@ run(){
     fi
     export TERM=linux
     if [[ ! -n $nopidone ]] ; then
-        exec pidone busybox chroot ${DESTDIR} debrun "$@"
+        exec pidone $(get_chroot) ${DESTDIR} debrun "$@"
     else
         echo "Running without PID isolation"
-        exec busybox chroot ${DESTDIR} debrun "$@"
+        exec $(get_chroot) ${DESTDIR} debrun "$@"
     fi
 }
-
+get_chroot(){
+    if chroot --help |& head -n 1 | grep -i busybox ; then
+        echo "busybox chroot"
+    else
+        echo "chroot --userspec debian:debian"
+    fi
+}
 fail_exit(){
     echo -e "\033[31;1mError: \033[;0m$*"
     echo -n "    => Press any key to exit"

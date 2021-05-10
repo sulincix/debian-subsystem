@@ -19,7 +19,7 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 ### Install:
 `make install DESTDIR=/`
 
-### Components
+### Components:
 
 `debian`           : run command in subsystem
 
@@ -32,3 +32,8 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 `debian-umount`    : umount all binding os subsystem
 
 `debian-xdg-open`  : Open file with xdg-open from debian
+
+### Bugs:
+* pavucontrol not working (however alsamixer working)
+* polkit authentication not working
+* shell job control not available (if chroot command is symlink of busybox)
