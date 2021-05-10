@@ -132,6 +132,7 @@ run(){
         export SHELL=/bin/bash
     fi
     export TERM=linux
+    busybox chroot ${DESTDIR} true || exit 1
     if [[ ! -n $nopidone ]] ; then
         exec pidone $(get_chroot) ${DESTDIR} debrun "$@"
     else
