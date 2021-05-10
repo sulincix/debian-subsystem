@@ -1,4 +1,5 @@
 #!/bin/bash
+hostctl-daemon &
 cd /usr/lib/sulin/dsl
 cmd=""
 for arg in "$@" ; do

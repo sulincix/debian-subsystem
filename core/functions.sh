@@ -3,7 +3,7 @@ msg(){
 }
 wsl_block(){
     var=$(uname -r)
-    if [[ "$var" == *Microsoft* || "$var" == "*WSL*" ]]
+    if [[ "$var" == "*Microsoft*" || "$var" == "*WSL*" ]]
     then
         exit 1
     fi
@@ -37,7 +37,7 @@ debian_check(){
         debian_init
     fi
     #umount_all
-    for i in run dev sys proc tmp dev/pts ; do
+    for i in proc root run dev sys tmp dev/pts ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             pidone mount --make-private --bind /$i "${DESTDIR}/$i"
         fi
@@ -88,6 +88,7 @@ run(){
     d=${DISPLAY}
     s=${SHELL}
     cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
+    cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
     sync_gid
     xhost +localhost &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do

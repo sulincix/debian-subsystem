@@ -1,0 +1,18 @@
+#!/bin/bash
+if [[ ! -f /var/debian/etc/os-release ]] ; then
+    exit 1
+fi
+if ps aux | grep -v grep | grep /var/debian/tmp/hostctl &>/dev/null ; then
+    exit 0
+fi
+if ! LANG=C file /var/debian/tmp/hostctl | grep pipe ; then
+    rm -f /var/debian/tmp/hostctl
+fi
+while true ; do
+    mkfifo /var/debian/tmp/hostctl || true    
+    cat /var/debian/tmp/hostctl | while read line
+    do
+        $line &
+        sleep 0.3
+    done
+done

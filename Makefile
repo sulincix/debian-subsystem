@@ -23,7 +23,8 @@ install-core:
 	install core/variable.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
-	install core/hostctl $(DESTDIR)/usr/bin/
+	install core/hostctl $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/hostctl-daemon $(DESTDIR)/usr/bin/
 
 install-terminal:
 	mkdir -p $(DESTDIR)/usr/share/applications/ || true

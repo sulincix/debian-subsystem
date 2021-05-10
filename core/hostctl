@@ -1,15 +1,10 @@
 #!/bin/bash
-if [[ ! -f /var/debian/etc/os-release ]] ; then
+if ! ls /tmp/hostctl &>/dev/null ; then
+    echo -e "Failed to connect hostctl. Please run \"hostctl-daemon &\" on host"
     exit 1
 fi
-if ps aux | grep -v grep | grep /var/debian/tmp/hostctl &>/dev/null ; then
-    exit 0
-fi
-mkfifo /var/debian/tmp/hostctl || true
-while true ; do
-    cat /var/debian/tmp/hostctl | while read line
-    do
-        $line &
-        sleep 0.3
-    done
-done
+timeout 3 echo "$*" > /tmp/hostctl || {
+    echo -e "Failed to connect hostctl. Please run \"hostctl-daemon &\" on host"
+    exit 1
+
+}
