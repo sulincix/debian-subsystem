@@ -12,7 +12,6 @@ install-polkit:
 install-cli:
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	install cli/debian $(DESTDIR)/usr/bin/debian
-	install cli/debian-sudo $(DESTDIR)/usr/bin/debian-sudo
 	install cli/debian-umount $(DESTDIR)/usr/bin/debian-umount
 
 install-core:
