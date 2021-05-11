@@ -1,4 +1,0 @@
-#!/bin/bash
-hostctl-daemon &
-cd /usr/lib/sulin/dsl
-exec pkexec /usr/lib/sulin/dsl/dsl.sh --root

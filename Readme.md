@@ -27,10 +27,9 @@ make install DESTDIR=/
 ```
 
 ### Components:
+`pidone`           : pid namespace isolator.
 
 `debian`           : run command in subsystem
-
-`debian-sudo`      : run command in subsystem as root
 
 `debian-session`   : run Xsession on subsystem
 
@@ -41,13 +40,17 @@ make install DESTDIR=/
 `debian-xdg-open`  : Open file with xdg-open from debian
 
 ### Simple usage:
-You can use `debian` command to run debian subsystem shell. Subsystem shell pid value is 1 but /proc directory is common. So you can see host process in debian.
+You can use `debian` command to run debian subsystem shell. Subsystem shell **pid** value is **1** but **/proc** directory is common. So you can see host process in debian.
+
+If you need full **/proc** isolation, you must run `mount -t proc proc /proc` command in debian subsystem with root.
 
 If you want to run command on debian subsystem shell, you should use `debian <<< command` or `echo "command" | debian`. 
 
 If you want to run command on host system from debian subsystem, you should use `hostctl command` command. This command cannot generate any output and input.
 
-You should open `~/.local/hostctl.log` file to see hostctl logs.
+You should open `~/.local/hostctl.log` file to see hostctl-daemon logs.
+
+If you want to remove debian installation, you must run first `debian-umount` then `rm -rf /var/debian/`.
 
 ### Bug report:
 https://gitlab.com/sulincix/debian-subsystem
