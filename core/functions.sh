@@ -5,7 +5,7 @@ wsl_block(){
     var=$(uname -r)
     [[ ! -f /proc/cpuinfo ]] && return 1
     if [[ "$var" == "*Microsoft*" || "$var" == "*microsoft*" || "$var" == "*WSL*" ]] \
-    || cat /proc/cpuinfo | grep "microcode" | grep "0xffffffff"
+    || cat /proc/cpuinfo | grep "microcode" | grep "0xffffffff" &>/dev/null
     then
         return 1
     fi
