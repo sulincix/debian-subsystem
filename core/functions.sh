@@ -3,7 +3,7 @@ msg(){
 }
 wsl_block(){
     var=$(uname -r)
-    if [[ "$var" == "*Microsoft*" || "$var" == "*WSL*" ]]
+    if [[ "$var" == "*Microsoft*" || "$var" == "*microsoft*" || "$var" == "*WSL*" ]]
     then
         exit 1
     fi
