@@ -1,16 +1,18 @@
 #!/bin/bash
 set -e
-if [[ ! -f /run/debian ]] ; then
-    which systemd-tmpfiles &>/dev/null && systemd-tmpfiles --create
-    which tmpfiles &>/dev/null && tmpfiles --create
-    touch /run/debian
+if [[ $UID -eq 0 ]] ; then
+    if [[ ! -f /run/debian ]] ; then
+        which systemd-tmpfiles &>/dev/null && systemd-tmpfiles --create
+        which tmpfiles &>/dev/null && tmpfiles --create
+        touch /run/debian
+        chown debian /home/debian
+    fi
 fi
 export USER=debian
 export HOME=/home/debian
 export PULSE_SERVER=127.0.0.1
-chown debian /home/debian
-source /etc/profile
 cd /home/debian
+source /etc/profile
 get_shell(){
     if [[ $UID -eq 0 ]] ; then
         echo "su --preserve-environment debian"
