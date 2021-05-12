@@ -18,7 +18,7 @@ trim(){
 check_update(){
     cd /tmp
     CHECK_URL="https://gitlab.com/sulincix/debian-subsystem"
-    timeout 3 wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver &>/dev/null || return 0
+    timeout 3 wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver &>/dev/null || true
     if  [[ "$(md5sum ver | cut -f 1 -d ' ')" != "$(md5sum /usr/lib/sulin/dsl/version  | cut -f 1 -d ' ')" ]] ; then
         msg "Info" "new version available."
         msg "Info" "unmounting debian and stop hostctl"
@@ -32,12 +32,13 @@ check_update(){
         make >/dev/null || return 0
         make install  >/dev/null || return 0
         msg "Info" "clearing"
-        rm -rf /tmp/debian-subsystem-master /tmp/ver
+        rm -rf /tmp/debian-subsystem-master
         msg "Info" "Installation finished."
         cd /usr/lib/sulin/dsl
         msg "Info" "Restarting"
         exec $0 $@
     fi
+    rm -f /tmp/ver &>/dev/null
 }
 debian_init(){
     ls ${DESTDIR}/etc/os-release &>/dev/null && echo "Debian already installed" && exit 0
@@ -81,7 +82,7 @@ arch_init(){
     chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 debian_check(){
-    if [[ $(iniparser /etc/debian.conf "default" "updates") != "false" ]] ; then
+    if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
         check_update
     fi
     if [[ ! -f ${DESTDIR}/etc/os-release ]] ; then
