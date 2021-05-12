@@ -100,14 +100,11 @@ debian_check(){
         fi
     done
     if ! mount | grep "${DESTDIR}/dev/shm" &>/dev/null ; then
-        mount -t tmpfs tmpfs "${DESTDIR}/dev/shm"
+        mount --make-private -t tmpfs tmpfs "${DESTDIR}/dev/shm"
     fi
     mkdir -p "${DESTDIR}/home" || true
     if ! mount | grep "${DESTDIR}/home" &>/dev/null ; then
-        mount --bind "/${HOMEDIR}" "${DESTDIR}/home/debian"
-    fi
-    if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
-        mount -t tmpfs tmpfs ${DESTDIR}/run
+        mount --make-private --bind "/${HOMEDIR}" "${DESTDIR}/home/debian"
     fi
     if [[ ! -d ${DESTDIR}/usr/share/applications/ ]] ; then
         mkdir -p ${DESTDIR}/usr/share/applications/ &>/dev/null || true
