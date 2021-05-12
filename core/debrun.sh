@@ -6,6 +6,8 @@ if [[ $UID -eq 0 ]] ; then
         which tmpfiles &>/dev/null && tmpfiles --create
         touch /run/debian
         chown debian /home/debian
+        chmod +rw /dev/snd/*
+        chmod +rw /dev/dri/*
     fi
 fi
 export USER=debian
