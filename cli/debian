@@ -11,4 +11,4 @@ get_root(){
         fi
     fi
 }
-$(get_root) /usr/lib/sulin/dsl/dsl.sh
+$(get_root) /usr/lib/sulin/dsl/dsl.sh ${SYSTEM}

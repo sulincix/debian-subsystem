@@ -143,6 +143,7 @@ run(){
     p=${PATH}
     d=${DISPLAY}
     s=${SHELL}
+    b=${SYSTEM}
     cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
     sync_gid
@@ -152,6 +153,7 @@ run(){
     done
     export PATH=${p}
     export DISPLAY=${d}
+    export SYSTEM=${b}
     if [[ -f ${DESTDIR}/${SHELL} ]] ; then
         export SHELL=${s}
     else
