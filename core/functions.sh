@@ -81,7 +81,9 @@ arch_init(){
     chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 debian_check(){
-    check_update
+    if [[ $(iniparser /etc/debian.conf "default" "updates") != "false" ]] ; then
+        check_update
+    fi
     if [[ ! -f ${DESTDIR}/etc/os-release ]] ; then
         echo "Debian installation not found."
         if [[ "${DIST}" == "arch" ]] ; then
@@ -157,7 +159,8 @@ run(){
     fi
     export TERM=linux
     busybox chroot ${DESTDIR} debrun true || exit 1
-    if [[ ! -n $nopidone ]] ; then
+    use_pidone=$(iniparser /etc/debian.conf "default" "pidone")
+    if [[ ! -n $nopidone && ${use_pidone} != "false" ]] ; then
         exec pidone $(get_chroot) ${DESTDIR} debrun "$@"
     else
         echo "Running without PID isolation"
