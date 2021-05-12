@@ -17,6 +17,7 @@ install-cli:
 install-core:
 	make -C utils install
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
+	mkdir -p $(DESTDIR)/etc || true
 	install core/debrun.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/version $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/
@@ -25,6 +26,7 @@ install-core:
 	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/hostctl $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/hostctl-daemon $(DESTDIR)/usr/bin/
+	install debian.conf  $(DESTDIR)/etc/
 
 install-terminal:
 	mkdir -p $(DESTDIR)/usr/share/applications/ || true

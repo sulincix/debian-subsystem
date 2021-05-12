@@ -1,3 +1,5 @@
+#!/bin/bash
+[[ -f /etc/debian.conf ]] && source /etc/debian.conf
 [[ "$DIST" == "" ]] && DIST="stable"
 [[ "$REPO" == "" ]] && REPO="https://deb.debian.org/debian"
 [[ "$DESTDIR" == "" ]] && DESTDIR="/var/debian"

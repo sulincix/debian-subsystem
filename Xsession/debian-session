@@ -1,6 +1,7 @@
 #!/bin/bash
 hostctl-daemon &
-if ls /var/debian/etc/alternatives/x-session-manager &>/dev/null ; then
+source /usr/lib/sulin/dsl/variable.sh
+if ls ${DESTDIR}/etc/alternatives/x-session-manager &>/dev/null ; then
     exec pkexec /usr/lib/sulin/dsl/dsl.sh <<< /etc/X11/Xsession
 elif [[ -f /usr/lib/sulin/dsl/d-term ]] ; then
     exec /usr/lib/sulin/dsl/d-term "pkexec /usr/lib/sulin/dsl/dsl.sh"

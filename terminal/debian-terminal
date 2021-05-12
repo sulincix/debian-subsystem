@@ -1,5 +1,6 @@
 #!/bin/bash
-if ls /var/debian/usr/bin/x-terminal-emulator &>/dev/null ; then
+source /usr/lib/sulin/dsl/variable.sh
+if ls ${DESTDIR}/usr/bin/x-terminal-emulator &>/dev/null ; then
     pkexec /usr/lib/sulin/dsl/dsl.sh <<< x-terminal-emulator
 elif [[ -f /usr/lib/sulin/dsl/d-term ]] ; then
     /usr/lib/sulin/dsl/d-term "pkexec /usr/lib/sulin/dsl/dsl.sh"

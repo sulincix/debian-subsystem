@@ -1,4 +1,14 @@
 #!/bin/bash
 hostctl-daemon &
 cd /usr/lib/sulin/dsl
-exec pkexec /usr/lib/sulin/dsl/dsl.sh
+source /usr/lib/sulin/dsl/variable.sh
+get_root(){
+    if [[ $UID -ne 0 ]]; then
+        if which pkexec &>/dev/null && [[ "$NOPKEXEC" == "" ]] ; then
+            echo "exec pkexec"
+        else
+            echo "su -c"
+        fi
+    fi
+}
+$(get_root) /usr/lib/sulin/dsl/dsl.sh
