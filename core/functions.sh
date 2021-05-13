@@ -41,7 +41,7 @@ check_update(){
     rm -f /tmp/ver &>/dev/null
 }
 debian_init(){
-    ls ${DESTDIR}/etc/os-release &>/dev/null && echo "Debian already installed" && return 0
+    ls ${DESTDIR}/etc/os-release &>/dev/null && return 0
     if ! which debootstrap &>/dev/null; then
         msg "Installing:" "debootstrap"
         cd /tmp
@@ -65,7 +65,7 @@ debian_init(){
     chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 arch_init(){
-    ls ${DESTDIR}/usr/lib/os-release &>/dev/null && echo "Archlinux already installed" && return 0
+    ls ${DESTDIR}/usr/lib/os-release &>/dev/null && return 0
     if ! which arch-bootstrap &>/dev/null; then
         msg "Installing:" "debootstrap"
         cd /tmp
@@ -86,7 +86,6 @@ debian_check(){
     if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
         check_update
     fi
-    echo "Debian installation not found."
     if [[ "${DIST}" == "arch" ]] ; then
         arch_init
     else
