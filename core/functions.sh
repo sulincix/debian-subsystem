@@ -86,13 +86,11 @@ debian_check(){
     if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
         check_update
     fi
-    if [[ ! -f ${DESTDIR}/etc/os-release ]] ; then
-        echo "Debian installation not found."
-        if [[ "${DIST}" == "arch" ]] ; then
-            arch_init
-        else
-            debian_init
-        fi
+    echo "Debian installation not found."
+    if [[ "${DIST}" == "arch" ]] ; then
+        arch_init
+    else
+        debian_init
     fi
     #umount_all
     for i in proc root run dev sys tmp dev/pts ; do
