@@ -119,7 +119,7 @@ debian_check(){
     
 }
 umount_all(){
-    for i in system dev/pts dev/shm dev sys proc run tmp home/debian ; do
+    for i in system dev/pts root dev/shm dev sys proc run tmp home/debian ; do
         while umount -lf -R ${DESTDIR}/$i/ &>/dev/null ; do
            true
         done
