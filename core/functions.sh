@@ -65,7 +65,7 @@ debian_init(){
     chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 arch_init(){
-    ls ${DESTDIR}/etc/os-release &>/dev/null && echo "Archlinux already installed" && exit 0
+    ls ${DESTDIR}/usr/lib/os-release &>/dev/null && echo "Archlinux already installed" && exit 0
     if ! which arch-bootstrap &>/dev/null; then
         msg "Installing:" "debootstrap"
         cd /tmp
@@ -75,6 +75,7 @@ arch_init(){
     fi
     arch="$(uname -m)"
     arch-bootstrap -a "$arch" -r "${REPO}" -d "${DESTDIR}/pkgs" "${DESTDIR}" || fail_exit "Failed to install archlinux chroot"
+    sync
     msg "Creating user:" "debian"
     chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir ${DESTDIR}/home/debian
