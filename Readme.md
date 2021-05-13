@@ -26,6 +26,9 @@ make
 make install DESTDIR=/
 ```
 
+### Install from single command:
+`bash <(curl https://gitlab.com/sulincix/debian-subsystem/-/raw/master/netinstall.sh)`
+
 ### Components:
 `pidone`           : pid namespace isolator.
 
