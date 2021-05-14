@@ -3,7 +3,8 @@ build:
 	make -C utils build
 clean:
 	make -C utils clean
-install: install-core install-polkit install-cli install-terminal install-session
+
+install: install-core install-terminal install-session
 	
 install-polkit:
 	mkdir -p $(DESTDIR)/usr/share/polkit-1/actions/ || true
@@ -14,7 +15,7 @@ install-cli:
 	install cli/debian $(DESTDIR)/usr/bin/debian
 	install cli/debian-umount $(DESTDIR)/usr/bin/debian-umount
 
-install-core:
+install-core: install-polkit install-cli
 	make -C utils install
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	mkdir -p $(DESTDIR)/etc || true
