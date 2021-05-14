@@ -26,11 +26,16 @@ make
 make install DESTDIR=/
 ```
 
+if you dont need terminal and session component you can run `make install-core`
+
+
 ### Install from single command:
 `bash <(curl https://gitlab.com/sulincix/debian-subsystem/-/raw/master/netinstall.sh)`
 
 ### Components:
 `pidone`           : pid namespace isolator.
+
+`iniparser`        : ini config file parser.
 
 `debian`           : run command in subsystem
 
@@ -42,7 +47,7 @@ make install DESTDIR=/
 
 `debian-xdg-open`  : Open file with xdg-open from debian
 
-### Simple usage:
+### Usage:
 You can use `debian` command to run debian subsystem shell. Subsystem shell **pid** value is **1** but **/proc** directory is common. So you can see host process in debian.
 
 If you need full **/proc** isolation, you must run `mount -t proc proc /proc` command in debian subsystem with root.
@@ -54,6 +59,16 @@ If you want to run command on host system from debian subsystem, you should use 
 You should open `~/.local/hostctl.log` file to see hostctl-daemon logs.
 
 If you want to remove debian installation, you must run first `debian-umount` then `rm -rf /var/debian/`.
+
+Distribution configs defined by `/etc/debian.conf` file. if you want to run another distribution, you can set **SYSTEM** environment.
+
+```shell
+# for run with devuan config
+export SYSTEM=devuan
+debian
+# for run archlinux config
+SYSTEM=archlinux debian
+```
 
 ### Bug report:
 https://gitlab.com/sulincix/debian-subsystem
