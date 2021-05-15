@@ -82,12 +82,37 @@ arch_init(){
     msg "Settings password for:" "root"
     chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
+alpine_init(){
+ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
+    if ! which apk &>/dev/null; then
+        msg "Installing:" "apk-tools"
+        mkdir -p /tmp/apk
+        cd /tmp/apk
+        arch="$(uname -m)"
+        wget -c "https://dl-cdn.alpinelinux.org/alpine/v3.12/main/$arch/apk-tools-static-2.10.6-r0.apk" -O apk-tools-static.apk || fail_exit "Failed to fetch apt-tools"
+        tar -zxf apk-tools-static.apk
+        cp -pf sbin/apk.static /bin/apk
+        chmod +x /bin/apk
+    fi
+    arch="$(uname -m)"
+    apk --arch $arch -X "${REPO}/main/" -U --allow-untrusted --root ${DESTDIR} --initdb add alpine-base bash || fail_exit "Failed to install archlinux chroot"
+    sync
+    echo "${REPO}/main/" > ${DESTDIR}/etc/apk/repositories
+    echo "${REPO}/community/" >> ${DESTDIR}/etc/apk/repositories
+    msg "Creating user:" "debian"
+    chroot ${DESTDIR} adduser debian -D -H -h /home/debian -s /bin/ash || fail_exit "Failed to create debian user"
+    mkdir ${DESTDIR}/home/debian
+    msg "Settings password for:" "root"
+    chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
+}
 debian_check(){
     if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
         check_update
     fi
     if [[ "${DIST}" == "arch" ]] ; then
         arch_init
+    elif [[ "${DIST}" == "alpine" ]] ; then
+        alpine_init
     else
         debian_init
     fi
@@ -142,6 +167,7 @@ run(){
     b=${SYSTEM}
     cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
+    cat /etc/resolv.conf > ${DESTDIR}/etc/resolv.conf
     sync_gid
     xhost +localhost &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do

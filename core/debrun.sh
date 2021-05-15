@@ -17,7 +17,7 @@ cd /home/debian
 source /etc/profile
 get_shell(){
     if [[ $UID -eq 0 ]] ; then
-        echo "su --preserve-environment debian"
+        echo "su -p debian"
     else
         echo "sh"
     fi

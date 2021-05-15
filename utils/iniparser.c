@@ -38,7 +38,7 @@ char* get_area(char* ctx,char* name){
     return (char*)ret;
 }
 char* val_process(char* ctx, char* name){
-    char* ret = malloc(sizeof(char)*(strlen(ctx)-strlen(name)));
+    char* ret = malloc(sizeof(char)*(strlen(ctx)));
     for(int i=strlen(name);i<strlen(ctx)+1;i++){
         ret[i-strlen(name)]=ctx[i];
     }
@@ -49,13 +49,13 @@ char* get_value(char* ctx, char* name){
     int len = strcount(ctx,"\n");
     char** lines = strsplit(ctx,"\n");
     char* section=malloc(sizeof(char)*(strlen(name)+2));
-    char* ret= malloc(sizeof(char)*(strlen(ctx)+1));
+    char* ret= malloc(sizeof(char)*(strlen(ctx)+2));
     strcpy(ret,"");
     strcpy(section,name);
     strcat(section,"=");
     for(int i=0;i<len;i++){
         if(1==iseq(section,lines[i])){
-            ret=val_process(lines[i],section);
+            ret=val_process((char*)lines[i],section);
         }
     }
     return ret;
@@ -68,6 +68,7 @@ int main(int argc,char* argv[]){
         return 1;
     }
     char* area = get_area(readlines(argv[1]),argv[2]);
+    //puts(area);
     puts(get_value(area,argv[3]));
 }
 
