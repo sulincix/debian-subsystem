@@ -1,6 +1,6 @@
 build:
-	gcc pidone.c -o pidone -static
-	gcc iniparser.c -o iniparser -static
+	gcc pidone.c -o pidone
+	gcc iniparser.c -o iniparser
 
 clean:
 	rm -f pidone iniparser
