@@ -105,6 +105,32 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
     msg "Settings password for:" "root"
     chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
+sulin_init(){
+    if ! which inary &>/dev/null ; then
+        msg "Checking:" "inary build dependencies"
+        which intltool-merge &>/dev/null || fail_exit "Dependency: intltool not found."
+        which python3 &>/dev/null || fail_exit "Dependency: python3 not found."
+        for module in setuptools wheel ; do
+            python3 -c "import $module" &>/dev/null || fail_exit "Dependency: python3-$module not found."
+        done
+        msg "Installing:" "inary"
+        mkdir -p /tmp/inary || true
+        cd /tmp/inary
+        wget -c "https://gitlab.com/sulinos/devel/inary/-/archive/master/inary-master.tar" -O inary.tar || fail_exit "Failed to fetch inary"
+        tar -xf inary.tar
+        cd inary-master
+        python3 setup.py build
+        python3 setup.py install --root=/
+        ln -s inary-cli /usr/bin/inary || true
+    fi
+    inary ar sulin "${REPO}" -y -D${DESTDIR} || true
+    inary ur -y -D${DESTDIR} || true
+    inary it baselayout --ignore-dep --ignore-safety --ignore-configure -y -D${DESTDIR} 
+    inary it -c system.base curl -y --ignore-configure -D${DESTDIR}
+    chroot ${DESTDIR} inary cp busybox
+    chroot ${DESTDIR} inary cp baselayout
+    chroot ${DESTDIR} inary cp
+}
 debian_check(){
     if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
         check_update
@@ -113,6 +139,8 @@ debian_check(){
         arch_init
     elif [[ "${DIST}" == "alpine" ]] ; then
         alpine_init
+    elif [[ "${DIST}" == "sulin" ]] ; then
+        sulin_init
     else
         debian_init
     fi
