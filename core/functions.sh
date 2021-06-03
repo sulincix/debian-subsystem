@@ -130,6 +130,7 @@ sulin_init(){
     chroot ${DESTDIR} inary cp busybox
     chroot ${DESTDIR} inary cp baselayout
     chroot ${DESTDIR} inary cp
+    mkdir -p ${DESTDIR}/{dev,sys,proc} || true
 }
 debian_check(){
     set -e
