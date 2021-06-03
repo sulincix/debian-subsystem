@@ -120,7 +120,7 @@ sulin_init(){
         tar -xf inary.tar
         cd inary-master
         python3 setup.py build
-        python3 setup.py install --root=/ --bindir=/usr/bin
+        python3 setup.py install --root=/ --prefix=/usr
         ln -s inary-cli /usr/bin/inary || true
     fi
     inary ar sulin "${REPO}" -y -D${DESTDIR} || true
@@ -132,6 +132,7 @@ sulin_init(){
     chroot ${DESTDIR} inary cp
 }
 debian_check(){
+    set -e
     if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
         check_update
     fi
