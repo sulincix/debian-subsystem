@@ -14,7 +14,7 @@ export USER=debian
 export HOME=/home/debian
 export PULSE_SERVER=127.0.0.1
 cd /home/debian
-source /etc/profile
+source /etc/profile || true
 get_shell(){
     if [[ $UID -eq 0 ]] ; then
         echo "su -p debian"

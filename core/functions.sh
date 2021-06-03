@@ -106,6 +106,7 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
     chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 sulin_init(){
+    #ls ${DESTDIR}/data/user &>/dev/null && return 0
     if ! which inary &>/dev/null ; then
         msg "Checking:" "inary build dependencies"
         which intltool-merge &>/dev/null || fail_exit "Dependency: intltool not found."
@@ -123,14 +124,23 @@ sulin_init(){
         python3 setup.py install --root=/ --prefix=/usr
         ln -s inary-cli /usr/bin/inary || true
     fi
-    inary ar sulin "${REPO}" -y -D${DESTDIR} || true
+    :'inary ar sulin "${REPO}" -y -D${DESTDIR} || true
     inary ur -y -D${DESTDIR} || true
     inary it baselayout --ignore-dep --ignore-safety --ignore-configure -y -D${DESTDIR} 
     inary it -c system.base curl -y --ignore-configure -D${DESTDIR}
-    chroot ${DESTDIR} inary cp busybox
-    chroot ${DESTDIR} inary cp baselayout
+    chroot ${DESTDIR} inary rp busybox
+    chroot ${DESTDIR} inary rp baselayout
     chroot ${DESTDIR} inary cp
     mkdir -p ${DESTDIR}/{dev,sys,proc} || true
+    # symlinked /home for debian baselayout compability.
+    ln -s data/user ${DESTDIR}/home || true '
+    cp -pf ${DESTDIR}/usr/share/baselayout/passwd ${DESTDIR}/etc/passwd
+    cp -pf ${DESTDIR}/usr/share/baselayout/shadow ${DESTDIR}/etc/shadow
+    cp -pf ${DESTDIR}/usr/share/baselayout/group ${DESTDIR}/etc/group
+    chroot ${DESTDIR} useradd debian -d /data/user/debian -s /bin/bash || fail_exit "Failed to create debian user"
+    mkdir ${DESTDIR}/data/user/debian || true
+    msg "Settings password for:" "root"
+    chroot ${DESTDIR} passwd root || fail_exit "Failed to set password."
 }
 debian_check(){
     set -e
