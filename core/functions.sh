@@ -120,7 +120,7 @@ sulin_init(){
         tar -xf inary.tar
         cd inary-master
         python3 setup.py build
-        python3 setup.py install --root=/
+        python3 setup.py install --root=/ --bindir=/usr/bin
         ln -s inary-cli /usr/bin/inary || true
     fi
     inary ar sulin "${REPO}" -y -D${DESTDIR} || true
