@@ -22,6 +22,9 @@ get_shell(){
         echo "sh"
     fi
 }
+# su command blocked non-terminal. So we need login for sulin.
+# This feature provide that sulin is safer then others :)
+[[ -d /data/user ]] && exec login
 if which dbus-launch &>/dev/null ; then 
     exec $(get_shell) -c "exec dbus-launch -- $*"
 else

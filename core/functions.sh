@@ -57,6 +57,7 @@ debian_init(){
     [[ $(uname -m) == "aarch64" ]] && arch=arm64
     [[ $(uname -m) == "i686" ]] && arch=i386
     [[ "$arch" == "" ]] && echo "Unsupported arch $(uname -m)" && exit 1
+    ls /usr/share/debootstrap/scripts/${DIST} &>/dev/null || ln -s stable /usr/share/debootstrap/scripts/${DIST}
     debootstrap --arch=$arch --extractor=ar --no-merged-usr "${DIST}" "${DESTDIR}" "${REPO}" || fail_exit "Failed to install debian chroot"
     msg "Creating user:" "debian"
     chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
@@ -141,6 +142,8 @@ sulin_init(){
     mkdir ${DESTDIR}/data/user/debian || true
     msg "Settings password for:" "root"
     chroot ${DESTDIR} passwd root || fail_exit "Failed to set password."
+    msg "Settings password for:" "debian"
+    chroot ${DESTDIR} passwd debian || fail_exit "Failed to set password."
 }
 debian_check(){
     set -e
