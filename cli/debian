@@ -9,6 +9,8 @@ get_root(){
         else
             echo "su -c"
         fi
+    else
+        echo "env ROOTMODE=1"
     fi
 }
 $(get_root) /usr/lib/sulin/dsl/dsl.sh ${SYSTEM}

@@ -10,22 +10,24 @@ if [[ $UID -eq 0 ]] ; then
         chmod +rw /dev/dri/*
     fi
 fi
-export USER=debian
-export HOME=/home/debian
 export PULSE_SERVER=127.0.0.1
-cd /home/debian
+if [[ "$ROOTMODE" == "1" ]] ; then
+    export USER=root
+    export HOME=/root
+else
+    export USER=debian
+    export HOME=/home/debian
+fi
+cd ${HOME}
 source /etc/profile || true
 get_shell(){
-    if [[ $UID -eq 0 ]] ; then
-        echo "su -p debian"
+    if [[ $UID -eq 0 && "$ROOTMODE" != "1" ]] ; then
+        echo "su -p $USER"
     else
         echo "sh"
     fi
 }
-# su command blocked non-terminal. So we need login for sulin.
-# This feature provide that sulin is safer then others :)
-[[ -d /data/user ]] && exec login
-if which dbus-launch &>/dev/null ; then 
+if which dbus-launch &>/dev/null && [[ "$ROOTMODE" != "1" ]]  ; then 
     exec $(get_shell) -c "exec dbus-launch -- $*"
 else
     exec $(get_shell) -c "exec $*"

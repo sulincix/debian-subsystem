@@ -208,6 +208,7 @@ run(){
     d=${DISPLAY}
     s=${SHELL}
     b=${SYSTEM}
+    r=${ROOTMODE}
     cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
     cat /etc/resolv.conf > ${DESTDIR}/etc/resolv.conf
@@ -219,6 +220,7 @@ run(){
     export PATH=${p}
     export DISPLAY=${d}
     export SYSTEM=${b}
+    export ROOTMODE=${r}
     if [[ -f ${DESTDIR}/${SHELL} ]] ; then
         export SHELL=${s}
     else
@@ -237,6 +239,8 @@ run(){
 get_chroot(){
     if chroot --help |& head -n 1 | grep -i busybox ; then
         echo "busybox chroot"
+    elif [[ "$ROOTMODE" == 1 ]] ; then
+        echo "chroot"
     else
         echo "chroot --userspec debian:debian"
     fi
