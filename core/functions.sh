@@ -211,6 +211,7 @@ run(){
     r=${ROOTMODE}
     cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
+    rm -f ${DESTDIR}/etc/resolv.conf &>/dev/null|| true
     cat /etc/resolv.conf > ${DESTDIR}/etc/resolv.conf
     sync_gid
     xhost +localhost &>/dev/null || true
