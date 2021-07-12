@@ -1,3 +1,4 @@
+set -e
 msg(){
     echo -e "\033[32;1m$1\033[;0m $2"
 }
@@ -145,6 +146,20 @@ sulin_init(){
     msg "Settings password for:" "debian"
     chroot ${DESTDIR} passwd debian || fail_exit "Failed to set password."
 }
+gentoo_init(){
+    ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
+    stage3=$(curl https://www.gentoo.org/downloads/ | sed "s/.*href=\"//g" | sed "s/\".*//g" | grep "tar\." | grep -v "systemd" | \
+             grep -v "nomultilib" | grep -v "musl" | grep "amd64-" | grep -v "hardened" | sort -V | head -n 1)
+    curdir="$(pwd)"
+    mkdir -p ${DESTDIR} || true
+    cd ${DESTDIR} ; wget -c "$stage3" -O gentoo.tar.xz ; tar -xvf /tmp/gentoo.tar.xz
+    rm -f gentoo.tar.xz
+    echo -e "GENTOO_MIRRORS=\"${REPO}\"" >> ${DESTDIR}/etc/make.conf
+    chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
+    mkdir ${DESTDIR}/home/debian
+    msg "Settings password for:" "root"
+    chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
+}
 debian_check(){
     set -e
     if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
@@ -156,6 +171,8 @@ debian_check(){
         alpine_init
     elif [[ "${DIST}" == "sulin" ]] ; then
         sulin_init
+    elif [[ "${DIST}" == "gentoo" ]] ; then
+        gentoo_init
     else
         debian_init
     fi
