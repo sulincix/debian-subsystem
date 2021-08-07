@@ -1,4 +1,4 @@
-set -e
+set -ex
 msg(){
     echo -e "\033[32;1m$1\033[;0m $2"
 }
@@ -109,42 +109,18 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
 }
 sulin_init(){
     ls ${DESTDIR}/data/user &>/dev/null && return 0
-    if ! which inary &>/dev/null ; then
-        msg "Checking:" "inary build dependencies"
-        which intltool-merge &>/dev/null || fail_exit "Dependency: intltool not found."
-        which python3 &>/dev/null || fail_exit "Dependency: python3 not found."
-        for module in setuptools wheel ; do
-            python3 -c "import $module" &>/dev/null || fail_exit "Dependency: python3-$module not found."
-        done
-        msg "Installing:" "inary"
-        mkdir -p /tmp/inary || true
-        cd /tmp/inary
-        wget -c "https://gitlab.com/sulinos/devel/inary/-/archive/master/inary-master.tar" -O inary.tar || fail_exit "Failed to fetch inary"
-        tar -xf inary.tar
-        cd inary-master
-        python3 setup.py build
-        python3 setup.py install --root=/ --prefix=/usr
-        ln -s inary-cli /usr/bin/inary || true
+    if ! which sulinstrapt &>/dev/null ; then
+        msg "Installing:" "debootstrap"
+        cd /tmp
+        wget -c "https://raw.githubusercontent.com/tokland/arch-bootstrap/master/arch-bootstrap.sh" -O sulinstrapt.sh || fail_exit "Failed to fetch arch-bootstrap"
+        cp -fp sulinstrapt.sh /usr/bin/sulinstrapt
+        chmod 755 /usr/bin/sulinstrapt
     fi
-    inary ar sulin "${REPO}" -y -D${DESTDIR} || true
-    inary ur -y -D${DESTDIR} || true
-    inary it baselayout --ignore-dep --ignore-safety --ignore-configure -y -D${DESTDIR} 
-    inary it -c system.base curl -y --ignore-configure -D${DESTDIR}
-    chroot ${DESTDIR} inary rp busybox
-    chroot ${DESTDIR} inary rp baselayout
-    chroot ${DESTDIR} inary cp
-    mkdir -p ${DESTDIR}/{dev,sys,proc} || true
-    # symlinked /home for debian baselayout compability.
-    ln -s data/user ${DESTDIR}/home || true
-    cp -pf ${DESTDIR}/usr/share/baselayout/passwd ${DESTDIR}/etc/passwd
-    cp -pf ${DESTDIR}/usr/share/baselayout/shadow ${DESTDIR}/etc/shadow
-    cp -pf ${DESTDIR}/usr/share/baselayout/group ${DESTDIR}/etc/group
+    sulinstrapt ${DESTDIR} -r ${REPO}
     chroot ${DESTDIR} useradd debian -d /data/user/debian -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir ${DESTDIR}/data/user/debian || true
     msg "Settings password for:" "root"
     chroot ${DESTDIR} passwd root || fail_exit "Failed to set password."
-    msg "Settings password for:" "debian"
-    chroot ${DESTDIR} passwd debian || fail_exit "Failed to set password."
 }
 gentoo_init(){
     ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
