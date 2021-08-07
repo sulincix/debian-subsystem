@@ -176,7 +176,7 @@ debian_check(){
     else
         debian_init
     fi
-    #umount_all
+    umount_all
     for i in proc root run dev sys tmp dev/pts ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             pidone mount --make-private --bind /$i "${DESTDIR}/$i"
@@ -187,7 +187,10 @@ debian_check(){
     fi
     mkdir -p "${DESTDIR}/home" || true
     if ! mount | grep "${DESTDIR}/home" &>/dev/null ; then
-        mount --make-private --bind "/${HOMEDIR}" "${DESTDIR}/home/debian"
+        common_home=$(iniparser /etc/debian.conf "default" "common_home")
+        if [[ ${common_home} != "false" ]] ; then
+            mount --make-private --bind "/${HOMEDIR}" "${DESTDIR}/home/debian"
+        fi
     fi
     if [[ ! -d ${DESTDIR}/usr/share/applications/ ]] ; then
         mkdir -p ${DESTDIR}/usr/share/applications/ &>/dev/null || true
@@ -197,7 +200,12 @@ debian_check(){
         mkdir -p ${DESTDIR}/system || true
     fi
     if ! mount | grep "${DESTDIR}/system" &>/dev/null ; then
-        mount --make-private --bind / "${DESTDIR}/system"
+        bind_system=$(iniparser /etc/debian.conf "default" "bind_system")
+        if [[ ${bind_system} != "false" ]] ; then
+            mount --make-private --bind / "${DESTDIR}/system"
+        else
+            rmdir "${DESTDIR}/system" &>/dev/null || true
+        fi
     fi
     
 }

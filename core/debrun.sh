@@ -18,6 +18,7 @@ else
     export USER=debian
     export HOME=/home/debian
 fi
+chown ${USER} ${HOME} 
 cd ${HOME}
 source /etc/profile || true
 get_shell(){
