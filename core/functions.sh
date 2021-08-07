@@ -91,7 +91,7 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
         mkdir -p /tmp/apk
         cd /tmp/apk
         arch="$(uname -m)"
-        wget -c "https://dl-cdn.alpinelinux.org/alpine/v3.12/main/$arch/apk-tools-static-2.10.6-r0.apk" -O apk-tools-static.apk || fail_exit "Failed to fetch apt-tools"
+        wget -c "https://dl-cdn.alpinelinux.org/alpine/v3.12/main/x86_64/apk-tools-static-2.10.7-r0.apk" -O apk-tools-static.apk || fail_exit "Failed to fetch apt-tools"
         tar -zxf apk-tools-static.apk
         cp -pf sbin/apk.static /bin/apk
         chmod +x /bin/apk
