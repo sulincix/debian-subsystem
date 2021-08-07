@@ -1,4 +1,4 @@
-set -ex
+set -e
 msg(){
     echo -e "\033[32;1m$1\033[;0m $2"
 }
