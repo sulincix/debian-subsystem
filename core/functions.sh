@@ -110,9 +110,9 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
 sulin_init(){
     ls ${DESTDIR}/data/user &>/dev/null && return 0
     if ! which sulinstrapt &>/dev/null ; then
-        msg "Installing:" "debootstrap"
+        msg "Installing:" "sulinstrapt"
         cd /tmp
-        wget -c "https://raw.githubusercontent.com/tokland/arch-bootstrap/master/arch-bootstrap.sh" -O sulinstrapt.sh || fail_exit "Failed to fetch arch-bootstrap"
+        wget -c "https://gitlab.com/sulinos/devel/inary/-/raw/develop/scripts/sulinstrapt" -O sulinstrapt.sh || fail_exit "Failed to fetch arch-bootstrap"
         cp -fp sulinstrapt.sh /usr/bin/sulinstrapt
         chmod 755 /usr/bin/sulinstrapt
     fi
