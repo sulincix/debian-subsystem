@@ -42,7 +42,10 @@ install-session:
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	mkdir -p $(DESTDIR)/usr/share/xsessions/ || true
 	mkdir -p $(DESTDIR)/usr/share/applications/ || true
+	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	install Xsession/debian-session $(DESTDIR)/usr/bin/
 	install Xsession/debian-xdg-open $(DESTDIR)/usr/bin/
+	install Xsession/debxdg $(DESTDIR)/usr/lib/sulin/dsl || true
+	install Xsession/debxdg.conf $(DESTDIR)/usr/lib/sulin/dsl || true
 	install Xsession/debian-session.desktop $(DESTDIR)/usr/share/xsessions/
 	install Xsession/debian-xdg.desktop $(DESTDIR)/usr/share/applications/

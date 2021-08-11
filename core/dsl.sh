@@ -24,7 +24,7 @@ if [[ "$1" == "--root" ]] ; then
 elif [[ "$1" == "--xdg" ]] ; then
     shift
     nopidone=true
-    run xdg-open "$@"
+    run debxdg "$@"
 else
     run /bin/bash
 fi

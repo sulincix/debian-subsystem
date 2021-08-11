@@ -136,6 +136,14 @@ gentoo_init(){
     msg "Settings password for:" "root"
     chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
+
+common_init(){
+    [[ -f ${DESTDIR}/bin/debrun ]] || cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
+    [[ -f ${DESTDIR}/bin/hostctl ]] || cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
+    [[ -f ${DESTDIR}/bin/debxdg ]] || cp -prf /usr/lib/sulin/dsl/debxdg ${DESTDIR}/bin/debxdg
+    [[ -f ${DESTDIR}/etc/debxdg.conf ]] || cp -prf /usr/lib/sulin/dsl/debxdg.conf ${DESTDIR}/etc/debxdg.conf
+    [[ -f ${DESTDIR}/bin/iniparser ]] || cp -prf $(which iniparser) ${DESTDIR}/bin/iniparser
+}
 debian_check(){
     set -e
     if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
@@ -152,6 +160,7 @@ debian_check(){
     else
         debian_init
     fi
+    common_init
     umount_all
     for i in proc root dev sys tmp dev/pts ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
@@ -210,8 +219,6 @@ run(){
     s=${SHELL}
     b=${SYSTEM}
     r=${ROOTMODE}
-    cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
-    cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
     rm -f ${DESTDIR}/etc/resolv.conf &>/dev/null|| true
     cat /etc/resolv.conf > ${DESTDIR}/etc/resolv.conf
     sync_gid
