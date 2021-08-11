@@ -1,4 +1,5 @@
 #!/bin/bash
+[[ -f "$1" ]] && exec debian-xdg-open $@
 source /usr/lib/sulin/dsl/variable.sh
 if ls ${DESTDIR}/usr/bin/x-terminal-emulator &>/dev/null ; then
     pkexec /usr/lib/sulin/dsl/dsl.sh <<< x-terminal-emulator

@@ -48,4 +48,3 @@ install-session:
 	install Xsession/debxdg $(DESTDIR)/usr/lib/sulin/dsl || true
 	install Xsession/debxdg.conf $(DESTDIR)/usr/lib/sulin/dsl || true
 	install Xsession/debian-session.desktop $(DESTDIR)/usr/share/xsessions/
-	install Xsession/debian-xdg.desktop $(DESTDIR)/usr/share/applications/
