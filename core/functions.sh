@@ -153,7 +153,7 @@ debian_check(){
         debian_init
     fi
     umount_all
-    for i in proc root run dev sys tmp dev/pts ; do
+    for i in proc root dev sys tmp dev/pts ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             pidone mount --make-private --bind /$i "${DESTDIR}/$i"
         fi

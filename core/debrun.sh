@@ -9,6 +9,9 @@ if [[ $UID -eq 0 ]] ; then
         chmod +rw /dev/snd/*
         chmod +rw /dev/dri/*
     fi
+    if [[ ! -d /run/dbus ]] ; then
+        mkdir -p /run/dbus
+    fi
 fi
 export PULSE_SERVER=127.0.0.1
 if [[ "$ROOTMODE" == "1" ]] ; then
@@ -18,6 +21,7 @@ else
     export USER=debian
     export HOME=/home/debian
 fi
+export XDG_RUNTIME_DIR=/tmp/runtime-${USER}
 chown ${USER} ${HOME} 
 cd ${HOME}
 source /etc/profile || true
