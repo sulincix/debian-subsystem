@@ -63,8 +63,6 @@ debian_init(){
     msg "Creating user:" "debian"
     chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir ${DESTDIR}/home/debian
-    msg "Settings password for:" "root"
-    chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 arch_init(){
     ls ${DESTDIR}/usr/lib/os-release &>/dev/null && return 0
@@ -81,8 +79,6 @@ arch_init(){
     msg "Creating user:" "debian"
     chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir ${DESTDIR}/home/debian
-    msg "Settings password for:" "root"
-    chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 alpine_init(){
 ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
@@ -104,8 +100,6 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
     msg "Creating user:" "debian"
     chroot ${DESTDIR} adduser debian -D -H -h /home/debian -s /bin/ash || fail_exit "Failed to create debian user"
     mkdir ${DESTDIR}/home/debian
-    msg "Settings password for:" "root"
-    chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 sulin_init(){
     ls ${DESTDIR}/data/user &>/dev/null && return 0
@@ -119,8 +113,6 @@ sulin_init(){
     sulinstrapt ${DESTDIR} -r ${REPO}
     chroot ${DESTDIR} useradd debian -d /data/user/debian -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir ${DESTDIR}/data/user/debian || true
-    msg "Settings password for:" "root"
-    chroot ${DESTDIR} passwd root || fail_exit "Failed to set password."
 }
 gentoo_init(){
     ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
@@ -133,8 +125,6 @@ gentoo_init(){
     echo -e "GENTOO_MIRRORS=\"${REPO}\"" >> ${DESTDIR}/etc/make.conf
     chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir ${DESTDIR}/home/debian
-    msg "Settings password for:" "root"
-    chroot ${DESTDIR} passwd || fail_exit "Failed to set password."
 }
 
 common_init(){
