@@ -227,6 +227,8 @@ sync_desktop(){
         echo -e "NoDisplay="$(iniparser "$path" "Desktop Entry" "NoDisplay") >> /usr/share/applications/debian/$file
         echo -e "Type=Application" >> /usr/share/applications/debian/$file
         echo -e "Categories="$(iniparser "$path" "Desktop Entry" "Categories") >> /usr/share/applications/debian/$file
+        echo -e "NotShowIn="$(iniparser "$path" "Desktop Entry" "NotShowIn") >> /usr/share/applications/debian/$file
+        echo -e "OnlyShowIn="$(iniparser "$path" "Desktop Entry" "OnlyShowIn") >> /usr/share/applications/debian/$file
     done
 }
 
