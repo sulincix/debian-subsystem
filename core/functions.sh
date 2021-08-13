@@ -223,7 +223,7 @@ sync_desktop(){
         echo -e "Name="$(iniparser "$path" "Desktop Entry" "Name")" (on $(iniparser /etc/debian.conf default system))" >> /usr/share/applications/debian/$file
         echo -e "Comment="$(iniparser "$path" "Desktop Entry" "Comment") >> /usr/share/applications/debian/$file
         echo -e "Icon="$(iniparser "$path" "Desktop Entry" "Icon") >> /usr/share/applications/debian/$file
-        echo -e "Exec=bash -c \"debian <<< "$(iniparser "$path" "Desktop Entry" "Exec")"\"" >> /usr/share/applications/debian/$file
+        echo -e "Exec=bash -c \"echo \\\""$(iniparser "$path" "Desktop Entry" "Exec")"\\\" | debian\"" >> /usr/share/applications/debian/$file
         echo -e "Type=Application" >> /usr/share/applications/debian/$file
         for var in NoDisplay NotShowIn OnlyShowIn Categories Terminal ; do
             
