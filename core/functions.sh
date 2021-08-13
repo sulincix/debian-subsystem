@@ -213,6 +213,23 @@ sync_gid(){
     done
 }
 
+sync_desktop(){
+    rm -rf /usr/share/applications/debian
+    mkdir -p /usr/share/applications/debian
+    for file in $(ls ${DESTDIR}/usr/share/applications); do
+        path="${DESTDIR}/usr/share/applications/$file"
+        echo -e "[Desktop Entry]" > /usr/share/applications/debian/$file
+        echo -e "Name="$(iniparser "$path" "Desktop Entry" "Name")" on debian" >> /usr/share/applications/debian/$file
+        echo -e "Comment="$(iniparser "$path" "Desktop Entry" "Comment") >> /usr/share/applications/debian/$file
+        echo -e "Icon="$(iniparser "$path" "Desktop Entry" "Icon") >> /usr/share/applications/debian/$file
+        echo -e "Exec=bash -c \"debian <<< "$(iniparser "$path" "Desktop Entry" "Exec")"\"" >> /usr/share/applications/debian/$file
+        echo -e "Terminal="$(iniparser "$path" "Desktop Entry" "Terminal") >> /usr/share/applications/debian/$file
+        echo -e "NoDisplay="$(iniparser "$path" "Desktop Entry" "NoDisplay") >> /usr/share/applications/debian/$file
+        echo -e "Type=Application" >> /usr/share/applications/debian/$file
+        echo -e "Categories="$(iniparser "$path" "Desktop Entry" "Categories") >> /usr/share/applications/debian/$file
+    done
+}
+
 run(){
     p=${PATH}
     d=${DISPLAY}
@@ -222,6 +239,7 @@ run(){
     rm -f ${DESTDIR}/etc/resolv.conf &>/dev/null|| true
     cat /etc/resolv.conf > ${DESTDIR}/etc/resolv.conf
     sync_gid
+    sync_desktop
     xhost +localhost &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do
         unset "$e" &>/dev/null
