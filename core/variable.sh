@@ -18,3 +18,4 @@ fi
 if [[ "$HOMEDIR" == "" ]] ; then
    HOMEDIR="$(cat /etc/passwd | grep 1000 | cut -d ":" -f 6)"
 fi
+USERNAME=$(grep "1000" /etc/passwd | cut -f 1 -d ":")

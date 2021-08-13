@@ -61,8 +61,8 @@ debian_init(){
     ls /usr/share/debootstrap/scripts/${DIST} &>/dev/null || ln -s stable /usr/share/debootstrap/scripts/${DIST}
     debootstrap --arch=$arch --extractor=ar --no-merged-usr "${DIST}" "${DESTDIR}" "${REPO}" || fail_exit "Failed to install debian chroot"
     msg "Creating user:" "debian"
-    chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir ${DESTDIR}/home/debian
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
+    mkdir "${DESTDIR}/home/${USERNAME}"
 }
 arch_init(){
     ls ${DESTDIR}/usr/lib/os-release &>/dev/null && return 0
@@ -77,7 +77,7 @@ arch_init(){
     arch-bootstrap -a "$arch" -r "${REPO}" -d "${DESTDIR}/pkgs" "${DESTDIR}" || fail_exit "Failed to install archlinux chroot"
     sync
     msg "Creating user:" "debian"
-    chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir ${DESTDIR}/home/debian
 }
 alpine_init(){
@@ -98,8 +98,8 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
     echo "${REPO}/main/" > ${DESTDIR}/etc/apk/repositories
     echo "${REPO}/community/" >> ${DESTDIR}/etc/apk/repositories
     msg "Creating user:" "debian"
-    chroot ${DESTDIR} adduser debian -D -H -h /home/debian -s /bin/ash || fail_exit "Failed to create debian user"
-    mkdir ${DESTDIR}/home/debian
+    chroot "${DESTDIR}" adduser "${USERNAME}" -D -H -h "/home/${USERNAME}" -s /bin/ash || fail_exit "Failed to create debian user"
+    mkdir "${DESTDIR}/home/"${USERNAME}""
 }
 sulin_init(){
     ls ${DESTDIR}/data/user &>/dev/null && return 0
@@ -110,9 +110,9 @@ sulin_init(){
         cp -fp sulinstrapt.sh /usr/bin/sulinstrapt
         chmod 755 /usr/bin/sulinstrapt
     fi
-    sulinstrapt ${DESTDIR} -r ${REPO}
-    chroot ${DESTDIR} useradd debian -d /data/user/debian -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir ${DESTDIR}/data/user/debian || true
+    sulinstrapt "${DESTDIR}" -r "${REPO}"
+    chroot "${DESTDIR}" useradd d"${USERNAME}" -d "/data/user/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
+    mkdir "${DESTDIR}/data/user/${USERNAME}" || true
 }
 gentoo_init(){
     ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
@@ -123,8 +123,8 @@ gentoo_init(){
     cd ${DESTDIR} ; wget -c "$stage3" -O gentoo.tar.xz ; tar -xvf /tmp/gentoo.tar.xz
     rm -f gentoo.tar.xz
     echo -e "GENTOO_MIRRORS=\"${REPO}\"" >> ${DESTDIR}/etc/make.conf
-    chroot ${DESTDIR} useradd debian -d /home/debian -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir ${DESTDIR}/home/debian
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
+    mkdir "${DESTDIR}/home/${USERNAME}"
 }
 
 common_init(){
@@ -152,6 +152,7 @@ debian_check(){
     fi
     common_init
     umount_all
+
     for i in proc root dev sys tmp dev/pts ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             pidone mount --make-private --bind /$i "${DESTDIR}/$i"
@@ -164,7 +165,7 @@ debian_check(){
     if ! mount | grep "${DESTDIR}/home" &>/dev/null ; then
         common_home=$(iniparser /etc/debian.conf "default" "common_home")
         if [[ ${common_home} != "false" ]] ; then
-            mount --make-private --bind "/${HOMEDIR}" "${DESTDIR}/home/debian"
+            mount --make-private --bind "/${HOMEDIR}" "${DESTDIR}/home/${USERNAME}"
         fi
     fi
     if [[ ! -d ${DESTDIR}/usr/share/applications/ ]] ; then
@@ -182,10 +183,11 @@ debian_check(){
             rmdir "${DESTDIR}/system" &>/dev/null || true
         fi
     fi
+
     
 }
 umount_all(){
-    for i in system dev/pts root dev/shm dev sys proc run tmp home/debian ; do
+    for i in system dev/pts root dev/shm dev sys proc run tmp home/"${USERNAME}" ; do
         while umount -lf -R ${DESTDIR}/$i/ &>/dev/null ; do
            true
         done
@@ -204,9 +206,15 @@ sync_gid(){
 }
 
 sync_desktop(){
+    touch "${DESTDIR}/var/cache/app-ltime"
+    mtime=$(stat "${DESTDIR}"/usr/share/applications | grep Modify)
+    ltime=$(cat "${DESTDIR}/var/cache/app-ltime")
+    if [[ "$mtime" == "$ltime" ]] ; then
+        return
+    fi
     rm -rf /usr/share/applications/debian
     mkdir -p /usr/share/applications/debian
-    for file in $(ls ${DESTDIR}/usr/share/applications); do
+    for file in $(ls "${DESTDIR}"/usr/share/applications); do
         if [[ "$file" == "d-term.desktop" || "$file" == "mimeinfo.cache" ]] ; then
             continue
         fi
@@ -224,6 +232,7 @@ sync_desktop(){
             fi
         done
     done
+    stat "${DESTDIR}"/usr/share/applications | grep Modify > "${DESTDIR}/var/cache/app-ltime"
 }
 
 run(){
@@ -265,7 +274,7 @@ get_chroot(){
     elif [[ "$ROOTMODE" == 1 ]] ; then
         echo "chroot"
     else
-        echo "chroot --userspec debian:debian"
+        echo "chroot --userspec ${USERNAME}:${USERNAME}"
     fi
 }
 fail_exit(){

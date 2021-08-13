@@ -1,11 +1,12 @@
 #!/bin/bash
 set -e
+USERNAME=$(grep "1000" /etc/passwd | cut -f 1 -d ":")
 if [[ $UID -eq 0 ]] ; then
     if [[ ! -f /run/debian ]] ; then
         which systemd-tmpfiles &>/dev/null && systemd-tmpfiles --create
         which tmpfiles &>/dev/null && tmpfiles --create
         touch /run/debian
-        chown debian /home/debian
+        chown ${USERNAME} /home/${USERNAME}
         chmod +rw /dev/snd/*
         chmod +rw /dev/dri/*
     fi
@@ -18,12 +19,13 @@ if [[ "$ROOTMODE" == "1" ]] ; then
     export USER=root
     export HOME=/root
 else
-    export USER=debian
-    export HOME=/home/debian
+    export USER="${USERNAME}"
+    export HOME="/home/${USERNAME}"
 fi
 export XDG_RUNTIME_DIR=/tmp/runtime-${USER}
-chown ${USER} ${HOME} 
-cd ${HOME}
+[[ ! -d "$HOME" ]] && mkdir -p "$HOME"
+chown "${USER}" "${HOME}"
+cd "${HOME}"
 source /etc/profile || true
 get_shell(){
     if [[ $UID -eq 0 && "$ROOTMODE" != "1" ]] ; then
