@@ -217,9 +217,12 @@ sync_desktop(){
     rm -rf /usr/share/applications/debian
     mkdir -p /usr/share/applications/debian
     for file in $(ls ${DESTDIR}/usr/share/applications); do
+        if [[ "$file" == "d-term.desktop" || "$file" == "mimeinfo.cache" ]] ; then
+            continue
+        fi
         path="${DESTDIR}/usr/share/applications/$file"
         echo -e "[Desktop Entry]" > /usr/share/applications/debian/$file
-        echo -e "Name="$(iniparser "$path" "Desktop Entry" "Name")" on debian" >> /usr/share/applications/debian/$file
+        echo -e "Name="$(iniparser "$path" "Desktop Entry" "Name")" (on ${SYSTEM})" >> /usr/share/applications/debian/$file
         echo -e "Comment="$(iniparser "$path" "Desktop Entry" "Comment") >> /usr/share/applications/debian/$file
         echo -e "Icon="$(iniparser "$path" "Desktop Entry" "Icon") >> /usr/share/applications/debian/$file
         echo -e "Exec=bash -c \"debian <<< "$(iniparser "$path" "Desktop Entry" "Exec")"\"" >> /usr/share/applications/debian/$file
