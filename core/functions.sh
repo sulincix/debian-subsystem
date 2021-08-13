@@ -223,12 +223,13 @@ sync_desktop(){
         echo -e "Comment="$(iniparser "$path" "Desktop Entry" "Comment") >> /usr/share/applications/debian/$file
         echo -e "Icon="$(iniparser "$path" "Desktop Entry" "Icon") >> /usr/share/applications/debian/$file
         echo -e "Exec=bash -c \"debian <<< "$(iniparser "$path" "Desktop Entry" "Exec")"\"" >> /usr/share/applications/debian/$file
-        echo -e "Terminal="$(iniparser "$path" "Desktop Entry" "Terminal") >> /usr/share/applications/debian/$file
-        echo -e "NoDisplay="$(iniparser "$path" "Desktop Entry" "NoDisplay") >> /usr/share/applications/debian/$file
         echo -e "Type=Application" >> /usr/share/applications/debian/$file
-        echo -e "Categories="$(iniparser "$path" "Desktop Entry" "Categories") >> /usr/share/applications/debian/$file
-        echo -e "NotShowIn="$(iniparser "$path" "Desktop Entry" "NotShowIn") >> /usr/share/applications/debian/$file
-        echo -e "OnlyShowIn="$(iniparser "$path" "Desktop Entry" "OnlyShowIn") >> /usr/share/applications/debian/$file
+        for var in NoDisplay NotShowIn OnlyShowIn Categories Terminal ; do
+            
+            if [[ -n $(iniparser "$path" "Desktop Entry" "$var") ]] ; then
+                echo -e "$var="$(iniparser "$path" "Desktop Entry" "$var") >> /usr/share/applications/debian/$file
+            fi
+        done
     done
 }
 
