@@ -222,7 +222,7 @@ sync_desktop(){
         fi
         path="${DESTDIR}/usr/share/applications/$file"
         echo -e "[Desktop Entry]" > /usr/share/applications/debian/$file
-        echo -e "Name="$(iniparser "$path" "Desktop Entry" "Name")" (on ${SYSTEM})" >> /usr/share/applications/debian/$file
+        echo -e "Name="$(iniparser "$path" "Desktop Entry" "Name")" (on $(iniparser /etc/debian.conf default system))" >> /usr/share/applications/debian/$file
         echo -e "Comment="$(iniparser "$path" "Desktop Entry" "Comment") >> /usr/share/applications/debian/$file
         echo -e "Icon="$(iniparser "$path" "Desktop Entry" "Icon") >> /usr/share/applications/debian/$file
         echo -e "Exec=bash -c \"debian <<< "$(iniparser "$path" "Desktop Entry" "Exec")"\"" >> /usr/share/applications/debian/$file
