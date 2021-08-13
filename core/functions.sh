@@ -225,7 +225,7 @@ sync_desktop(){
         echo -e "Icon="$(iniparser "$path" "Desktop Entry" "Icon") >> /usr/share/applications/debian/$file
         echo -e "Exec=bash -c \"echo \\\""$(iniparser "$path" "Desktop Entry" "Exec")"\\\" | debian\"" >> /usr/share/applications/debian/$file
         echo -e "Type=Application" >> /usr/share/applications/debian/$file
-        for var in NoDisplay NotShowIn OnlyShowIn Categories Terminal ; do
+        for var in NoDisplay NotShowIn OnlyShowIn Categories Terminal MimeType ; do
             
             if [[ -n $(iniparser "$path" "Desktop Entry" "$var") ]] ; then
                 echo -e "$var="$(iniparser "$path" "Desktop Entry" "$var") >> /usr/share/applications/debian/$file
