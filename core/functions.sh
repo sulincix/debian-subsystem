@@ -157,8 +157,8 @@ debian_check(){
             mount --make-private --bind /$i "${DESTDIR}/$i"
         fi
     done
-    if ! mount | grep "${DESTDIR}/run/user" &>/dev/null ; then
-        mount --make-private -t tmpfs tmpfs "${DESTDIR}/run/user"
+    if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
+        mount --make-private -t tmpfs tmpfs "${DESTDIR}/run"
     fi
     if ! mount | grep "${DESTDIR}/tmp" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/tmp"
