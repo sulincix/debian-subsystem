@@ -38,7 +38,7 @@ install-terminal:
 	install terminal/d-term.desktop $(DESTDIR)/usr/lib/sulin/dsl/
 	
 	install terminal/d-term.py $(DESTDIR)/usr/lib/sulin/dsl/d-term
-	[ -f terminal/d-term ] && install terminal/d-term $(DESTDIR)/usr/lib/sulin/dsl/d-term
+	[ -f terminal/d-term ] && install terminal/d-term $(DESTDIR)/usr/lib/sulin/dsl/d-term || true
 	install terminal/debian-terminal $(DESTDIR)/usr/bin/debian-terminal
 	install terminal/debian.desktop $(DESTDIR)/usr/share/applications/
 
