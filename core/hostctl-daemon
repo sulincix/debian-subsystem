@@ -9,12 +9,17 @@ trim(){
 done
 }
 ps ax | grep -v grep | grep "/usr/bin/hostctl-daemon$" | grep -v "$$" &>/dev/null && exit 0
+if [[ $UID -eq 0 ]] ; then
+    echo "Hostctl must run without root!"
+    exit 1
+fi
 rm -f /tmp/hostctl &>/dev/null || true
 mkfifo /tmp/hostctl &>/dev/null || true
-chmod 777 /tmp/hostctl &>/dev/null || true
+chmod 700 /tmp/hostctl &>/dev/null || true
  echo "##### $(LANG=C date) ##### CREATING DAEMON #####" >> ~/.local/hostctl.log
 while true ; do
-    while read line < ${DESTDIR}/tmp/hostctl
+    echo "Starting hostctl"
+    while read line < /tmp/hostctl
     do
         echo "##### $(LANG=C date) ##### $line #####" >> ~/.local/hostctl.log
         $line &>> ~/.local/hostctl.log &

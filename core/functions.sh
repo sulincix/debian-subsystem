@@ -152,18 +152,18 @@ debian_check(){
     fi
     common_init
 
-    for i in proc root dev sys dev/pts run ; do
+    for i in proc root dev sys dev/pts ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
-            pidone mount --make-private --bind /$i "${DESTDIR}/$i"
+            mount --make-private --bind /$i "${DESTDIR}/$i"
         fi
     done
     if ! mount | grep "${DESTDIR}/run/user" &>/dev/null ; then
-        pidone mount --make-private -t tmpfs tmpfs "${DESTDIR}/run/user"
+        mount --make-private -t tmpfs tmpfs "${DESTDIR}/run/user"
     fi
     if ! mount | grep "${DESTDIR}/tmp" &>/dev/null ; then
-        pidone mount --make-private -t tmpfs tmpfs "${DESTDIR}/tmp"
+        mount --make-private -t tmpfs tmpfs "${DESTDIR}/tmp"
         touch "${DESTDIR}/tmp/hostctl"
-        pidone mount --bind /tmp/hostctl "${DESTDIR}/tmp/hostctl"
+        mount --bind /tmp/hostctl "${DESTDIR}/tmp/hostctl"
     fi
     if ! mount | grep "${DESTDIR}/dev/shm" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/dev/shm"

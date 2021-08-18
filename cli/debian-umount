@@ -7,5 +7,10 @@ trim(){
         echo $line
     done
 }
-ps ax  | grep -v grep | grep hostctl-daemon | trim | cut  -d " " -f 1 | xargs kill -9 &>/dev/null || true
+ps ax | grep -v grep | grep "/usr/bin/hostctl-daemon$" | trim | cut -f "1" -d " " | xargs kill -9 &>/dev/null || true
+rm -f /tmp/hostctl
 umount_all
+
+if [[ "$1" == "--remove" ]] ; then
+    rm -rf "${DESTDIR}"
+fi
