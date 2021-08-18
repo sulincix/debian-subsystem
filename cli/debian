@@ -1,5 +1,4 @@
 #!/bin/bash
-hostctl-daemon &
 cd /usr/lib/sulin/dsl
 source /usr/lib/sulin/dsl/variable.sh
 get_root(){

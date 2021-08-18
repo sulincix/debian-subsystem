@@ -162,8 +162,6 @@ debian_check(){
     fi
     if ! mount | grep "${DESTDIR}/tmp" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/tmp"
-        touch "${DESTDIR}/tmp/hostctl"
-        mount --bind /tmp/hostctl "${DESTDIR}/tmp/hostctl"
     fi
     if ! mount | grep "${DESTDIR}/dev/shm" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/dev/shm"

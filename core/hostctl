@@ -1,10 +1,10 @@
 #!/bin/bash
-if ! ls /run/hostctl &>/dev/null ; then
-    echo -e "Failed to connect hostctl. Please run \"hostctl-daemon &\" on host"
+if ! ls /tmp/hostctl &>/dev/null ; then
+    echo -e "Failed to connect hostctl."
     exit 1
 fi
 timeout 3 echo "$*" > /run/hostctl || {
-    echo -e "Failed to connect hostctl. Please run \"hostctl-daemon &\" on host"
+    echo -e "Failed to connect hostctl."
     exit 1
 
 }

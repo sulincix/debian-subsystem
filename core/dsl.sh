@@ -19,6 +19,17 @@ debian_check || {
     echo "Press any key to exit"
     read -s -n 1 && exit 1
 }
+
+if ! ls ${DESTDIR}/tmp/hostctl &>/dev/null ; then
+    echo "Starting hostctl"
+    mkfifo ${DESTDIR}/tmp/hostctl &>/dev/null || true
+    chmod 700 ${DESTDIR}/tmp/hostctl &>/dev/null || true
+    chown ${USERNAME} ${DESTDIR}/tmp/hostctl
+    while read line < ${DESTDIR}/tmp/hostctl ; do
+        su "${USERNAME}" -c "$line" &
+        sleep 0.3
+    done &
+fi
 if [[ "$1" == "--root" ]] ; then
     run su
 elif [[ "$1" == "--xdg" ]] ; then

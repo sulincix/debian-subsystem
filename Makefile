@@ -26,7 +26,6 @@ install-core: install-polkit install-cli
 	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/hostctl $(DESTDIR)/usr/lib/sulin/dsl/
-	install core/hostctl-daemon $(DESTDIR)/usr/bin/
 	install debian.conf  $(DESTDIR)/etc/
 
 install-terminal:
