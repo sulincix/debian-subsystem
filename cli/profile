@@ -1,1 +1,1 @@
-echo true | debian
+echo true | debian --no-install

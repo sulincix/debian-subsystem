@@ -16,7 +16,8 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 * busybox
 * vte-2.91 (for d-term)
 * gtk+-3.0 (for d-term)
-* pygobject (for d-term)
+* pygobject (for d-term/python)
+* vala (for d-term/vala)
 
 ### Install:
 ```shell
@@ -39,6 +40,8 @@ if you dont need terminal and session component you can run `make install-core`
 
 `debian`           : run command in subsystem
 
+`hostctl`          : send command from subsystem to host
+
 `debian-session`   : run Xsession on subsystem
 
 `debian-terminal`  : open a subsystem terminal
@@ -52,11 +55,8 @@ You can use `debian` command to run debian subsystem shell. Subsystem shell **pi
 
 If you need full **/proc** isolation, you must run `mount -t proc proc /proc` command in debian subsystem with root.
 
-If you want to run command on debian subsystem shell, you should use `debian <<< command` or `echo "command" | debian`. 
+If you want to run command on host system from debian subsystem, you should use `hostctl command` command.
 
-If you want to run command on host system from debian subsystem, you should use `hostctl command` command. This command cannot generate any output and input.
-
-You should open `~/.local/hostctl.log` file to see hostctl-daemon logs.
 
 If you want to remove debian installation, you must run first `debian-umount` then `rm -rf /var/debian/`.
 
@@ -69,6 +69,23 @@ debian
 # for run archlinux config
 SYSTEM=archlinux debian
 ```
+
+You can send command to subsystem shell. 
+
+```
+# type 1
+echo "ls -la /" | debian
+# type 2
+debian <<< "ls -la /"
+```
+
+**d-term** is subsystem terminal application. If you install any terminal application d-term replaced with it. (x-terminal-emulator)
+
+Subsystem applications installed your application menu. You can open files with subsystem application. Menu will sync after next subsystem shell creation.
+
+**debian-session** create subsystem Xsession. If **x-session-manager** exists run. If not exists, run d-term.
+
+You can disable common_home and bind_system features in **/etc/debian.conf** file. If you disable common_home, /home directory will isolated. If you disable bind_system, subsystem cannot access hosts filesystem. (/system)
 
 ### Bug report:
 https://gitlab.com/sulincix/debian-subsystem
