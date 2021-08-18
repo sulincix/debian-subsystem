@@ -12,4 +12,9 @@ get_root(){
         echo "env ROOTMODE=1"
     fi
 }
+if [[ "$1" == "--no-install" ]] ; then
+    if [[ ! -f "${DESTDIR}/etc/os-release" ]] ; then
+        exit 0
+    fi
+fi
 $(get_root) /usr/lib/sulin/dsl/dsl.sh ${SYSTEM}
