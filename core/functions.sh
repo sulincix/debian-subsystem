@@ -151,13 +151,20 @@ debian_check(){
         debian_init
     fi
     common_init
-    umount_all
 
-    for i in proc root dev sys tmp dev/pts ; do
+    for i in proc root dev sys dev/pts run ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             pidone mount --make-private --bind /$i "${DESTDIR}/$i"
         fi
     done
+    if ! mount | grep "${DESTDIR}/run/user" &>/dev/null ; then
+        pidone mount --make-private -t tmpfs tmpfs "${DESTDIR}/run/user"
+    fi
+    if ! mount | grep "${DESTDIR}/tmp" &>/dev/null ; then
+        pidone mount --make-private -t tmpfs tmpfs "${DESTDIR}/tmp"
+        touch "${DESTDIR}/tmp/hostctl"
+        pidone mount --bind /tmp/hostctl "${DESTDIR}/tmp/hostctl"
+    fi
     if ! mount | grep "${DESTDIR}/dev/shm" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/dev/shm"
     fi

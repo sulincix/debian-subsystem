@@ -9,8 +9,9 @@ trim(){
 done
 }
 ps ax | grep -v grep | grep "/usr/bin/hostctl-daemon$" | grep -v "$$" &>/dev/null && exit 0
-rm -f ${DESTDIR}/tmp/hostctl || true
-mkfifo ${DESTDIR}/tmp/hostctl &>/dev/null || true
+rm -f /tmp/hostctl &>/dev/null || true
+mkfifo /tmp/hostctl &>/dev/null || true
+chmod 777 /tmp/hostctl &>/dev/null || true
  echo "##### $(LANG=C date) ##### CREATING DAEMON #####" >> ~/.local/hostctl.log
 while true ; do
     while read line < ${DESTDIR}/tmp/hostctl

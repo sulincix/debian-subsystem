@@ -23,8 +23,10 @@ else
     export HOME="/home/${USERNAME}"
 fi
 export XDG_RUNTIME_DIR=/tmp/runtime-${USER}
+[[ ! -d "${XDG_RUNTIME_DIR}" ]] && mkdir -p  "${XDG_RUNTIME_DIR}"
 [[ ! -d "$HOME" ]] && mkdir -p "$HOME"
 chown "${USER}" "${HOME}"
+chown "${USER}" "${XDG_RUNTIME_DIR}"
 cd "${HOME}"
 source /etc/profile || true
 get_shell(){
