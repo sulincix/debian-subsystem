@@ -4,6 +4,7 @@ int main(string[] args){
     Gtk.init (ref args);
     Gtk.Window window = new Gtk.Window (Gtk.WindowType.TOPLEVEL);
     var term = new Vte.Terminal();
+    term.set_font_scale(0.9);
     term.child_exited.connect ( (t)=> { Gtk.main_quit(); } );
     var cmd = "";
     try{
