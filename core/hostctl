@@ -3,7 +3,7 @@ if ! ls /tmp/hostctl &>/dev/null ; then
     echo -e "Failed to connect hostctl."
     exit 1
 fi
-timeout 3 echo "$*" > /run/hostctl || {
+timeout 3 echo "$*" > /tmp/hostctl || {
     echo -e "Failed to connect hostctl."
     exit 1
 
