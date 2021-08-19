@@ -26,6 +26,10 @@ cd debian-subsystem
 make
 make install DESTDIR=/
 ```
+Debian based distribution users must run this
+```
+ make fix-debian DESTDIR=/
+```
 
 if you dont need terminal and session component you can run `make install-core`
 
