@@ -1,2 +1,6 @@
-export XDG_DATA_DIRS+=":/usr/share:$(bash -c 'source /usr/lib/sulin/dsl/variable.sh; echo ${DESTDIR}')/var/share"
-echo true | debian --no-install
+echo true | debian --no-install &
+if [ $UID -gt 999 ] ; then
+    if [ "${XDG_DATA_DIRS}" != "" ] ; then
+        export XDG_DATA_DIRS="$(bash -c 'source /usr/lib/sulin/dsl/variable.sh; echo ${DESTDIR}')/var/share:${XDG_DATA_DIRS}"
+    fi
+fi
