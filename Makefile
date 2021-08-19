@@ -48,8 +48,15 @@ install-session:
 	mkdir -p $(DESTDIR)/usr/share/xsessions/ || true
 	mkdir -p $(DESTDIR)/usr/share/applications/ || true
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
+	mkdir -p $(DESTDIR)/etc/X11/xinit/xinitrc.d/ || true
 	install Xsession/debian-session $(DESTDIR)/usr/bin/
 	install Xsession/debian-xdg-open $(DESTDIR)/usr/bin/
 	install Xsession/debxdg $(DESTDIR)/usr/lib/sulin/dsl || true
 	install Xsession/debxdg.conf $(DESTDIR)/usr/lib/sulin/dsl || true
 	install Xsession/debian-session.desktop $(DESTDIR)/usr/share/xsessions/
+	install Xsession/xinitrc $(DESTDIR)/etc/X11/xinit/xinitrc.d/99-dsl
+
+fix-debian:
+	mkdir -p $(DESTDIR)/etc/X11/Xsession.d/ || true
+	echo "source /etc/X11/xinit/xinitrc.d/*" > $(DESTDIR)/etc/X11/Xsession.d/98-xinitrc
+	chmod +x $(DESTDIR)/etc/X11/Xsession.d/98-xinitrc
