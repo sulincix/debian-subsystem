@@ -128,11 +128,21 @@ gentoo_init(){
 }
 
 common_init(){
-    [[ -f ${DESTDIR}/bin/debrun ]] || cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
-    [[ -f ${DESTDIR}/bin/hostctl ]] || cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
-    [[ -f ${DESTDIR}/bin/debxdg ]] || cp -prf /usr/lib/sulin/dsl/debxdg ${DESTDIR}/bin/debxdg
-    [[ -f ${DESTDIR}/etc/debxdg.conf ]] || cp -prf /usr/lib/sulin/dsl/debxdg.conf ${DESTDIR}/etc/debxdg.conf
+    cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
+    cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
+    cp -prf /usr/lib/sulin/dsl/debxdg ${DESTDIR}/bin/debxdg
+    cp -prf /usr/lib/sulin/dsl/debxdg.conf ${DESTDIR}/etc/debxdg.conf
     [[ -f ${DESTDIR}/bin/iniparser ]] || cp -prf $(which iniparser) ${DESTDIR}/bin/iniparser
+    if [[ ! -d ${DESTDIR}/var/share ]] ; then
+        mkdir -p ${DESTDIR}/var/share
+        ln -s ../../usr/share/icons  ${DESTDIR}/var/share/icons
+        ln -s ../../usr/share/themes  ${DESTDIR}/var/share/themes
+    fi
+    if [[ ! -d /usr/lib/sulin/dsl/share ]] ; then
+        mkdir -p /usr/lib/sulin/dsl/share
+        ln -s ../../../../share/icons /usr/lib/sulin/dsl/share/icons
+        ln -s ../../../../share/themes /usr/lib/sulin/dsl/share/themes
+    fi
 }
 debian_check(){
     set -e

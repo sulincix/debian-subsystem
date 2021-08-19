@@ -29,6 +29,9 @@ chown "${USER}" "${HOME}"
 chown "${USER}" "${XDG_RUNTIME_DIR}"
 cd "${HOME}"
 source /etc/profile || true
+if [[ -d /system/usr/lib/sulin/dsl/share ]] ; then
+    export XDG_DATA_DIRS="/usr/share/:${XDG_DATA_DIRS}:/system/usr/lib/sulin/dsl/share"
+fi
 get_shell(){
     if [[ $UID -eq 0 && "$ROOTMODE" != "1" ]] ; then
         echo "su -p $USER"

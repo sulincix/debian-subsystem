@@ -17,7 +17,7 @@ install-cli:
 	mkdir -p $(DESTDIR)/etc/profile.d/ || true
 	install cli/debian $(DESTDIR)/usr/bin/debian
 	install cli/debian-umount $(DESTDIR)/usr/bin/debian-umount
-	install cli/profile $(DESTDIR)/etc/profile.d/99-dsl
+	install cli/profile $(DESTDIR)/etc/profile.d/99-dsl.sh
 
 install-core: install-polkit install-cli
 	make -C utils install
