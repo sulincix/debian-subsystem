@@ -54,9 +54,9 @@ install-session:
 	install Xsession/debxdg $(DESTDIR)/usr/lib/sulin/dsl || true
 	install Xsession/debxdg.conf $(DESTDIR)/usr/lib/sulin/dsl || true
 	install Xsession/debian-session.desktop $(DESTDIR)/usr/share/xsessions/
-	install Xsession/xinitrc $(DESTDIR)/etc/X11/xinit/xinitrc.d/99-dsl
+	install Xsession/xinitrc $(DESTDIR)/etc/X11/xinit/xinitrc.d/98-dsl
 
 fix-debian:
 	mkdir -p $(DESTDIR)/etc/X11/Xsession.d/ || true
-	echo "source /etc/X11/xinit/xinitrc.d/*" > $(DESTDIR)/etc/X11/Xsession.d/98-xinitrc
-	chmod +x $(DESTDIR)/etc/X11/Xsession.d/98-xinitrc
+	mv $(DESTDIR)/etc/X11/xinit/xinitrc.d/98-dsl $(DESTDIR)/etc/X11/Xsession.d/98-dsl
+	rmdir $(DESTDIR)/etc/X11/xinit/xinitrc.d/ || true
