@@ -11,12 +11,11 @@ echo "  --set     :  set variable"
 echo "  file path :  open file with selected program"
 exit $1
 }
-echo $@
 if [[ "$1" == "--get" ]] ; then
-    [[ $# -ne 3 ]] || help_msg 1
+    [[ "$2" == "" ]] && help_msg 1
     get "$2"
 elif [[ "$1" == "--set" ]] ; then
-    [[ $# -ne 4 ]] ||  help_msg 1
+    [[ "$3" == "" || "$2" == "" ]] &&  help_msg 1
     sed -i "/^$2=.*/d" ~/.config/debxdg.conf
     echo "$2=$3" >> ~/.config/debxdg.conf
 elif [[ -f "$1" ]] ; then
@@ -28,5 +27,7 @@ elif [[ -f "$1" ]] ; then
     else
         "$app" "$file"
     fi
+else
+    help_msg
 fi
 
