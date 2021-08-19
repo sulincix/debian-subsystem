@@ -1,7 +1,4 @@
 #!/bin/bash
-get(){
-    iniparser ~/.config/debxdg.conf "Main" "$1"
-}
 [[ -f "$1" ]] && exec debian-xdg-open $@
 source /usr/lib/sulin/dsl/variable.sh
 if [[ $(get x-terminal-emulator) != "" ]] ; then

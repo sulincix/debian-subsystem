@@ -3,6 +3,10 @@
 get_var(){
     iniparser /etc/debian.conf "${SYSTEM}" "$1"
 }
+get(){
+    [[ -f ~/.config/debxdg.conf ]] || cp -pf /etc/debxdg.conf ~/.config/debxdg.conf
+    iniparser ~/.config/debxdg.conf "Main" "$1"
+}
 if [[ -f /etc/debian.conf ]] ; then
     DIST=$(get_var DIST)
     REPO=$(get_var REPO)
