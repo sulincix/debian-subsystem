@@ -1,7 +1,7 @@
 DESTDIR="$(bash -c 'source /usr/lib/sulin/dsl/variable.sh; echo ${DESTDIR}')"
 if [ -z "$XDG_DATA_DIRS" ]; then
-    XDG_DATA_DIRS=/usr/local/share/:/usr/share/:$DESTDIR
+    XDG_DATA_DIRS=/usr/local/share/:/usr/share/:$DESTDIR/var/share
 else
-    XDG_DATA_DIRS="$XDG_DATA_DIRS":$DESTDIR
+    XDG_DATA_DIRS="$XDG_DATA_DIRS":$DESTDIR/var/share
 fi
 export XDG_DATA_DIRS

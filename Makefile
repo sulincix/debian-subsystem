@@ -58,5 +58,6 @@ install-session:
 
 fix-debian:
 	mkdir -p $(DESTDIR)/etc/X11/Xsession.d/ || true
-	mv $(DESTDIR)/etc/X11/xinit/xinitrc.d/98-dsl $(DESTDIR)/etc/X11/Xsession.d/98-dsl
+	rm -f $(DESTDIR)/etc/X11/xinit/xinitrc.d/98-dsl || true
+	install Xsession/xinitrc $(DESTDIR)/etc/X11/Xsession.d/98-dsl
 	rmdir $(DESTDIR)/etc/X11/xinit/xinitrc.d/ || true
