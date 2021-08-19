@@ -2,7 +2,7 @@
 CURDIR=$(pwd)
 cd /tmp
 if [[ -f /var/lib/dpkg/info ]] ; then
-    su -c "apt install git wget -yq"
+    su -c "apt install git wget make gcc -yq"
 fi
 git clone https://gitlab.com/sulincix/debian-subsystem
 cd debian-subsystem
