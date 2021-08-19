@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 [[ "${SYSTEM}" == "" ]] && SYSTEM=$(iniparser /etc/debian.conf "default" "system")
 get_var(){
     iniparser /etc/debian.conf "${SYSTEM}" "$1"

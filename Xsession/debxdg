@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 help_msg(){
 echo "Usage: debxdg [--get/--set] (file path)"
 echo "  --get     :  get variable"
