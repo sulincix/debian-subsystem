@@ -1,5 +1,4 @@
 #!/bin/bash
-hostctl-daemon &
 get(){
     iniparser ~/.config/debxdg.conf "Main" "$1"
 }
