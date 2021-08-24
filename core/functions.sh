@@ -143,6 +143,13 @@ common_init(){
         ln -s ../../../../share/icons /usr/lib/sulin/dsl/share/icons
         ln -s ../../../../share/themes /usr/lib/sulin/dsl/share/themes
     fi
+    if [[ ! -d /usr/lib/sulin/dsl/ld ]] ; then
+        mkdir -p /usr/lib/sulin/dsl/ld
+        ln -s ${DESTDIR}/lib /usr/lib/sulin/dsl/ld/lib
+        ln -s ${DESTDIR}/usr/lib /usr/lib/sulin/dsl/ld/usrlib
+        ln -s ${DESTDIR}/lib/x86_64-linux-gnu /usr/lib/sulin/dsl/ld/x86_64-linux-gnu
+        ln -s ${DESTDIR}/usr/lib/x86_64-linux-gnu /usr/lib/sulin/dsl/ld/usrx86_64-linux-gnu
+    fi
 }
 debian_check(){
     set -e

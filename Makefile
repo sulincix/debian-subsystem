@@ -22,7 +22,7 @@ install-cli:
 install-core: install-polkit install-cli
 	make -C utils install
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
-	mkdir -p $(DESTDIR)/etc || true
+	mkdir -p $(DESTDIR)/etc/ld.so.conf.d || true
 	install core/debrun.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/version $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/
@@ -30,7 +30,8 @@ install-core: install-polkit install-cli
 	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/hostctl $(DESTDIR)/usr/lib/sulin/dsl/
-	[ ! -f $(DESTDIR)/etc/debian.conf ] && install debian.conf  $(DESTDIR)/etc/
+	[ ! -f $(DESTDIR)/etc/debian.conf ] && install debian.conf  $(DESTDIR)/etc/ || true
+	install ldconfig $(DESTDIR)/etc/ld.so.conf.d/99-dsl.conf
 
 install-terminal:
 	mkdir -p $(DESTDIR)/usr/share/applications/ || true
