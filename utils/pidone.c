@@ -7,6 +7,7 @@
 #include <string.h>
 
 char cmd[4096];
+uid_t uid;
 static char child_stack[1024*1024];
 
 int run(const char *name) {
@@ -19,6 +20,7 @@ int run(const char *name) {
   execvp(cmd, argv);
 }
 static int child_fn() {
+  setuid(uid);
   run(cmd);
   return 0;
 }
@@ -31,6 +33,8 @@ int main(int argc,char *argv[]) {
       strcat(cmd,argv[i]);
       strcat(cmd,"\" ");
   }
+  uid = getuid();
+  setuid(0);
   pid_t pid = clone(child_fn, child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD , NULL);
   
   waitpid(pid, NULL, 0);
