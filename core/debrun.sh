@@ -3,8 +3,11 @@ set -e
 USERNAME=$(grep "1000" /etc/passwd | cut -f 1 -d ":")
 if [[ $UID -eq 0 ]] ; then
     if [[ ! -f /run/debian ]] ; then
-        which systemd-tmpfiles &>/dev/null && systemd-tmpfiles --create
-        which tmpfiles &>/dev/null && tmpfiles --create
+        if which systemd-tmpfiles &>/dev/null && [[ -d /run/systemd ]] ; then
+            systemd-tmpfiles --create
+        elif which tmpfiles &>/dev/null ; then
+            tmpfiles --create
+        fi
         touch /run/debian
         chown ${USERNAME} /home/${USERNAME}
         chmod +rw /dev/snd/*

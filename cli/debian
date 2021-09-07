@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /usr/lib/sulin/dsl
+set -e
 source /usr/lib/sulin/dsl/variable.sh
 get_root(){
     if [[ $UID -ne 0 ]]; then
@@ -17,4 +17,18 @@ if [[ "$1" == "--no-install" ]] ; then
         exit 0
     fi
 fi
-$(get_root) /usr/lib/sulin/dsl/dsl.sh ${SYSTEM}
+
+if [[ -f "$1" ]] ; then
+    cat $1 | $(get_root) /usr/lib/sulin/dsl/dsl.sh
+elif [[ "$1" == "-c" ]] ; then
+    shift
+    echo "$*" | $(get_root) /usr/lib/sulin/dsl/dsl.sh
+elif [[ "$1" == "--help" ]] ; then
+    echo "debian [options]"
+    echo "  --help         : Write this message"
+    echo "  -c             : Run command from subsystem"
+    echo "  --no-install   : Do not install if not installed."
+else
+    $(get_root) /usr/lib/sulin/dsl/dsl.sh
+fi
+

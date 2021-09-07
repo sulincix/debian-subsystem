@@ -64,15 +64,7 @@ If you want to run command on host system from debian subsystem, you should use 
 
 If you want to remove debian installation, you must run first `debian-umount` then `rm -rf /var/debian/`.
 
-Distribution configs defined by `/etc/debian.conf` file. if you want to run another distribution, you can set **SYSTEM** environment.
-
-```shell
-# for run with devuan config
-export SYSTEM=devuan
-debian
-# for run archlinux config
-SYSTEM=archlinux debian
-```
+Distribution configs defined by `/etc/debian.conf` file. if you want to run another distribution, you can set **system** variable.
 
 You can send command to subsystem shell. 
 
@@ -81,6 +73,8 @@ You can send command to subsystem shell.
 echo "ls -la /" | debian
 # type 2
 debian <<< "ls -la /"
+# type 3
+debian -c "ls -la /"
 ```
 
 **d-term** is subsystem terminal application. If you install any terminal application d-term replaced with it. (x-terminal-emulator)
