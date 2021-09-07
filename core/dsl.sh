@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-[[ $UID -ne 0 ]] && echo "You must be root!" && exit 1
+[[ $UID -ne 0 ]] && echo "You must be root! $UID" && exit 1
 umask 022
 cd /usr/lib/sulin/dsl
 setenforce 0 &>/dev/null || true

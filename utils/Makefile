@@ -8,5 +8,5 @@ clean:
 
 install:
 	mkdir -p $(DESTDIR)/usr/bin/ || true
-	install pidone $(DESTDIR)/usr/bin/
+	cp -fp pidone $(DESTDIR)/usr/bin/
 	install iniparser $(DESTDIR)/usr/bin/iniparser

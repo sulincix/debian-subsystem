@@ -1,9 +1,11 @@
 DESTDIR=/
 build:
 	make -C utils build
+	make -C cli build
 	make -C terminal build
 clean:
 	make -C utils clean
+	make -C cli clean
 	make -C terminal clean
 
 install: install-core install-terminal install-session
@@ -18,6 +20,7 @@ install-cli:
 	install cli/debian $(DESTDIR)/usr/bin/debian
 	install cli/debian-umount $(DESTDIR)/usr/bin/debian-umount
 	install cli/profile $(DESTDIR)/etc/profile.d/99-dsl.sh
+	[ -f cli/droot ] && cp -fp cli/droot $(DESTDIR)/usr/bin/
 
 install-core: install-polkit install-cli
 	make -C utils install
