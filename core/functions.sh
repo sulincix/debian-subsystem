@@ -143,6 +143,7 @@ common_init(){
         ln -s ../../../../share/icons /usr/lib/sulin/dsl/share/icons
         ln -s ../../../../share/themes /usr/lib/sulin/dsl/share/themes
     fi
+    cat /etc/machine-id > ${DESTDIR}/etc/machine-id
 }
 debian_check(){
     set -e

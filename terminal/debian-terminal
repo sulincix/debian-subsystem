@@ -3,13 +3,13 @@
 source /usr/lib/sulin/dsl/variable.sh
 if [[ $(get x-terminal-emulator) != "" ]] ; then
     if [[ $(get x-terminal-emulator) == "d-term" ]] ; then
-        /usr/lib/sulin/dsl/d-term "pkexec /usr/lib/sulin/dsl/dsl.sh"
+        /usr/lib/sulin/dsl/d-term "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
     fi
-    exec pkexec /usr/lib/sulin/dsl/dsl.sh <<< "$(get x-terminal-emulator)"
+    exec $(get_root) /usr/lib/sulin/dsl/dsl.sh <<< "$(get x-terminal-emulator)"
 elif ls ${DESTDIR}/usr/bin/x-terminal-emulator &>/dev/null ; then
-    exec pkexec /usr/lib/sulin/dsl/dsl.sh <<< x-terminal-emulator
+    exec $(get_root) /usr/lib/sulin/dsl/dsl.sh <<< x-terminal-emulator
 elif [[ -f /usr/lib/sulin/dsl/d-term ]] ; then
-    /usr/lib/sulin/dsl/d-term "pkexec /usr/lib/sulin/dsl/dsl.sh"
+    /usr/lib/sulin/dsl/d-term "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
 elif which xterm &>/dev/null ; then
-    exec xterm -e "pkexec /usr/lib/sulin/dsl/dsl.sh"
+    exec xterm -e "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
 fi

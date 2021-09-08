@@ -10,5 +10,5 @@ int main(int argc, char* argv[]){
     }
     setuid(0);
     setenv("USER","root",1);
-    execvp("/usr/lib/sulin/dsl/dsl.sh",NULL);
+    execvp("/usr/lib/sulin/dsl/dsl.sh",argv);
 }

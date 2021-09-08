@@ -1,19 +1,7 @@
 #!/bin/bash
 set -e
 source /usr/lib/sulin/dsl/variable.sh
-get_root(){
-    if [[ $UID -ne 0 ]]; then
-        if which droot &>/dev/null && ls -la $(which droot)| grep -e "^...s" &>/dev/null ; then
-            echo "exec droot"
-        elif which pkexec &>/dev/null && [[ "$NOPKEXEC" == "" ]] ; then
-            echo "exec pkexec"
-        else
-            echo "su -c"
-        fi
-    else
-        echo "env ROOTMODE=1"
-    fi
-}
+
 if [[ "$1" == "--no-install" ]] ; then
     if [[ ! -f "${DESTDIR}/etc/os-release" ]] ; then
         exit 0
@@ -30,6 +18,7 @@ elif [[ "$1" == "--help" ]] ; then
     echo "  --help         : Write this message"
     echo "  -c             : Run command from subsystem"
     echo "  --no-install   : Do not install if not installed."
+    echo "  --root         : Start with root mode"
 else
     $(get_root) /usr/lib/sulin/dsl/dsl.sh
 fi

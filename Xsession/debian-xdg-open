@@ -2,9 +2,9 @@
 source /usr/lib/sulin/dsl/variable.sh
 if [[ ! -f ${DESTDIR}/etc/os-release ]] ; then
     if [[ -f /usr/bin/d-term ]] ; then
-        /usr/bin/d-term pkexec /usr/lib/sulin/dsl/dsl.sh
+        /usr/bin/d-term $(get_root) /usr/lib/sulin/dsl/dsl.sh
     else
-        xterm -e "pkexec /usr/lib/sulin/dsl/dsl.sh true"
+        xterm -e "$(get_root) /usr/lib/sulin/dsl/dsl.sh true"
     fi
 fi
 for arg in "$@" ; do
@@ -14,6 +14,6 @@ for arg in "$@" ; do
         echo "File $file not found"
     else
         cd /usr/lib/sulin/dsl
-        pkexec /usr/lib/sulin/dsl/dsl.sh --xdg "/system/$file"
+        $(get_root) /usr/lib/sulin/dsl/dsl.sh --xdg "/system/$file"
     fi
 done
