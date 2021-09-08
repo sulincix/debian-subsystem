@@ -18,7 +18,6 @@ elif [[ "$1" == "--help" ]] ; then
     echo "  --help         : Write this message"
     echo "  -c             : Run command from subsystem"
     echo "  --no-install   : Do not install if not installed."
-    echo "  --root         : Start with root mode"
 else
     $(get_root) /usr/lib/sulin/dsl/dsl.sh
 fi

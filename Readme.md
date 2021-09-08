@@ -3,6 +3,26 @@
 Debian subsystem integration for host distribution.
 
 It uses chroot environment and You can run chrooted cli/gui appilcations on debian.
+
+### Supported distributions
+* Debian
+* Devuan
+* Ubuntu
+* Parrot
+* Pardus
+* Kali
+* Gentoo
+* Sulin
+* Archlinux
+
+### Features
+* Written pure bash and C
+* Open files with subsystem applications
+* Open subsystem session
+* Open subsystem terminal
+* Home directory is common
+* Dont need service
+
 ### Parts
 * Debian session
 * Debian terminal
@@ -11,7 +31,7 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 ### Dependencies:
 * debootstrap (if does not exists will install from source)
 * wget (for install debootstrap from source)
-* polkit (for rootles chroot)
+* polkit (only need if droot not exists)
 * make (for self update)
 * busybox
 * vte-2.91 (for d-term)
@@ -54,6 +74,8 @@ if you dont need terminal and session component you can run `make install-core`
 
 `debian-xdg-open`  : Open file with xdg-open from debian
 
+`droot`            : get a subsystem shell
+
 ### Usage:
 You can use `debian` command to run debian subsystem shell. Subsystem shell **pid** value is **1** but **/proc** directory is common. So you can see host process in debian.
 
@@ -91,4 +113,5 @@ https://gitlab.com/sulincix/debian-subsystem
 ### Bugs:
 * pavucontrol not working (however alsamixer working)
 * polkit authentication not working
+* gnome-session not working as subsystem session
 * shell job control not available (if chroot command is symlink of busybox)
