@@ -9,6 +9,10 @@ trim(){
 }
 ps ax | grep -v grep | grep "hostctl" | trim | cut -f "1" -d " " | xargs kill -9 &>/dev/null || true
 rm -f "${DESTDIR}"/tmp/hostctl
+PID_LIST=$(lsof +D "${DESTDIR}" 2>/dev/null | grep "${DESTDIR}" | cut -f 1 | sort -nu)
+for p in ${PID_LIST[@]} ; do
+    kill -9 $p
+done
 umount_all
 
 if [[ "$1" == "--remove" ]] ; then

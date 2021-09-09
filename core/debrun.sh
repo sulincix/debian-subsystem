@@ -16,6 +16,9 @@ if [[ $UID -eq 0 ]] ; then
     if [[ ! -d /run/dbus ]] ; then
         mkdir -p /run/dbus
     fi
+    if [[ ! -e /run/dbus/system_bus_socket ]] ; then
+        dbus-daemon --system &
+    fi
 fi
 export PULSE_SERVER=127.0.0.1
 if [[ "$ROOTMODE" == "1" ]] ; then
