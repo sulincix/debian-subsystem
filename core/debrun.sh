@@ -16,7 +16,7 @@ if [[ $UID -eq 0 ]] ; then
     if [[ ! -d /run/dbus ]] ; then
         mkdir -p /run/dbus
     fi
-    if [[ ! -e /run/dbus/system_bus_socket ]] ; then
+    if [[ ! -e /run/dbus/system_bus_socket ]] && which dbus-daemon &>/dev/null ; then
         dbus-daemon --system &
     fi
 fi
