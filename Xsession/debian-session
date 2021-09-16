@@ -9,9 +9,9 @@ if [[ "$(get x-session-manager)" != "" ]] ; then
     fi
     exec $(get_root) /usr/lib/sulin/dsl/dsl.sh <<< "$(get x-session-manager)"
 elif ls ${DESTDIR}/etc/alternatives/x-session-manager &>/dev/null ; then
-    exec $(get_root) /usr/lib/sulin/dsl/dsl.sh <<< /etc/X11/Xsession
+    $(get_root) /usr/lib/sulin/dsl/dsl.sh <<< /etc/X11/Xsession
 elif [[ -f /usr/lib/sulin/dsl/d-term ]] ; then
-    exec /usr/lib/sulin/dsl/d-term "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
+    /usr/lib/sulin/dsl/d-term "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
 else
-    exec xterm -e "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
+    xterm -e "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
 fi
