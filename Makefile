@@ -1,5 +1,8 @@
 DESTDIR=/
-build:
+
+build: build-core build-extra
+
+build-core:
 	@[ $$UID -eq 0 ]
 	make -C utils build
 	make -C cli build
@@ -13,7 +16,7 @@ clean:
 	make -C cli clean
 	make -C terminal clean
 
-install: install-core install-session
+install: install-core install-session install-extra
 
 install-extra: install-polkit install-terminal
 	
