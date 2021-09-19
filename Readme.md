@@ -30,7 +30,6 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 
 ### Dependencies:
 #### Core:
-* wget (for install debootstrap from source)
 * make (for self update)
 * busybox
 #### Extra:
