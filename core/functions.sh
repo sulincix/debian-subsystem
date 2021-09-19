@@ -19,14 +19,14 @@ trim(){
 check_update(){
     cd /tmp
     CHECK_URL="https://gitlab.com/sulincix/debian-subsystem"
-    timeout 3 wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver &>/dev/null || return
+    timeout 3 $wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver &>/dev/null || return 1
     if  [[ "$(md5sum ver | cut -f 1 -d ' ')" != "$(md5sum /usr/lib/sulin/dsl/version  | cut -f 1 -d ' ')" ]] ; then
         msg "Info" "new version available."
         msg "Info" "unmounting debian and stop hostctl"
         umount_all
         ps ax  | grep -v grep | grep hostctl-daemon | trim | cut  -d " " -f 1 | xargs kill -9 &>/dev/null || true
         msg "Info" "downloading"
-        wget -c "${CHECK_URL}/-/archive/master/debian-subsystem-master.zip" &>/dev/null || return 0
+        $wget -c "${CHECK_URL}/-/archive/master/debian-subsystem-master.zip" &>/dev/null || return 0
         unzip debian-subsystem-master.zip >/dev/null
         cd debian-subsystem-master
         msg "Info" "installing"
@@ -46,7 +46,7 @@ debian_init(){
     if ! which debootstrap &>/dev/null; then
         msg "Installing:" "debootstrap"
         cd /tmp
-        wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip || fail_exit "Failed to fetch debootstrap source"
+        $wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip || fail_exit "Failed to fetch debootstrap source"
         unzip debootstrap.zip  >/dev/null
         cd debootstrap-master
         make >/dev/null || fail_exit "Failed to install debootstrap"
@@ -69,7 +69,7 @@ arch_init(){
     if ! which arch-bootstrap &>/dev/null; then
         msg "Installing:" "debootstrap"
         cd /tmp
-        wget -c "https://raw.githubusercontent.com/tokland/arch-bootstrap/master/arch-bootstrap.sh" -O arch-bootstrap.sh || fail_exit "Failed to fetch arch-bootstrap"
+        $wget -c "https://raw.githubusercontent.com/tokland/arch-bootstrap/master/arch-bootstrap.sh" -O arch-bootstrap.sh || fail_exit "Failed to fetch arch-bootstrap"
         cp -fp arch-bootstrap.sh /usr/bin/arch-bootstrap
         chmod 755 /usr/bin/arch-bootstrap
     fi
@@ -87,7 +87,7 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
         mkdir -p /tmp/apk
         cd /tmp/apk
         arch="$(uname -m)"
-        wget -c "https://dl-cdn.alpinelinux.org/alpine/v3.12/main/$arch/apk-tools-static-2.10.7-r0.apk" -O apk-tools-static.apk || fail_exit "Failed to fetch apt-tools"
+        $wget -c "https://dl-cdn.alpinelinux.org/alpine/v3.12/main/$arch/apk-tools-static-2.10.7-r0.apk" -O apk-tools-static.apk || fail_exit "Failed to fetch apt-tools"
         tar -zxf apk-tools-static.apk
         cp -pf sbin/apk.static /bin/apk
         chmod +x /bin/apk
@@ -106,7 +106,7 @@ sulin_init(){
     if ! which sulinstrapt &>/dev/null ; then
         msg "Installing:" "sulinstrapt"
         cd /tmp
-        wget -c "https://gitlab.com/sulinos/devel/inary/-/raw/develop/scripts/sulinstrapt" -O sulinstrapt.sh || fail_exit "Failed to fetch arch-bootstrap"
+        $wget -c "https://gitlab.com/sulinos/devel/inary/-/raw/develop/scripts/sulinstrapt" -O sulinstrapt.sh || fail_exit "Failed to fetch arch-bootstrap"
         cp -fp sulinstrapt.sh /usr/bin/sulinstrapt
         chmod 755 /usr/bin/sulinstrapt
     fi
@@ -120,7 +120,7 @@ gentoo_init(){
              grep -v "nomultilib" | grep -v "musl" | grep "amd64-" | grep -v "hardened" | sort -V | head -n 1)
     curdir="$(pwd)"
     mkdir -p ${DESTDIR} || true
-    cd ${DESTDIR} ; wget -c "$stage3" -O gentoo.tar.xz ; tar -xvf /tmp/gentoo.tar.xz
+    cd ${DESTDIR} ; $wget -c "$stage3" -O gentoo.tar.xz ; tar -xvf /tmp/gentoo.tar.xz
     rm -f gentoo.tar.xz
     echo -e "GENTOO_MIRRORS=\"${REPO}\"" >> ${DESTDIR}/etc/make.conf
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
@@ -148,7 +148,7 @@ common_init(){
 }
 debian_check(){
     set -e
-    if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
+    if [[ "$(iniparser /etc/debian.conf default updates)" != "true" ]] ; then
         check_update
     fi
     if [[ "${DIST}" == "arch" ]] ; then

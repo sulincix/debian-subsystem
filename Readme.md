@@ -29,11 +29,12 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 * Debian cli
 
 ### Dependencies:
-* debootstrap (if does not exists will install from source)
+#### Core:
 * wget (for install debootstrap from source)
-* polkit (only need if droot not exists)
 * make (for self update)
 * busybox
+#### Extra:
+* polkit (only need if droot not exists)
 * vte-2.91 (for d-term)
 * gtk+-3.0 (for d-term)
 * pygobject (for d-term/python)
