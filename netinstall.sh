@@ -6,7 +6,7 @@ if [[ -d /var/lib/dpkg/info ]] ; then
 fi
 git clone https://gitlab.com/sulincix/debian-subsystem
 cd debian-subsystem
-make && su -c "make install"
+su -c "make && make build-extra && make install && make install-extra"
 if [[ -d /var/lib/dpkg/info ]] ; then
     su -c "make fix-debian"
 fi

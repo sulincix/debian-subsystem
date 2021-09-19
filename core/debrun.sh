@@ -17,7 +17,7 @@ if [[ $UID -eq 0 ]] ; then
         mkdir -p /run/dbus
     fi
     if [[ ! -e /run/dbus/system_bus_socket ]] && which dbus-daemon &>/dev/null ; then
-        dbus-daemon --system &
+        dbus-daemon --system & &>/dev/null
     fi
 fi
 export PULSE_SERVER=127.0.0.1

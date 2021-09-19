@@ -1,14 +1,21 @@
 DESTDIR=/
 build:
+	@[ $$UID -eq 0 ]
 	make -C utils build
 	make -C cli build
+
+build-extra:
+	@[ $$UID -eq 0 ]
 	make -C terminal build
+
 clean:
 	make -C utils clean
 	make -C cli clean
 	make -C terminal clean
 
-install: install-core install-terminal install-session
+install: install-core install-session
+
+install-extra: install-polkit install-terminal
 	
 install-polkit:
 	mkdir -p $(DESTDIR)/usr/share/polkit-1/actions/ || true
@@ -22,7 +29,7 @@ install-cli:
 	install cli/profile $(DESTDIR)/etc/profile.d/99-dsl.sh
 	[ -f cli/droot ] && cp -fp cli/droot $(DESTDIR)/usr/bin/
 
-install-core: install-polkit install-cli
+install-core: install-cli
 	make -C utils install
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	mkdir -p $(DESTDIR)/etc/ld.so.conf.d || true
@@ -41,7 +48,7 @@ install-terminal:
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	install terminal/d-term.desktop $(DESTDIR)/usr/lib/sulin/dsl/
-	
+
 	install terminal/d-term.py $(DESTDIR)/usr/lib/sulin/dsl/d-term
 	[ -f terminal/d-term ] && install terminal/d-term $(DESTDIR)/usr/lib/sulin/dsl/d-term || true
 	install terminal/debian-terminal $(DESTDIR)/usr/bin/debian-terminal

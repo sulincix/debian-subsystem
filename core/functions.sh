@@ -128,6 +128,7 @@ gentoo_init(){
 }
 
 common_init(){
+    chmod +x /usr/lib/sulin/dsl/* 
     cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
     cp -prf /usr/lib/sulin/dsl/debxdg ${DESTDIR}/bin/debxdg

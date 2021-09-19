@@ -35,6 +35,10 @@ int main(int argc,char *argv[]) {
   }
   uid = getuid();
   setuid(0);
+  if(getuid()!=0){
+    fputs("setuid() failing - operation not permitted\n",stderr);
+    return 7;
+  }
   pid_t pid = clone(child_fn, child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD , NULL);
   
   waitpid(pid, NULL, 0);
