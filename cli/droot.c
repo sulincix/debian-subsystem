@@ -9,6 +9,10 @@ int main(int argc, char* argv[]){
         setenv("ROOTMODE","1",1);
     }
     setuid(0);
+    if(getuid()!=0){
+        fputs("setuid() failing - operation not permitted\n",stderr);
+        return 7;
+    }  
     setenv("USER","root",1);
     execvp("/usr/lib/sulin/dsl/dsl.sh",argv);
 }

@@ -51,7 +51,7 @@ Debian based distribution users must run this
  make fix-debian DESTDIR=/
 ```
 
-if you dont need terminal and session component you can run `make install-core`
+if you dont need terminal and session component you can run `make build-core` and `make install-core`
 
 
 ### Install from single command:
