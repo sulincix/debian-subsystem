@@ -145,6 +145,9 @@ common_init(){
         ln -s ../../../../share/themes /usr/lib/sulin/dsl/share/themes
     fi
     cat /etc/machine-id > ${DESTDIR}/etc/machine-id
+    rm -f ${DESTDIR}/etc/resolv.conf &>/dev/null|| true
+    cat /etc/resolv.conf > ${DESTDIR}/etc/resolv.conf
+
 }
 debian_check(){
     set -e
@@ -163,17 +166,15 @@ debian_check(){
         debian_init
     fi
     common_init
-
-    for i in proc root dev sys dev/pts ; do
+    sync_gid
+    sync_desktop
+    for i in proc root dev sys dev/pts tmp ; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             mount --make-private --bind /$i "${DESTDIR}/$i"
         fi
     done
     if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/run"
-    fi
-    if ! mount | grep "${DESTDIR}/tmp" &>/dev/null ; then
-        mount --make-private -t tmpfs tmpfs "${DESTDIR}/tmp"
     fi
     if ! mount | grep "${DESTDIR}/dev/shm" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/dev/shm"
@@ -258,10 +259,6 @@ run(){
     s=${SHELL}
     b=${SYSTEM}
     r=${ROOTMODE}
-    rm -f ${DESTDIR}/etc/resolv.conf &>/dev/null|| true
-    cat /etc/resolv.conf > ${DESTDIR}/etc/resolv.conf
-    sync_gid
-    sync_desktop
     xhost +localhost &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do
         unset "$e" &>/dev/null

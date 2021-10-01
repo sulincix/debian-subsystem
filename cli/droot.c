@@ -8,8 +8,8 @@ int main(int argc, char* argv[]){
     }else{
         setenv("ROOTMODE","1",1);
     }
-    setuid(0);
-    if(getuid()!=0){
+    uid_t i = setuid(0);
+    if(getuid()!=0 || i != 0){
         fputs("setuid() failing - operation not permitted\n",stderr);
         return 7;
     }  
