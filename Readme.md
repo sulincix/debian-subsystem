@@ -108,11 +108,19 @@ Subsystem applications installed your application menu. You can open files with 
 
 You can disable common_home and bind_system features in **/etc/debian.conf** file. If you disable common_home, /home directory will isolated. If you disable bind_system, subsystem cannot access hosts filesystem. (/system)
 
+Fedora users can install dummy selinux for completely remove selinux from system. https://gitlab.com/sulinos/devel/libselinux-dummy
+
 ### Bug report:
-https://gitlab.com/sulincix/debian-subsystem
+https://gitlab.com/sulincix/debian-subsystem/-/issues
+
+### Mirrors:
+https://gitlab.com/sulincix/debian-subsystem (main)
+https://github.com/sulincix/debian-subsystem
+https://kod.pardus.org.tr/sulincix/debian-subsystem
 
 ### Bugs:
 * pavucontrol not working (however alsamixer working)
 * polkit authentication not working
 * gnome-session not working as subsystem session
 * shell job control not available (if chroot command is symlink of busybox)
+* selinux enforcing mode not supported. (subsystem will set permissive mode automatically)

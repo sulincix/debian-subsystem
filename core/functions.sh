@@ -128,6 +128,10 @@ gentoo_init(){
 }
 
 common_init(){
+    force_permissive=$(iniparser /etc/debian.conf "default" "force_permissive")
+    if [[ ${force_permissive} != "false" ]] ; then
+        setenforce 0 &>/dev/null || true
+    fi
     chmod +x /usr/lib/sulin/dsl/* 
     cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
