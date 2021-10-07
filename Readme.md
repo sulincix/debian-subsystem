@@ -39,6 +39,7 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 * pygobject (for d-term/python)
 * vala (for d-term/vala)
 
+Fedora users need to install glibc-static.
 ### Install:
 ```shell
 git clone https://gitlab.com/sulincix/debian-subsystem

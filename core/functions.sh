@@ -261,9 +261,9 @@ run(){
     r=${ROOTMODE}
     xhost +localhost &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do
-        unset "$e" &>/dev/null
+        unset "$e" &>/dev/null || true
     done
-    export PATH=${p}
+    export PATH="/bin:/sbin:"${p}
     export DISPLAY=${d}
     export SYSTEM=${b}
     export ROOTMODE=${r}
