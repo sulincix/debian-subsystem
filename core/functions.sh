@@ -287,7 +287,7 @@ run(){
     fi
 }
 get_chroot(){
-    if chroot --help |& head -n 1 | grep -i busybox ; then
+    if chroot --help |& head -n 1 | grep -i busybox &>/dev/null ; then
         echo "busybox chroot"
     elif [[ "$ROOTMODE" == 1 ]] ; then
         echo "chroot"
