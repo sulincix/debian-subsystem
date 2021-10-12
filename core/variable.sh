@@ -41,3 +41,4 @@ wget="wget"
 if !which wget &>/dev/null ; then
     wget="busybox wget"
 fi
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/games:/usr/games"
