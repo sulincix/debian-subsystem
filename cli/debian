@@ -1,7 +1,12 @@
 #!/bin/bash
 set -e
 source /usr/lib/sulin/dsl/variable.sh
-
+if [[ "$1" == "--system" ]] ; then
+    shift
+    export SYSTEM="$2"
+    source /usr/lib/sulin/dsl/variable.sh
+    shift
+fi
 if [[ "$1" == "--no-install" ]] ; then
     if [[ ! -f "${DESTDIR}/etc/os-release" ]] ; then
         exit 0
@@ -25,6 +30,7 @@ elif [[ "$1" == "--help" ]] ; then
     echo "  -c             : Run command from subsystem"
     echo "  --no-install   : Do not install if not installed."
     echo "  --update       : Install update if exists."
+    echo "  --system       : Install update if exists."
 else
     $(get_root) /usr/lib/sulin/dsl/dsl.sh
 fi
