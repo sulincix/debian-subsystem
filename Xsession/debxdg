@@ -7,8 +7,8 @@ echo "  --set     :  set variable"
 echo "  file path :  open file with selected program"
 exit $1
 }
+[[ -f ~/.config/debxdg.conf ]] || cp -pf /etc/debxdg.conf ~/.config/debxdg.conf
 get(){
-    [[ -f ~/.config/debxdg.conf ]] || cp -pf /etc/debxdg.conf ~/.config/debxdg.conf
     iniparser ~/.config/debxdg.conf "Main" "$1"
 }
 if [[ "$1" == "--get" ]] ; then

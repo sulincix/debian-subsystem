@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 source /usr/lib/sulin/dsl/variable.sh
+if [[ "$1" == "--help" ]] ; then
+    echo "debian [options]"
+    echo "  --help         : Write this message"
+    echo "  -c             : Run command from subsystem"
+    echo "  --no-install   : Do not install if not installed."
+    echo "  --update       : Install update if exists."
+    echo "  --system       : Install update if exists."
+    exit 0
+fi
 if [[ "$1" == "--system" ]] ; then
     shift
     export SYSTEM="$2"
@@ -24,13 +33,6 @@ elif [[ "$1" == "--update" ]] ; then
         echo "No update found. Already up to date."
         exit 0
     fi
-elif [[ "$1" == "--help" ]] ; then
-    echo "debian [options]"
-    echo "  --help         : Write this message"
-    echo "  -c             : Run command from subsystem"
-    echo "  --no-install   : Do not install if not installed."
-    echo "  --update       : Install update if exists."
-    echo "  --system       : Install update if exists."
 else
     $(get_root) /usr/lib/sulin/dsl/dsl.sh
 fi

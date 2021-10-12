@@ -200,7 +200,7 @@ debian_check(){
     if ! mount | grep "${DESTDIR}/system" &>/dev/null ; then
         bind_system=$(iniparser /etc/debian.conf "default" "bind_system")
         if [[ ${bind_system} != "false" ]] ; then
-            mount --make-private --bind / "${DESTDIR}/system"
+            mount --make-private -o ro --bind / "${DESTDIR}/system"
         else
             rmdir "${DESTDIR}/system" &>/dev/null || true
         fi
