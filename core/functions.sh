@@ -58,6 +58,10 @@ debian_init(){
     [[ $(uname -m) == "aarch64" ]] && arch=arm64
     [[ $(uname -m) == "i686" ]] && arch=i386
     [[ "$arch" == "" ]] && echo "Unsupported arch $(uname -m)" && exit 1
+    if [[ "$DIST" == "ubuntu-latest" ]] ; then
+        DIST=$(curl https://cdimage.ubuntu.com/daily-live/current/  | grep "desktop-amd64.iso" | head -n 1 | sed "s/.*href=\"//g;s/-.*//g")
+    fi
+    
     ls /usr/share/debootstrap/scripts/${DIST} &>/dev/null || ln -s stable /usr/share/debootstrap/scripts/${DIST}
     debootstrap --arch=$arch --extractor=ar --no-merged-usr "${DIST}" "${DESTDIR}" "${REPO}" || fail_exit "Failed to install debian chroot"
     msg "Creating user:" "debian"
