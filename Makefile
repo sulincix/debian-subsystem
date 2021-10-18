@@ -1,4 +1,5 @@
 DESTDIR=/
+SHELL=/bin/bash
 
 build: build-core build-extra
 
