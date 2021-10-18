@@ -28,6 +28,10 @@ elif [[ "$1" == "-c" ]] ; then
     shift
     echo "$*" | $(get_root) /usr/lib/sulin/dsl/dsl.sh
 elif [[ "$1" == "--update" ]] ; then
+    if [[ "$UID" != 0 ]] ; then
+        echo "You must be root!"
+        exit 1
+    fi
     source /usr/lib/sulin/dsl/functions.sh
     if ! check_update ; then
         echo "No update found. Already up to date."
