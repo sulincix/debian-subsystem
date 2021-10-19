@@ -155,6 +155,10 @@ common_init(){
     cat /etc/machine-id > ${DESTDIR}/etc/machine-id
     rm -f ${DESTDIR}/etc/resolv.conf &>/dev/null|| true
     cat /etc/resolv.conf > ${DESTDIR}/etc/resolv.conf
+    if [[ "$(readlink /bin/sh)" != "bash" ]] ; then
+        rm -f /bin/sh
+        ln -s bash /bin/sh
+    fi
 
 }
 debian_check(){
