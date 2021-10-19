@@ -209,6 +209,13 @@ debian_check(){
             rmdir "${DESTDIR}/system" &>/dev/null || true
         fi
     fi
+    bind_system=$(iniparser /etc/debian.conf "default" "common_flatpak")
+    if [[ ${common_flatpak} != "false" && -d /var/lib/flatpak ]] ; then
+        if ! mount | grep "${DESTDIR}/var/lib/flatpak" &>/dev/null ; then
+            mkdir -p "${DESTDIR}/var/lib/flatpak" || true
+            mount --make-private --bind "/var/lib/flatpak" "${DESTDIR}/var/lib/flatpak"
+        fi
+    fi
 
     
 }
