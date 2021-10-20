@@ -198,8 +198,7 @@ debian_check(){
             mount --make-private --bind "/${HOMEDIR}" "${DESTDIR}/home/${USERNAME}"
         fi
     fi
-    if [[ ! -d ${DESTDIR}/usr/share/applications/ ]] ; then
-        mkdir -p ${DESTDIR}/usr/share/applications/ &>/dev/null || true
+    if [[ -d ${DESTDIR}/usr/share/applications/ ]] ; then
         cp -pf /usr/lib/sulin/dsl/d-term.desktop ${DESTDIR}/usr/share/applications/
     fi
     if [[ ! -d ${DESTDIR}/system ]] ; then
