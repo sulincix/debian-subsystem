@@ -1,6 +1,10 @@
 #!/bin/bash
 if [[ "$1" == "--nested" ]] ; then
     shift
+    if ! which Xephyr &>/dev/null ; then
+        echo "Xephyr not found"
+        exit 1
+    fi
     Xephyr -title "Debian" $@ :1 &
     export DISPLAY=:1
     sleep 1
