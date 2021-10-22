@@ -120,7 +120,6 @@ https://gitlab.com/sulincix/debian-subsystem/-/issues
 * https://kod.pardus.org.tr/sulincix/debian-subsystem
 
 ### Bugs:
-* pavucontrol not working (however alsamixer working)
 * polkit authentication not working
 * gnome-session not working as subsystem session
 * shell job control not available (if chroot command is symlink of busybox)
