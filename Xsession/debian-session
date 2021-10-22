@@ -1,4 +1,10 @@
 #!/bin/bash
+if [[ "$1" == "--nested" ]] ; then
+    shift
+    Xephyr $@ :1 &
+    export DISPLAY=:1
+    sleep 1
+fi
 get(){
     iniparser ~/.config/debxdg.conf "Main" "$1"
 }
