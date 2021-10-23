@@ -82,7 +82,7 @@ arch_init(){
     sync
     msg "Creating user:" "debian"
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir ${DESTDIR}/home/debian
+    mkdir "${DESTDIR}/home/${USERNAME}"
 }
 alpine_init(){
 ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
