@@ -27,4 +27,5 @@ umount_all
 
 if [[ "$1" == "--remove" ]] ; then
     rm -rf "${DESTDIR}"
+    rm -rf /usr/share/applications/debian/*.desktop
 fi
