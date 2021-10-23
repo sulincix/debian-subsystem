@@ -268,7 +268,9 @@ sync_desktop(){
             fi
         done
     done
-    stat "${DESTDIR}"/usr/share/applications | grep Modify > "${DESTDIR}/var/cache/app-ltime"
+    if [[ -d ${DESTDIR}/usr/share/applications/ ]] ; then
+        stat "${DESTDIR}"/usr/share/applications | grep Modify > "${DESTDIR}/var/cache/app-ltime"
+    fi
 }
 
 run(){
