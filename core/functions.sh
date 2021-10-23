@@ -73,12 +73,12 @@ arch_init(){
     if ! which arch-bootstrap &>/dev/null; then
         msg "Installing:" "debootstrap"
         cd /tmp
-        $wget -c "https://raw.githubusercontent.com/tokland/arch-bootstrap/master/arch-bootstrap.sh" -O arch-bootstrap.sh || fail_exit "Failed to fetch arch-bootstrap"
-        cp -fp arch-bootstrap.sh /usr/bin/arch-bootstrap
-        chmod 755 /usr/bin/arch-bootstrap
+        $wget -c "https://gitlab.com/tearch-linux/applications-and-tools/archstrap/-/raw/master/archstrap.sh" -O archstrap.sh || fail_exit "Failed to fetch arch-bootstrap"
+        cp -fp archstrap.sh /usr/bin/archstrap
+        chmod 755 /usr/bin/archstrap
     fi
     arch="$(uname -m)"
-    arch-bootstrap -a "$arch" -r "${REPO}" -d "${DESTDIR}/pkgs" "${DESTDIR}" || fail_exit "Failed to install archlinux chroot"
+    archstrap "${DESTDIR}" -r "${REPO}" || fail_exit "Failed to install archlinux chroot"
     sync
     msg "Creating user:" "debian"
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
