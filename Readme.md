@@ -14,6 +14,7 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 * Gentoo
 * Sulin
 * Archlinux
+* Manjaro
 
 ### Features
 * Written pure bash and C
