@@ -212,7 +212,7 @@ debian_check(){
             rmdir "${DESTDIR}/system" &>/dev/null || true
         fi
     fi
-    bind_system=$(iniparser /etc/debian.conf "default" "common_flatpak")
+    common_flatpak=$(iniparser /etc/debian.conf "default" "common_flatpak")
     if [[ ${common_flatpak} != "false" && -d /var/lib/flatpak ]] ; then
         if ! mount | grep "${DESTDIR}/var/lib/flatpak" &>/dev/null ; then
             mkdir -p "${DESTDIR}/var/lib/flatpak" || true
@@ -279,6 +279,7 @@ run(){
     s=${SHELL}
     b=${SYSTEM}
     r=${ROOTMODE}
+    u=${USERNAME}
     xhost +localhost &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do
         unset "$e" &>/dev/null || true
@@ -287,6 +288,7 @@ run(){
     export DISPLAY=${d}
     export SYSTEM=${b}
     export ROOTMODE=${r}
+    export USERNAME=${u}
     if [[ -f ${DESTDIR}/${SHELL} ]] ; then
         export SHELL=${s}
     else
