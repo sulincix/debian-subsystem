@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-source /usr/lib/sulin/dsl/variable.sh
 if [[ "$1" == "--help" ]] ; then
     echo "debian [options]"
     echo "  --help         : Write this message"
@@ -11,11 +10,11 @@ if [[ "$1" == "--help" ]] ; then
     exit 0
 fi
 if [[ "$1" == "--system" ]] ; then
-    shift
     export SYSTEM="$2"
-    source /usr/lib/sulin/dsl/variable.sh
+    shift
     shift
 fi
+source /usr/lib/sulin/dsl/variable.sh
 if [[ "$1" == "--no-install" ]] ; then
     if [[ ! -f "${DESTDIR}/etc/os-release" ]] ; then
         exit 0
