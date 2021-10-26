@@ -2,9 +2,8 @@
 set -e
 [[ $UID -ne 0 ]] && echo "You must be root! $UID" && exit 1
 umask 022
-cd /usr/lib/sulin/dsl
-source variable.sh
-source functions.sh
+source /usr/lib/sulin/dsl/variable.sh
+source /usr/lib/sulin/dsl/functions.sh
 wsl_block || {
     echo "Fucking WSL environment is not allowed!"
     echo -e "\033[?25l"
