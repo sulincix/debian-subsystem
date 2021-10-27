@@ -5,8 +5,3 @@ build:
 
 clean:
 	rm -f pidone iniparser
-
-install:
-	mkdir -p $(DESTDIR)/usr/bin/ || true
-	cp -fp pidone $(DESTDIR)/usr/bin/
-	install iniparser $(DESTDIR)/usr/bin/iniparser
