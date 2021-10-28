@@ -1,4 +1,4 @@
-set -e
+set -ex
 msg(){
     echo -e "\033[32;1m$1\033[;0m $2"
 }
@@ -130,8 +130,9 @@ void_init(){
         cp -pf ./usr/bin/xbps-install.static /bin/xbps-install
     fi
     yes | SSL_NO_VERIFY_PEER=1 XBPS_ARCH=$arch xbps-install -f -S -r ${DESTDIR} -R "$REPO" base-system -y
-    chroot "${DESTDIR}" adduser "${USERNAME}" -D -H -h "/home/${USERNAME}" -s /bin/ash || fail_exit "Failed to create debian user"
-    mkdir "${DESTDIR}/home/"${USERNAME}""
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
+    mkdir "${DESTDIR}/home/${USERNAME}"
+    chmod 777 "${DESTDIR}/tmp"
 }
 gentoo_init(){
     ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
@@ -259,6 +260,7 @@ sync_gid(){
 }
 
 sync_desktop(){
+    [[ ! -d "${DESTDIR}"/usr/share/applications ]] && return 0
     touch "${DESTDIR}/var/cache/app-ltime"
     mtime=$(stat "${DESTDIR}"/usr/share/applications | grep Modify)
     ltime=$(cat "${DESTDIR}/var/cache/app-ltime")
