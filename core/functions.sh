@@ -119,6 +119,20 @@ sulin_init(){
     chroot "${DESTDIR}" useradd d"${USERNAME}" -d "/data/user/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir "${DESTDIR}/data/user/${USERNAME}" || true
 }
+void_init(){
+    ls ${DESTDIR}/etc/os-release &>/dev/null && return 0
+    if ! which xbps-static &>/dev/null ; then
+        msg "Installing:" "xbps-static"
+        cd /tmp
+        arch="$(uname -m)"
+        $wget -c "https://alpha.de.repo.voidlinux.org/static/xbps-static-latest.$arch-musl.tar.xz" -O xbps-static-latest.x86_64-musl.tar.xz
+        tar -xf xbps-static-latest.x86_64-musl.tar.xz
+        cp -pf ./usr/bin/xbps-install.static /bin/xbps-install
+    fi
+    yes | SSL_NO_VERIFY_PEER=1 XBPS_ARCH=$arch xbps-install -f -S -r ${DESTDIR} -R "$REPO" base-system -y
+    chroot "${DESTDIR}" adduser "${USERNAME}" -D -H -h "/home/${USERNAME}" -s /bin/ash || fail_exit "Failed to create debian user"
+    mkdir "${DESTDIR}/home/"${USERNAME}""
+}
 gentoo_init(){
     ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
     stage3=$(curl https://www.gentoo.org/downloads/ | sed "s/.*href=\"//g" | sed "s/\".*//g" | grep "tar\." | grep -v "systemd" | \
@@ -173,6 +187,8 @@ debian_check(){
         alpine_init
     elif [[ "${DIST}" == "sulin" ]] ; then
         sulin_init
+    elif [[ "${DIST}" == "void" ]] ; then
+        void_init
     elif [[ "${DIST}" == "gentoo" ]] ; then
         gentoo_init
     else
