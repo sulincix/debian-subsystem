@@ -66,7 +66,7 @@ debian_init(){
     debootstrap --arch=$arch --extractor=ar --no-merged-usr --no-check-gpg --extractor=ar "${DIST}" "${DESTDIR}" "${REPO}" || fail_exit "Failed to install debian chroot"
     msg "Creating user:" "debian"
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir "${DESTDIR}/home/${USERNAME}"
+    mkdir -p "${DESTDIR}/home/${USERNAME}"
 }
 arch_init(){
     ls ${DESTDIR}/usr/lib/os-release &>/dev/null && return 0
@@ -82,7 +82,7 @@ arch_init(){
     sync
     msg "Creating user:" "debian"
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir "${DESTDIR}/home/${USERNAME}"
+    mkdir -p "${DESTDIR}/home/${USERNAME}"
 }
 alpine_init(){
 ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
@@ -104,7 +104,7 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
     echo "${REPO}/community/" >> ${DESTDIR}/etc/apk/repositories
     msg "Creating user:" "debian"
     chroot "${DESTDIR}" adduser "${USERNAME}" -D -H -h "/home/${USERNAME}" -s /bin/ash || fail_exit "Failed to create debian user"
-    mkdir "${DESTDIR}/home/"${USERNAME}""
+    mkdir -p "${DESTDIR}/home/"${USERNAME}""
 }
 sulin_init(){
     ls ${DESTDIR}/data/user &>/dev/null && return 0
@@ -117,7 +117,7 @@ sulin_init(){
     fi
     sulinstrapt "${DESTDIR}" -r "${REPO}"
     chroot "${DESTDIR}" useradd d"${USERNAME}" -d "/data/user/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir "${DESTDIR}/data/user/${USERNAME}" || true
+    mkdir -p "${DESTDIR}/data/user/${USERNAME}" || true
 }
 void_init(){
     ls ${DESTDIR}/etc/os-release &>/dev/null && return 0
@@ -131,7 +131,7 @@ void_init(){
     fi
     yes | SSL_NO_VERIFY_PEER=1 XBPS_ARCH=$arch xbps-install -f -S -r ${DESTDIR} -R "$REPO" base-system -y
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir "${DESTDIR}/home/${USERNAME}"
+    mkdir -p "${DESTDIR}/home/${USERNAME}"
 }
 gentoo_init(){
     ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
@@ -143,7 +143,7 @@ gentoo_init(){
     rm -f gentoo.tar.xz
     echo -e "GENTOO_MIRRORS=\"${REPO}\"" >> ${DESTDIR}/etc/make.conf
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir "${DESTDIR}/home/${USERNAME}"
+    mkdir -p "${DESTDIR}/home/${USERNAME}"
 }
 
 common_init(){
