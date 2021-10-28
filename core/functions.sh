@@ -1,4 +1,4 @@
-set -ex
+set -e
 msg(){
     echo -e "\033[32;1m$1\033[;0m $2"
 }
@@ -132,7 +132,6 @@ void_init(){
     yes | SSL_NO_VERIFY_PEER=1 XBPS_ARCH=$arch xbps-install -f -S -r ${DESTDIR} -R "$REPO" base-system -y
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir "${DESTDIR}/home/${USERNAME}"
-    chmod 777 "${DESTDIR}/tmp"
 }
 gentoo_init(){
     ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
@@ -175,6 +174,7 @@ common_init(){
         rm -f /bin/sh
         ln -s bash /bin/sh
     fi
+    chmod 777 "${DESTDIR}/tmp"
 
 }
 debian_check(){
