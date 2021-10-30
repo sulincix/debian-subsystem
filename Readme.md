@@ -79,6 +79,8 @@ if you dont need terminal and session component you can run `make build-core` an
 
 `droot`            : get a subsystem shell
 
+`pkexec-fake`      : polkit authentication with hosts pkexec
+
 ### Usage:
 You can use `debian` command to run debian subsystem shell. Subsystem shell **pid** value is **1** but **/proc** directory is common. So you can see host process in debian.
 
@@ -113,6 +115,8 @@ You can disable common_home and bind_system features in **/etc/debian.conf** fil
 Fedora users can install dummy selinux for completely remove selinux from system.
 https://gitlab.com/sulinos/devel/libselinux-dummy
 
+Polkit authentication message is wrong. Because pkexec-fake component use fifo bridge and run `echo true` command as root and return status. so You will se **/bin/echo** command instead of original command.
+
 ### Bug report:
 https://gitlab.com/sulincix/debian-subsystem/-/issues
 
@@ -122,7 +126,6 @@ https://gitlab.com/sulincix/debian-subsystem/-/issues
 * https://kod.pardus.org.tr/sulincix/debian-subsystem
 
 ### Bugs:
-* polkit authentication not working
 * gnome-session not working as subsystem session
 * shell job control not available (if chroot command is symlink of busybox)
 * selinux enforcing mode not supported. (subsystem will set permissive mode automatically)
