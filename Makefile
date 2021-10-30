@@ -11,6 +11,7 @@ build-core:
 build-extra:
 	@[ $$UID -eq 0 ]
 	make -C terminal build
+	make -C polkit build
 
 clean:
 	make -C utils clean
@@ -34,6 +35,7 @@ install-extra: install-polkit install-terminal
 	
 install-polkit:
 	install polkit/org.sulin.debian.policy $(DESTDIR)/usr/share/polkit-1/actions/
+	cp -prf polkit/pkexec-fake $(DESTDIR)/usr/lib/sulin/dsl/
 
 install-cli:
 	[ -f cli/droot ] && cp -fp cli/droot $(DESTDIR)/usr/bin/

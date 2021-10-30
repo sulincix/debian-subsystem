@@ -157,6 +157,9 @@ common_init(){
     cp -prf /usr/lib/sulin/dsl/debxdg ${DESTDIR}/bin/debxdg
     cp -prf /usr/lib/sulin/dsl/debxdg.conf ${DESTDIR}/etc/debxdg.conf
     [[ -f ${DESTDIR}/bin/iniparser ]] || cp -prf $(which iniparser) ${DESTDIR}/bin/iniparser
+    if [[ -f /usr/lib/sulin/dsl/pkexec-fake ]] ; then
+        cp -prf /usr/lib/sulin/dsl/pkexec-fake ${DESTDIR}/usr/bin/pkexec
+    fi
     if [[ ! -d ${DESTDIR}/var/share ]] ; then
         mkdir -p ${DESTDIR}/var/share
         ln -s ../../usr/share/icons  ${DESTDIR}/var/share/icons
@@ -175,8 +178,8 @@ common_init(){
         ln -s bash /bin/sh
     fi
     chmod 777 "${DESTDIR}/tmp"
-
 }
+
 debian_check(){
     set -e
     if [[ "$(iniparser /etc/debian.conf default updates)" != "true" ]] ; then
