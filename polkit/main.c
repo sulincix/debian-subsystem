@@ -4,6 +4,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#define _GNU_SOURCE
+uid_t getuid();
+uid_t setuid(uid_t uid);
+int execvp(const char *, char * const*);
+
 char* which(char* cmd);
 
 int main(int argc, char *argv[]){
