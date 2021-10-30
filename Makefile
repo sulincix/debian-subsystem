@@ -17,6 +17,7 @@ clean:
 	make -C utils clean
 	make -C cli clean
 	make -C terminal clean
+	make -C polkit clean
 
 create-dirs:
 	mkdir -p $(DESTDIR)/etc/ld.so.conf.d || true

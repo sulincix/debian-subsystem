@@ -2,3 +2,4 @@ utils/pidone
 utils/iniparser
 terminal/d-term
 cli/droot
+polkit/pkexec-fake
