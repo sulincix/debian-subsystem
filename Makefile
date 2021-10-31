@@ -57,6 +57,7 @@ install: create-dirs install-core install-session install-extra
 	install core/version $(DESTDIR)/usr/lib/sulin/dsl/
 	install ldconfig $(DESTDIR)/etc/ld.so.conf.d/99-dsl.conf
 	install utils/iniparser $(DESTDIR)/usr/bin/iniparser
+	cp -prf data $(DESTDIR)/usr/lib/sulin/dsl/
 
 install-terminal:
 	[ -f terminal/d-term ] && install terminal/d-term $(DESTDIR)/usr/lib/sulin/dsl/d-term || true

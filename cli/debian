@@ -19,6 +19,7 @@ if [[ "$1" == "--no-install" ]] ; then
     if [[ ! -f "${DESTDIR}/etc/os-release" ]] ; then
         exit 0
     fi
+    shift
 fi
 
 if [[ -f "$1" ]] ; then
