@@ -202,9 +202,14 @@ debian_check(){
     common_init
     sync_gid
     sync_desktop
-    for i in proc root dev sys dev/pts tmp ; do
+    for i in proc root tmp; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             mount --make-private --bind /$i "${DESTDIR}/$i"
+        fi
+    done
+    for i in  dev sys dev/pts ; do
+        if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
+            mount -o ro --make-private --bind /$i "${DESTDIR}/$i"
         fi
     done
     if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then

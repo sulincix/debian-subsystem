@@ -10,8 +10,6 @@ if [[ $UID -eq 0 ]] ; then
         fi
         touch /run/debian
         chown ${USERNAME} /home/${USERNAME}
-        chmod +rw /dev/snd/*
-        chmod +rw /dev/dri/*
     fi
     if [[ ! -d /run/dbus ]] ; then
         mkdir -p /run/dbus
