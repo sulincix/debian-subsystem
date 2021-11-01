@@ -21,6 +21,7 @@ if [[ "$1" == "--kill" ]] ; then
     for p in ${PID_LIST[@]} ; do
         kill -9 $p || true
     done
+    pactl unload-module module-native-protocol-tcp &>/dev/null
 shift
 fi
 umount_all

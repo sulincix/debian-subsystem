@@ -179,6 +179,14 @@ common_init(){
         ln -s bash /bin/sh
     fi
     chmod 777 "${DESTDIR}/tmp"
+    local username="$(grep '1000' /etc/passwd | cut -f 1 -d ':')"
+    if which pactl &>/dev/null; then
+        if  su "$username" -c "pactl list short modules" |& grep "module-native-protocol-tcp" &>/dev/null; then
+            true
+        else
+            su "$username" -c "pactl load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1  &>/dev/null" || true
+        fi
+    fi
 }
 
 debian_check(){
