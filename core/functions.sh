@@ -81,6 +81,7 @@ arch_init(){
     arch="$(uname -m)"
     archstrap "${DESTDIR}" -r "${REPO}" || fail_exit "Failed to install archlinux chroot"
     sync
+    cp -pf /usr/lib/sulin/dsl/data/hostctl-alpm.hook ${DESTDIR}/usr/share/libalpm/hooks/hostctl-alpm.hook
     msg "Creating user:" "debian"
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
     mkdir -p "${DESTDIR}/home/${USERNAME}"

@@ -2,6 +2,7 @@ DESTDIR=/
 SHELL=/bin/bash
 
 build: build-core build-extra
+	chmod +x -R ./*
 
 build-core:
 	@[ $$UID -eq 0 ]
