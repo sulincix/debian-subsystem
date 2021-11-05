@@ -4,7 +4,7 @@ int main(string[] args){
     Gtk.init (ref args);
     Gtk.Window window = new Gtk.Window (Gtk.WindowType.TOPLEVEL);
     var term = new Vte.Terminal();
-    term.set_font_scale(0.9);
+    term.set_font_scale(1.1);
     term.child_exited.connect ( (t)=> { Gtk.main_quit(); } );
     var cmd = "";
     try{
@@ -23,7 +23,8 @@ int main(string[] args){
     var scrolled = new Gtk.ScrolledWindow(null,null);
     window.add(scrolled);
     scrolled.add(term);
-    window.set_default_size (547,352);
+    window.set_default_size(760,488);
+    window.set_title("d-term")
     window.show_all ();
     Gtk.main ();
     return 0;
