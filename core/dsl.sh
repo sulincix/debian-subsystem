@@ -18,13 +18,13 @@ debian_check || {
     read -s -n 1 && exit 1
 }
 
-if ! ls ${DESTDIR}/tmp/hostctl &>/dev/null ; then
+if ! ls ${DESTDIR}/run/hostctl&>/dev/null ; then
     echo "Starting hostctl"
-    mkfifo ${DESTDIR}/tmp/hostctl &>/dev/null || true
-    chmod 700 ${DESTDIR}/tmp/hostctl &>/dev/null || true
-    chown ${USERNAME} ${DESTDIR}/tmp/hostctl
-    while read line < ${DESTDIR}/tmp/hostctl ; do
-        su "${USERNAME}" -c "$line" &
+    mkfifo ${DESTDIR}/run/hostctl&>/dev/null || true
+    chmod 700 ${DESTDIR}/run/hostctl&>/dev/null || true
+    chown ${USERNAME} ${DESTDIR}/run/hostctl
+    while read line < ${DESTDIR}/run/hostctl; do
+        su "${USERNAME}" -c "$line" &> ${DESTDIR}/run/hostctl &
         sleep 0.3
     done &
 fi

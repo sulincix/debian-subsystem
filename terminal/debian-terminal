@@ -1,8 +1,16 @@
 #!/bin/bash
 [[ -f "$1" ]] && exec debian-xdg-open $@
 source /usr/lib/sulin/dsl/variable.sh
-if [[ -f /usr/lib/sulin/dsl/d-term ]] ; then
-    /usr/lib/sulin/dsl/d-term "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
-elif which xterm &>/dev/null ; then
-    xterm -e "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
+if ! ls ${DESTDIR}/run/hostctl &> /dev/null ; then
+    if [[ -f /usr/lib/sulin/dsl/d-term ]] ; then
+        /usr/lib/sulin/dsl/d-term "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
+    elif which xterm &>/dev/null ; then
+        xterm -e "$(get_root) /usr/lib/sulin/dsl/dsl.sh"
+    fi
+else
+    if [[ -f /usr/lib/sulin/dsl/d-term ]] ; then
+        echo '/usr/lib/sulin/dsl/d-term "'$(get_root)' /usr/lib/sulin/dsl/dsl.sh"' > ${DESTDIR}/run/hostctl
+    elif which xterm &>/dev/null ; then
+        echo 'xterm -e "'$(get_root)' /usr/lib/sulin/dsl/dsl.sh"'  > ${DESTDIR}/run/hostctl
+    fi
 fi
