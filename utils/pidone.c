@@ -39,8 +39,9 @@ int main(int argc,char *argv[]) {
     fputs("setuid() failing - operation not permitted\n",stderr);
     return 7;
   }
-  pid_t pid = clone(child_fn, child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD , NULL);
-  
+  pid_t pid = clone(child_fn, child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | CLONE_NEWIPC | CLONE_NEWCGROUP | CLONE_VM | CLONE_VFORK | SIGCHLD , NULL);
+  setuid(0);
+ 
   waitpid(pid, NULL, 0);
   return 0;
 }

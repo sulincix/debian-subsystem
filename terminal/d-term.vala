@@ -24,7 +24,7 @@ int main(string[] args){
     window.add(scrolled);
     scrolled.add(term);
     window.set_default_size(760,488);
-    window.set_title("d-term")
+    window.set_title("d-term");
     window.show_all ();
     Gtk.main ();
     return 0;
