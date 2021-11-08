@@ -24,7 +24,7 @@ if ! ls ${DESTDIR}/run/hostctl&>/dev/null ; then
     chmod 700 ${DESTDIR}/run/hostctl&>/dev/null || true
     chown ${USERNAME} ${DESTDIR}/run/hostctl
     while read line < ${DESTDIR}/run/hostctl; do
-        su "${USERNAME}" -c "$line" &> ${DESTDIR}/run/hostctl &
+        su "${USERNAME}" -c "$line" &
         sleep 0.3
     done &
 fi
