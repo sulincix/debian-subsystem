@@ -63,7 +63,7 @@ debian_init(){
     fi
     
     ls /usr/share/debootstrap/scripts/${DIST} &>/dev/null || ln -s stable /usr/share/debootstrap/scripts/${DIST}
-    debootstrap --arch=$arch --extractor=ar --variant=minbase --no-merged-usr --no-check-gpg --extractor=ar "${DIST}" "${DESTDIR}" "${REPO}" || fail_exit "Failed to install debian chroot"
+    debootstrap --arch=$arch --extractor=ar --no-merged-usr --no-check-gpg --extractor=ar "${DIST}" "${DESTDIR}" "${REPO}" || fail_exit "Failed to install debian chroot"
     cp -pf /usr/lib/sulin/dsl/data/99hostctl ${DESTDIR}/etc/apt/apt.conf.d/99hostctl
     msg "Creating user:" "debian"
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
