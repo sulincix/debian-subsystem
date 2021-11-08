@@ -350,6 +350,7 @@ get_chroot(){
         echo "chroot --userspec ${USERNAME}:${USERNAME}"
     fi
 }
+
 fail_exit(){
     echo -e "\033[31;1mError: \033[;0m$*"
     echo -n "    => Press any key to exit"

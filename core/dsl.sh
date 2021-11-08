@@ -4,6 +4,7 @@ set -e
 umask 022
 source /usr/lib/sulin/dsl/variable.sh
 source /usr/lib/sulin/dsl/functions.sh
+echo -n "$SYSTEM" > /proc/$$/comm
 wsl_block || {
     echo "Fucking WSL environment is not allowed!"
     echo -e "\033[?25l"

@@ -17,12 +17,15 @@ fi
 ps ax | grep -v grep | grep "hostctl" | trim | cut -f "1" -d " " | xargs kill -9 &>/dev/null || true
 rm -f "${DESTDIR}"/run/hostctl
 if [[ "$1" == "--kill" ]] ; then
-    PID_LIST=$(lsof +D "${DESTDIR}" 2>/dev/null | grep "${DESTDIR}" | grep -v "${DESTDIR}/system" | grep -v "${DESTDIR}/home" | grep -v "${DESTDIR}/root" | grep -v "${DESTDIR}/var/lib/flatpak" | grep -v grep | tr -s ' ' | cut -f 2 -d ' ' | grep -v "$$")
+    set +e
+    PID_LIST=$(ps aux | grep -v grep | grep dsl.sh | tr -s ' ' | cut -f 2 -d ' ')
     for p in ${PID_LIST[@]} ; do
+        echo "kill $p"
         kill -9 $p || true
     done
     pactl unload-module module-native-protocol-tcp &>/dev/null
-shift
+    shift
+    set -e
 fi
 umount_all
 
