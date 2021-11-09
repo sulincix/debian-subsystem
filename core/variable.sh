@@ -14,6 +14,7 @@ get_root(){
     fi
 }
 [[ "${SYSTEM}" == "" ]] && SYSTEM=$(iniparser /etc/debian.conf "default" "system")
+[[ "$(iniparser /etc/debian.conf "default" "colorize")" == "false" ]] && export NO_COLOR=1
 get_var(){
     iniparser /etc/debian.conf "${SYSTEM}" "$1"
 }
