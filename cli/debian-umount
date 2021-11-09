@@ -20,7 +20,7 @@ if [[ "$1" == "--kill" ]] ; then
     set +e
     PID_LIST=$(ps aux | grep -v grep | grep dsl.sh | tr -s ' ' | cut -f 2 -d ' ')
     for p in ${PID_LIST[@]} ; do
-        echo "kill $p"
+        msg "Kill" "$p"
         kill -9 $p || true
     done
     pactl unload-module module-native-protocol-tcp &>/dev/null

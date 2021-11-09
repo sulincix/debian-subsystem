@@ -1,7 +1,15 @@
 set -e
-msg(){
-    echo -e "\033[32;1m$1\033[;0m $2"
-}
+if [[ "$NO_COLOR" == "" ]] ; then
+    msg(){
+        col="32"
+        [[ "$1" == "Error" ]] && col=31
+        echo -e "\033[$col;1m$1\033[;0m $2"
+    }
+else
+    msg(){
+        echo "$1 $2"
+    }
+fi
 wsl_block(){
     var=$(uname -r)
     [[ ! -f /proc/cpuinfo ]] && return 1
@@ -57,7 +65,7 @@ debian_init(){
     [[ $(uname -m) == "x86_64" ]] && arch=amd64
     [[ $(uname -m) == "aarch64" ]] && arch=arm64
     [[ $(uname -m) == "i686" ]] && arch=i386
-    [[ "$arch" == "" ]] && echo "Unsupported arch $(uname -m)" && exit 1
+    [[ "$arch" == "" ]] && msg "Error" "Unsupported arch $(uname -m)" && exit 1
     if [[ "$DIST" == "ubuntu-latest" ]] ; then
         DIST=$(curl https://cdimage.ubuntu.com/daily-live/current/  | grep "desktop-amd64.iso" | head -n 1 | sed "s/.*href=\"//g;s/-.*//g")
     fi
@@ -337,7 +345,7 @@ run(){
     if [[ ! -n $nopidone && ${use_pidone} != "false" ]] ; then
         exec pidone $(get_chroot) ${DESTDIR} debrun "$@"
     else
-        echo "Running without PID isolation"
+        msg "Info" "Running without PID isolation"
         exec $(get_chroot) ${DESTDIR} debrun "$@"
     fi
 }
@@ -352,7 +360,7 @@ get_chroot(){
 }
 
 fail_exit(){
-    echo -e "\033[31;1mError: \033[;0m$*"
+    msg "Error" "$*"
     echo -n "    => Press any key to exit"
     read -s -n 1 && exit 1
 }
