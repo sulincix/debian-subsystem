@@ -67,7 +67,7 @@ debian_init(){
     [[ $(uname -m) == "i686" ]] && arch=i386
     [[ "$arch" == "" ]] && msg "Error" "Unsupported arch $(uname -m)" && exit 1
     if [[ "$DIST" == "ubuntu-latest" ]] ; then
-        DIST=$(curl https://cdimage.ubuntu.com/daily-live/current/  | grep "desktop-amd64.iso" | head -n 1 | sed "s/.*href=\"//g;s/-.*//g")
+        DIST=$($wget -O - https://cdimage.ubuntu.com/daily-live/current/  | grep "desktop-amd64.iso" | head -n 1 | sed "s/.*href=\"//g;s/-.*//g")
     fi
     
     ls /usr/share/debootstrap/scripts/${DIST} &>/dev/null || ln -s stable /usr/share/debootstrap/scripts/${DIST}
@@ -101,7 +101,7 @@ ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
         mkdir -p /tmp/apk
         cd /tmp/apk
         arch="$(uname -m)"
-        apktools=$(curl https://dl-cdn.alpinelinux.org/alpine/latest-stable/main/$arch/ | grep "apk-tools-static" | sed "s/^.*=\"//g;s/\".*//g")
+        apktools=$($wget -O - https://dl-cdn.alpinelinux.org/alpine/latest-stable/main/$arch/ | grep "apk-tools-static" | sed "s/^.*=\"//g;s/\".*//g")
         $wget -c "https://dl-cdn.alpinelinux.org/alpine/latest-stable/main/$arch/$apktools" -O apk-tools-static.apk || fail_exit "Failed to fetch apt-tools"
         tar -zxf apk-tools-static.apk
         cp -pf sbin/apk.static /bin/apk
@@ -145,7 +145,7 @@ void_init(){
 }
 gentoo_init(){
     ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
-    stage3=$(curl https://www.gentoo.org/downloads/ | sed "s/.*href=\"//g" | sed "s/\".*//g" | grep "tar\." | grep -v "systemd" | \
+    stage3=$($wget -O - https://www.gentoo.org/downloads/ | sed "s/.*href=\"//g" | sed "s/\".*//g" | grep "tar\." | grep -v "systemd" | \
              grep -v "nomultilib" | grep -v "musl" | grep "amd64-" | grep -v "hardened" | sort -V | head -n 1)
     curdir="$(pwd)"
     mkdir -p ${DESTDIR} || true
@@ -340,7 +340,7 @@ run(){
         export SHELL=/bin/bash
     fi
     export TERM=linux
-    busybox chroot ${DESTDIR} debrun true || exit 1
+    chroot ${DESTDIR} debrun true || exit 1
     use_pidone=$(iniparser /etc/debian.conf "default" "pidone")
     if [[ ! -n $nopidone && ${use_pidone} != "false" ]] ; then
         exec pidone $(get_chroot) ${DESTDIR} debrun "$@"
