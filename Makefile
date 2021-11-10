@@ -29,11 +29,15 @@ create-dirs:
 	mkdir -p $(DESTDIR)/usr/share/polkit-1/actions/ || true
 	mkdir -p $(DESTDIR)/usr/share/xsessions/ || true
 	mkdir -p $(DESTDIR)/etc/X11/xinit/xinitrc.d/ || true
+	mkdir -p $(DESTDIR)/etc/xdg/menus/ || true
+	mkdir -p $(DESTDIR)/usr/share/desktop-directories/ || true
 
 
 install-core: install-cli
 
 install-extra: install-polkit install-terminal
+	install data/debian.menu $(DESTDIR)/etc/xdg/menus/debian.menu
+	install data/debian.directory $(DESTDIR)/usr/share/desktop-directories/debian.directory
 	
 install-polkit:
 	install polkit/org.sulin.debian.policy $(DESTDIR)/usr/share/polkit-1/actions/
