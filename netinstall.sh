@@ -17,7 +17,7 @@ git clone https://gitlab.com/sulinos/devel/libselinux-dummy
 git clone https://gitlab.com/sulincix/debian-subsystem
 
 cd /tmp/libselinux-dummy
-make && make install &
+make && make install
 
 cd /tmp/debian-subsystem
 make && make build-extra && make install && make install-extra
