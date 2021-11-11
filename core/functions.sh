@@ -263,7 +263,13 @@ debian_check(){
             mount --make-private --bind "/var/lib/flatpak" "${DESTDIR}/var/lib/flatpak"
         fi
     fi
-
+    block_camera=$(iniparser /etc/debian.conf "default" "block_camera")
+    if [[ ${block_camera} != "false" ]] ; then
+        for dev in $(ls ${DESTDIR}/dev/video* 2>/dev/null) ; do
+            rm -f $dev || true        
+        done
+        
+    fi
     
 }
 umount_all(){
