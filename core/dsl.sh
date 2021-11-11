@@ -21,11 +21,13 @@ debian_check || {
 
 if ! ls ${DESTDIR}/run/hostctl&>/dev/null ; then
     msg "Starting" "hostctl"
+    echo "=> $(date) :: Starting hostctl" &>>${DESTDIR}/var/log/hostctl.log
     mkfifo ${DESTDIR}/run/hostctl&>/dev/null || true
     chmod 700 ${DESTDIR}/run/hostctl&>/dev/null || true
     chown ${USERNAME} ${DESTDIR}/run/hostctl
     while read line < ${DESTDIR}/run/hostctl; do
-        su "${USERNAME}" -c "$line" &
+        echo "=> $(date) :: $line" &>>${DESTDIR}/var/log/hostctl.log
+        su "${USERNAME}" -c "$line" &>>${DESTDIR}/var/log/hostctl.log &
         sleep 0.3
     done &
 fi
