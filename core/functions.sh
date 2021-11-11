@@ -266,9 +266,8 @@ debian_check(){
     block_camera=$(iniparser /etc/debian.conf "default" "block_camera")
     if [[ ${block_camera} != "false" ]] ; then
         for dev in $(ls ${DESTDIR}/dev/video* 2>/dev/null) ; do
-            rm -f $dev || true        
+            mount --bind /dev/null $dev || true        
         done
-        
     fi
     
 }
