@@ -34,7 +34,7 @@ elif [[ "$1" == "-c" ]] ; then
     if [[ "${use_hostctl}" == "true" ]] && ls ${DESTDIR}/run/hostctl &>/dev/null  ; then
         echo 'echo "'$*'" | '$(get_root)' /usr/lib/sulin/dsl/dsl.sh' > ${DESTDIR}/run/hostctl
     else
-        echo "$*" | $(get_root) /usr/lib/sulin/dsl/dsl.sh
+        echo "$*" | exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
      fi
 elif [[ "$1" == "--update" ]] ; then
     if [[ "$UID" != 0 ]] ; then
@@ -51,6 +51,6 @@ elif [[ "$1" == "--update" ]] ; then
     msg "Info" "Check update"
     check_update
 else
-    $(get_root) /usr/lib/sulin/dsl/dsl.sh
+    exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
 fi
 

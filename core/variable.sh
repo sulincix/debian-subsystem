@@ -3,9 +3,9 @@ set -e
 get_root(){
     if [[ $UID -ne 0 ]]; then
         if which droot &>/dev/null && ls -la $(which droot)| grep -e "^...s" &>/dev/null ; then
-            echo "exec droot"
+            echo "droot"
         elif which pkexec &>/dev/null && [[ "$NOPKEXEC" == "" ]] ; then
-            echo "exec pkexec"
+            echo "pkexec"
         else
             echo "su -c"
         fi
