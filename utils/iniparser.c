@@ -178,9 +178,9 @@ char * readlines(const char * filename) {
 
     if (err) {
         if (err == FILE_NOT_EXIST) {
-            fprintf(stderr, "Error: file not found.\n", err);
+            fprintf(stderr, "Error: %s\n", "file not found.", err);
         } else if (err == FILE_READ_ERROR) {
-            fprintf(stderr, "Error: failed to read file.\n", err);
+            fprintf(stderr, "Error: %s\n", "failed to read file.", err);
         }
         exit(err);
     } else {
