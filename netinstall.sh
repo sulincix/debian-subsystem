@@ -2,18 +2,25 @@
 set -e
 CURDIR=$(pwd)
 cd /tmp
+if [[ $UID -ne 0 ]] ;; then
+    echo "You must be root !!"
+    exit 1
+fi
+rm -rf /tmp/debian-subsystem /tmp/libselinux-dummy || true
 if [[ -d /var/lib/dpkg/info ]] ; then
-    su -c "apt install git wget make gcc -yq"
+    apt install git wget make gcc -yq
+elif [[ -d /var/lib/dnf ]] ; then
+    dnf install glibc-static make gcc wget git -y
 fi
 # Install dummy selinux
 git clone https://gitlab.com/sulinos/devel/libselinux-dummy
 git clone https://gitlab.com/sulincix/debian-subsystem
 
 cd /tmp/libselinux-dummy
-su -c "make && make install" &
+make && make install &
 
 cd /tmp/debian-subsystem
-su -c "make && make build-extra && make install && make install-extra" 
+make && make build-extra && make install && make install-extra
 if [[ -d /var/lib/dpkg/info ]] ; then
     su -c "make fix-debian"
 fi
