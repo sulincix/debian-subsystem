@@ -79,7 +79,7 @@ debian_init(){
 }
 arch_init(){
     ls ${DESTDIR}/usr/lib/os-release &>/dev/null && return 0
-    if ! which arch-bootstrap &>/dev/null; then
+    if ! which archstrap &>/dev/null; then
         msg "Installing:" "debootstrap"
         cd /tmp
         $wget -c "https://gitlab.com/tearch-linux/applications-and-tools/archstrap/-/raw/master/archstrap.sh" -O archstrap.sh || fail_exit "Failed to fetch arch-bootstrap"
@@ -267,7 +267,7 @@ debian_check(){
     
 }
 umount_all(){
-    for i in system dev/pts root dev/shm dev sys proc run tmp home/"${USERNAME}" ; do
+    for i in system dev/pts root dev/shm dev sys proc run tmp home/"${USERNAME}" var/lib/flatpak ; do
         while umount -lf -R ${DESTDIR}/$i/ &>/dev/null ; do
            true
         done
