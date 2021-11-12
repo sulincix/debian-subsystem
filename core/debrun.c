@@ -66,13 +66,13 @@ int main(int argc, char argv[]){
         chown(runtime,1000,1000);
         chown(home,1000,1000);
     }
-    if (getenv("XDG_RUNTIME_DIRS")!= NULL){
-       char line[1024];
-       strcpy(line,"/usr/share:");
-       strcat(line,getenv("XDG_RUNTIME_DIRS"));
-       strcat(line,":/system/usr/lib/sulin/dsl/share");
-       setenv("XDG_RUNTIME_DIRS",line,1); 
-    }
+    char line[1024];
+    strcpy(line,"/usr/share:");
+    if (getenv("XDG_DATA_DIRS")!= NULL){
+       strcat(line,getenv("XDG_DATA_DIRS"));
+       }
+    strcat(line,":/system/usr/lib/sulin/dsl/share");
+    setenv("XDG_DATA_DIRS",line,1); 
     char cmd[1024];
     strcpy(cmd,get_shell());
     if(cmd_exists("dbus-launch") && !iseq(getenv("ROOTMODE"),"1")){
