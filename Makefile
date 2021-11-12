@@ -6,6 +6,7 @@ build: build-core build-extra
 
 build-core:
 	@[ $$UID -eq 0 ]
+	make -C core build
 	make -C utils build
 	make -C cli build
 
@@ -15,6 +16,7 @@ build-extra:
 	make -C polkit build
 
 clean:
+	make -C core clean
 	make -C utils clean
 	make -C cli clean
 	make -C terminal clean
@@ -54,12 +56,12 @@ install: create-dirs install-core install-session install-extra
 	[ ! -f $(DESTDIR)/etc/debian.conf ] && install debian.conf  $(DESTDIR)/etc/ || true
 	cp -fp utils/pidone $(DESTDIR)/usr/bin/
 	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
-	install core/debrun.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/hostctl $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/variable.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/version $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/debrun $(DESTDIR)/usr/lib/sulin/dsl/
 	install ldconfig $(DESTDIR)/etc/ld.so.conf.d/99-dsl.conf
 	install utils/iniparser $(DESTDIR)/usr/bin/iniparser
 	cp -prf data $(DESTDIR)/usr/lib/sulin/dsl/

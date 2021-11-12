@@ -162,7 +162,7 @@ common_init(){
         setenforce 0 &>/dev/null || true
     fi
     chmod +x /usr/lib/sulin/dsl/* 
-    cp -prf /usr/lib/sulin/dsl/debrun.sh ${DESTDIR}/bin/debrun
+    cp -prf /usr/lib/sulin/dsl/debrun ${DESTDIR}/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
     cp -prf /usr/lib/sulin/dsl/debxdg ${DESTDIR}/bin/debxdg
     cp -prf /usr/lib/sulin/dsl/debxdg.conf ${DESTDIR}/etc/debxdg.conf
