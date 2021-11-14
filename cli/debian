@@ -42,14 +42,14 @@ elif [[ "$1" == "--update" ]] ; then
         exit 1
     fi
     rm -f ${DESTDIR}/var/cache/app-ltime
+    msg "Info" "Check update"
+    check_update
     msg "Info" "Unmount all"
     umount_all
     msg "Info" "Sync group id"
     sync_gid
     msg "Info" "Sync applications"
     sync_desktop
-    msg "Info" "Check update"
-    check_update
 else
     exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
 fi

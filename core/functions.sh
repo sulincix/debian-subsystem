@@ -26,6 +26,9 @@ trim(){
 }
 check_update(){
     cd /tmp
+    if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
+        return
+    fi
     CHECK_URL="https://gitlab.com/sulincix/debian-subsystem"
     timeout 3 $wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver &>/dev/null || return 1
     if  [[ "$(md5sum ver | cut -f 1 -d ' ')" != "$(md5sum /usr/lib/sulin/dsl/version  | cut -f 1 -d ' ')" ]] ; then
@@ -44,8 +47,7 @@ check_update(){
         rm -rf /tmp/debian-subsystem-master
         msg "Info" "Installation finished."
         cd /usr/lib/sulin/dsl
-        msg "Info" "Restarting"
-        exec $0 $@
+        msg "Info" "Done"
     fi
     rm -f /tmp/ver &>/dev/null
 }
@@ -200,9 +202,6 @@ common_init(){
 
 debian_check(){
     set -e
-    if [[ "$(iniparser /etc/debian.conf default updates)" != "true" ]] ; then
-        check_update
-    fi
     if [[ "${DIST}" == "arch" ]] ; then
         arch_init
     elif [[ "${DIST}" == "alpine" ]] ; then
