@@ -26,6 +26,7 @@ if [[ "$1" == "--no-install" ]] ; then
     fi
     shift
 fi
+
 if [[ -f "$1" ]] ; then
     cat $1 | $(get_root) /usr/lib/sulin/dsl/dsl.sh
 elif [[ "$1" == "-c" ]] ; then

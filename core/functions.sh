@@ -309,7 +309,7 @@ sync_desktop(){
         echo -e "Name="$(iniparser "$path" "Desktop Entry" "Name")" (on $SYSTEM)" >> /usr/share/applications/$SYSTEM/$file
         echo -e "Comment="$(iniparser "$path" "Desktop Entry" "Comment") >> /usr/share/applications/$SYSTEM/$file
         echo -e "Icon="$(iniparser "$path" "Desktop Entry" "Icon") >> /usr/share/applications/$SYSTEM/$file
-        echo -e "Exec=debian --system \"$SYSTEM\" --hostctl -c \"$(iniparser "$path" "Desktop Entry" "Exec")\"" >> /usr/share/applications/$SYSTEM/$file
+        echo -e "Exec=debian --hostctl --system \"$SYSTEM\" -c \"$(iniparser "$path" "Desktop Entry" "Exec")\"" >> /usr/share/applications/$SYSTEM/$file
         echo -e "Categories=Debian;$(iniparser "$path" "Desktop Entry" "Categories")" >> /usr/share/applications/$SYSTEM/$file
         echo -e "Type=Application" >> /usr/share/applications/$SYSTEM/$file
         for var in NoDisplay NotShowIn OnlyShowIn Terminal MimeType ; do
