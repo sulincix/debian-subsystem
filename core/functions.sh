@@ -176,11 +176,13 @@ common_init(){
         mkdir -p ${DESTDIR}/var/share
         ln -s ../../usr/share/icons  ${DESTDIR}/var/share/icons
         ln -s ../../usr/share/themes  ${DESTDIR}/var/share/themes
+        ln -s ../../usr/share/fonts  ${DESTDIR}/var/share/fonts
     fi
     if [[ ! -d /usr/lib/sulin/dsl/share ]] ; then
         mkdir -p /usr/lib/sulin/dsl/share
         ln -s ../../../../share/icons /usr/lib/sulin/dsl/share/icons
         ln -s ../../../../share/themes /usr/lib/sulin/dsl/share/themes
+        ln -s ../../../../share/fonts /usr/lib/sulin/dsl/share/fonts
     fi
     cat /etc/machine-id > ${DESTDIR}/etc/machine-id
     rm -f ${DESTDIR}/etc/resolv.conf &>/dev/null|| true
