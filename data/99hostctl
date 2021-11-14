@@ -1,1 +1,1 @@
-DPkg::Post-Invoke {"hostctl debian --no-install -c true";};
+DPkg::Post-Invoke {"hostctl debian --no-install -c true || true";};

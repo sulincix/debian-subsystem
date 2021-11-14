@@ -239,7 +239,7 @@ debian_check(){
     if ! mount | grep "${DESTDIR}/home" &>/dev/null ; then
         common_home=$(iniparser /etc/debian.conf "default" "common_home")
         if [[ ${common_home} != "false" ]] ; then
-            mount --make-private --bind "/${HOMEDIR}" "${DESTDIR}/home/${USERNAME}"
+            mount --make-private -o rw,nodev,nosuid --bind "/${HOMEDIR}" "${DESTDIR}/home/${USERNAME}"
         fi
     fi
     if [[ -d ${DESTDIR}/usr/share/applications/ ]] ; then
@@ -251,7 +251,7 @@ debian_check(){
     if ! mount | grep "${DESTDIR}/system" &>/dev/null ; then
         bind_system=$(iniparser /etc/debian.conf "default" "bind_system")
         if [[ ${bind_system} != "false" ]] ; then
-            mount --make-private -o ro --bind / "${DESTDIR}/system"
+            mount --make-private -o ro,nodev,nosuid,noexec --bind / "${DESTDIR}/system"
         else
             rmdir "${DESTDIR}/system" &>/dev/null || true
         fi
@@ -298,24 +298,24 @@ sync_desktop(){
     if [[ "$mtime" == "$ltime" ]] ; then
         return
     fi
-    rm -rf /usr/share/applications/debian
-    mkdir -p /usr/share/applications/debian
+    rm -rf /usr/share/applications/$SYSTEM
+    mkdir -p /usr/share/applications/$SYSTEM
     for file in $(ls "${DESTDIR}"/usr/share/applications); do
         if [[ "$file" == "d-term.desktop" || "$file" == "mimeinfo.cache" ]] ; then
             continue
         fi
         path="${DESTDIR}/usr/share/applications/$file"
-        echo -e "[Desktop Entry]" > /usr/share/applications/debian/$file
-        echo -e "Name="$(iniparser "$path" "Desktop Entry" "Name")" (on $(iniparser /etc/debian.conf default system))" >> /usr/share/applications/debian/$file
-        echo -e "Comment="$(iniparser "$path" "Desktop Entry" "Comment") >> /usr/share/applications/debian/$file
-        echo -e "Icon="$(iniparser "$path" "Desktop Entry" "Icon") >> /usr/share/applications/debian/$file
-        echo -e "Exec=debian --hostctl -c \"$(iniparser "$path" "Desktop Entry" "Exec")\"" >> /usr/share/applications/debian/$file
-        echo -e "Categories=Debian;$(iniparser "$path" "Desktop Entry" "Categories")" >> /usr/share/applications/debian/$file
-        echo -e "Type=Application" >> /usr/share/applications/debian/$file
+        echo -e "[Desktop Entry]" > /usr/share/applications/$SYSTEM/$file
+        echo -e "Name="$(iniparser "$path" "Desktop Entry" "Name")" (on $SYSTEM)" >> /usr/share/applications/$SYSTEM/$file
+        echo -e "Comment="$(iniparser "$path" "Desktop Entry" "Comment") >> /usr/share/applications/$SYSTEM/$file
+        echo -e "Icon="$(iniparser "$path" "Desktop Entry" "Icon") >> /usr/share/applications/$SYSTEM/$file
+        echo -e "Exec=debian --system \"$SYSTEM\" --hostctl -c \"$(iniparser "$path" "Desktop Entry" "Exec")\"" >> /usr/share/applications/$SYSTEM/$file
+        echo -e "Categories=Debian;$(iniparser "$path" "Desktop Entry" "Categories")" >> /usr/share/applications/$SYSTEM/$file
+        echo -e "Type=Application" >> /usr/share/applications/$SYSTEM/$file
         for var in NoDisplay NotShowIn OnlyShowIn Terminal MimeType ; do
             
             if [[ -n $(iniparser "$path" "Desktop Entry" "$var") ]] ; then
-                echo -e "$var="$(iniparser "$path" "Desktop Entry" "$var") >> /usr/share/applications/debian/$file
+                echo -e "$var="$(iniparser "$path" "Desktop Entry" "$var") >> /usr/share/applications/$SYSTEM/$file
             fi
         done
     done
