@@ -30,8 +30,8 @@ check_update(){
         return
     fi
     CHECK_URL="https://gitlab.com/sulincix/debian-subsystem"
-    timeout 3 $wget -c "${CHECK_URL}/-/raw/master/core/version" -O ver &>/dev/null || return 1
-    if  [[ "$(md5sum ver | cut -f 1 -d ' ')" != "$(md5sum /usr/lib/sulin/dsl/version  | cut -f 1 -d ' ')" ]] ; then
+    timeout 3 $wget -c "${CHECK_URL}/-/raw/master/debian/changelog" -O ver &>/dev/null || return 1
+    if  [[ "$(md5sum ver | cut -f 1 -d ' ')" != "$(md5sum /usr/lib/sulin/dsl/changelog  | cut -f 1 -d ' ')" ]] ; then
         msg "Info" "new version available."
         msg "Info" "unmounting debian and stop hostctl"
         umount_all

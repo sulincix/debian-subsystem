@@ -57,11 +57,11 @@ install: install-core install-session install-extra
 	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/hostctl $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/variable.sh $(DESTDIR)/usr/lib/sulin/dsl/
-	install core/version $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/debrun $(DESTDIR)/usr/lib/sulin/dsl/
 	install ldconfig $(DESTDIR)/etc/ld.so.conf.d/99-dsl.conf
 	install utils/iniparser $(DESTDIR)/usr/bin/iniparser
 	cp -prf data $(DESTDIR)/usr/lib/sulin/dsl/
+	install debian/changelog $(DESTDIR)/usr/lib/sulin/dsl/
 
 install-terminal:
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
