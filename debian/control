@@ -1,0 +1,13 @@
+Source: debian-subsystem
+Section: utils
+Priority: optional
+Maintainer: Ali Riza KESKIN <parduscix@yandex.ru>
+Build-Depends: make, gcc
+Standards-Version: 4.3.0
+Homepage: https://gitlab.com/sulincix/debian-subsystem
+
+Package: debian-subsystem
+Architecture: all
+Depends: ${misc:Depends}, libc6, xz-utils, zstd, busybox
+Description: Edit me
+ Edit me. I am description

@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+
+clean:
+	dh clean
+build:
+	make
+	make install DESTDIR=debian/debian-subsystem
+	make fix-debian DESTDIR=debian/debian-subsystem
+binary:
+	dh binary
