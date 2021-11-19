@@ -159,11 +159,6 @@ gentoo_init(){
 }
 
 common_init(){
-    force_permissive=$(iniparser /etc/debian.conf "default" "force_permissive")
-    if [[ ${force_permissive} != "false" ]] ; then
-        setenforce 0 &>/dev/null || true
-        sed -i "s/^SELINUX=*/SELINUX=disabled/" /etc/sysconfig/selinux &>/dev/null || true
-    fi
     if [[ -f ${DESTDIR}/run/debian ]] ; then
         return
     fi
@@ -207,6 +202,11 @@ common_init(){
 
 debian_check(){
     set -e
+    force_permissive=$(iniparser /etc/debian.conf "default" "force_permissive")
+    if [[ ${force_permissive} != "false" ]] ; then
+        setenforce 0 &>/dev/null || true
+        sed -i "s/^SELINUX=.*/SELINUX=disabled/g" /etc/sysconfig/selinux &>/dev/null || true
+    fi
     if [[ "${DIST}" == "arch" ]] ; then
         arch_init
     elif [[ "${DIST}" == "alpine" ]] ; then
