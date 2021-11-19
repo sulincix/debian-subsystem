@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+[[ "$DEBUG" == "" ]] || set -ex
 [[ $UID -ne 0 ]] && echo "You must be root! $UID" && exit 1
 umask 022
 source /usr/lib/sulin/dsl/variable.sh
