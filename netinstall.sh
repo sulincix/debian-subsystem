@@ -2,6 +2,7 @@
 set -e
 CURDIR=$(pwd)
 cd /tmp
+setenforce 0 &>/dev/null || true
 if [[ $UID -ne 0 ]] ; then
     echo "You must be root !!"
     exit 1
@@ -18,6 +19,7 @@ git clone https://gitlab.com/sulincix/debian-subsystem
 
 cd /tmp/libselinux-dummy
 make && make install
+sed -i "s/^SELINUX=.*/SELINUX=disabled/g" /etc/sysconfig/selinux &>/dev/null || true
 
 cd /tmp/debian-subsystem
 make && make build-extra && make install && make install-extra
