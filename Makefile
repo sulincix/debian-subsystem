@@ -5,13 +5,13 @@ build:  build-core build-extra
 	chmod +x -R ./*
 
 build-core:
-	@[ $$UID -eq 0 ]
+	@[ $$UID -ne 0 ] && echo -e "\033[31;1mYou must be root! \033[00m" && exit 1 || true
 	make -C core build
 	make -C utils build
 	make -C cli build
 
 build-extra:
-	@[ $$UID -eq 0 ]
+	@[ $$UID -ne 0 ]  && echo -e "\033[31;1mYou must be root! \033[00m" && exit 1 || true
 	make -C terminal build
 	make -C polkit build
 
@@ -50,7 +50,7 @@ install: install-core install-session install-extra
 	mkdir -p $(DESTDIR)/etc || true
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	mkdir -p $(DESTDIR)/etc/ld.so.conf.d || true
-	[ ! -f $(DESTDIR)/etc/debian.conf ] && install debian.conf  $(DESTDIR)/etc/ || true
+	install debian.conf  $(DESTDIR)/etc/ || true
 	cp -fp utils/pidone $(DESTDIR)/usr/bin/
 	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/
