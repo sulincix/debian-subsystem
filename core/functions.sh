@@ -277,6 +277,7 @@ debian_check(){
 }
 umount_all(){
     for i in system dev/pts root dev/shm dev sys proc run tmp home/"${USERNAME}" var/lib/flatpak ; do
+        msg "Umount" "${DESTDIR}/$i"
         while umount -lf -R ${DESTDIR}/$i/ &>/dev/null ; do
            true
         done
@@ -353,19 +354,22 @@ run(){
     chroot ${DESTDIR} debrun true || exit 1
     use_pidone=$(iniparser /etc/debian.conf "default" "pidone")
     if [[ ! -n $nopidone && ${use_pidone} != "false" ]] ; then
-        exec pidone $(get_chroot) ${DESTDIR} debrun "$@"
+        exec pidone $(get_chroot) /bin/debrun "$@"
     else
         msg "Info" "Running without PID isolation"
-        exec $(get_chroot) ${DESTDIR} debrun "$@"
+        exec $(get_chroot) /bin/debrun "$@"
     fi
 }
 get_chroot(){
-    if chroot --help |& head -n 1 | grep -i busybox &>/dev/null ; then
-        echo "busybox chroot"
+    use_bwrap=$(iniparser /etc/debian.conf "default" "use_bwrap")
+    if which bwrap &>/dev/null && [[ "${use_bwrap}" != "false" ]]; then
+        echo "bwrap --bind ${DESTDIR} / --dev /dev "
+    elif chroot --help |& head -n 1 | grep -i busybox &>/dev/null ; then
+        echo "busybox chroot ${DESTDIR}"
     elif [[ "$ROOTMODE" == 1 ]] ; then
-        echo "chroot"
+        echo "chroot ${DESTDIR}"
     else
-        echo "chroot --userspec ${USERNAME}:${USERNAME}"
+        echo "chroot --userspec ${USERNAME}:${USERNAME} ${DESTDIR}"
     fi
 }
 
