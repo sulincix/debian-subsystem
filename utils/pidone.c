@@ -34,11 +34,16 @@ int main(int argc,char *argv[]) {
       strcat(cmd,"\" ");
   }
   uid = getuid();
-  setuid(0);
-  if(getuid()!=0){
-    fputs("setuid() failing - operation not permitted\n",stderr);
-    return 7;
-  }
+  uid_t i = setuid(0);
+  if(getuid()!=0 || i != 0){
+    fputs("Suid permissions are missing. Enter root password to set permission.\n",stderr);
+    if(0 != system("su -c \"chown root $(which pidone); chmod u+s $(which pidone);\"")) {
+      fputs("setuid() failing - operation not permitted\n",stderr);
+      return 7;
+    }else{
+      execvp(argv[0],argv);
+    }
+  }  
   pid_t pid = clone(child_fn, child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | CLONE_NEWIPC | CLONE_NEWCGROUP | CLONE_VM | CLONE_VFORK | SIGCHLD , NULL);
   setuid(0);
  
