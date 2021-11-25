@@ -5,13 +5,13 @@ build:  build-core build-extra
 	chmod +x -R ./*
 
 build-core:
-	@[ $$UID -ne 0 ] && echo -e "\033[31;1mYou must be root! \033[00m" && exit 1 || true
+	@[[ $$UID -ne 0  && "$$NOSUID" == "" ]] && echo -e "\033[31;1mYou must be root! \033[00m" && exit 1 || true
 	make -C core build
 	make -C utils build
 	make -C cli build
 
 build-extra:
-	@[ $$UID -ne 0 ]  && echo -e "\033[31;1mYou must be root! \033[00m" && exit 1 || true
+	@[ $$UID -ne 0 && "$$NOSUID" == "" ]  && echo -e "\033[31;1mYou must be root! \033[00m" && exit 1 || true
 	make -C terminal build
 	make -C polkit build
 

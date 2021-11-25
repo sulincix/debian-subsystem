@@ -4,3 +4,4 @@ terminal/d-term
 cli/droot
 polkit/pkexec-fake
 debian/debian-subsystem
+core/debrun
