@@ -163,12 +163,16 @@ common_init(){
         return
     fi
     cp -prf /usr/lib/sulin/dsl/debrun ${DESTDIR}/bin/debrun
+    chown root ${DESTDIR}/usr/bin/debrun
+    chmod u+s ${DESTDIR}/usr/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
     cp -prf /usr/lib/sulin/dsl/debxdg ${DESTDIR}/bin/debxdg
     cp -prf /usr/lib/sulin/dsl/debxdg.conf ${DESTDIR}/etc/debxdg.conf
     [[ -f ${DESTDIR}/bin/iniparser ]] || cp -prf $(which iniparser) ${DESTDIR}/bin/iniparser
     if [[ -f /usr/lib/sulin/dsl/pkexec-fake ]] ; then
         cp -prf /usr/lib/sulin/dsl/pkexec-fake ${DESTDIR}/usr/bin/pkexec
+        chown root ${DESTDIR}/usr/bin/pkexec
+        chmod u+s ${DESTDIR}/usr/bin/pkexec
     fi
     if [[ ! -d ${DESTDIR}/var/share ]] ; then
         mkdir -p ${DESTDIR}/var/share

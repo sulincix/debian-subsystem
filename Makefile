@@ -34,12 +34,13 @@ install-polkit:
 	mkdir -p $(DESTDIR)/usr/share/polkit-1/actions/ || true
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	install polkit/org.sulin.debian.policy $(DESTDIR)/usr/share/polkit-1/actions/
-	cp -prf polkit/pkexec-fake $(DESTDIR)/usr/lib/sulin/dsl/
+	install polkit/pkexec-fake $(DESTDIR)/usr/lib/sulin/dsl/
 
 install-cli:
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	mkdir -p $(DESTDIR)/etc/profile.d/ || true
-	[ -f cli/droot ] && cp -fp cli/droot $(DESTDIR)/usr/bin/
+	[ -f cli/droot ] && install cli/droot $(DESTDIR)/usr/bin/
+	chmod u+s $(DESTDIR)/usr/bin/droot || true
 	install cli/debian $(DESTDIR)/usr/bin/debian
 	install cli/debian-umount $(DESTDIR)/usr/bin/debian-umount
 	install cli/profile $(DESTDIR)/etc/profile.d/99-dsl.sh
@@ -51,7 +52,8 @@ install: install-core install-session install-extra
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	mkdir -p $(DESTDIR)/etc/ld.so.conf.d || true
 	install debian.conf  $(DESTDIR)/etc/ || true
-	cp -fp utils/pidone $(DESTDIR)/usr/bin/
+	install utils/pidone $(DESTDIR)/usr/bin/
+	chmod u+s $(DESTDIR)/usr/bin/pidone || true
 	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/
 	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
