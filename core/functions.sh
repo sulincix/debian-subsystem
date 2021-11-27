@@ -163,8 +163,8 @@ common_init(){
         return
     fi
     cp -prf /usr/lib/sulin/dsl/debrun ${DESTDIR}/bin/debrun
-    chown root ${DESTDIR}/usr/bin/debrun
-    chmod u+s ${DESTDIR}/usr/bin/debrun
+    chown root ${DESTDIR}/bin/debrun
+    chmod u+s ${DESTDIR}/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
     cp -prf /usr/lib/sulin/dsl/debxdg ${DESTDIR}/bin/debxdg
     cp -prf /usr/lib/sulin/dsl/debxdg.conf ${DESTDIR}/etc/debxdg.conf
