@@ -239,6 +239,8 @@ debian_check(){
     done
     if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/run"
+        mkdir -p "${DESTDIR}/run/user/1000/cache"
+        chroot "${DESTDIR}"  chown ${USERNAME} -R "/run/user/1000"
     fi
     if ! mount | grep "${DESTDIR}/dev/shm" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/dev/shm"
