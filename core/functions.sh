@@ -255,7 +255,7 @@ debian_check(){
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/dev/shm"
     fi
     if ! mount | grep "${DESTDIR}/sys" &>/dev/null ; then
-        mount -o ro --make-private -t sysfs sysfs "${DESTDIR}/$i"
+        mount -o ro --make-private -t sysfs sysfs "${DESTDIR}/sys"
     fi
     if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/run"
