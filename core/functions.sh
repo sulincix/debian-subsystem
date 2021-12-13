@@ -228,11 +228,14 @@ debian_check(){
     common_init
     sync_gid
     sync_desktop
-    for i in proc root tmp; do
+    for i in proc root; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             mount --make-private --bind /$i "${DESTDIR}/$i"
         fi
     done
+    if ! mount | grep "${DESTDIR}/tmp" &>/dev/null ; then
+        mount --make-private -t tmpfs tmpfs "${DESTDIR}/tmp"
+    fi
     if ! mount | grep "${DESTDIR}/dev" &>/dev/null ; then
         isolate_dev=$(iniparser /etc/debian.conf "default" "isolate_dev")
         if [[ "${isolate_dev}" != "false" ]] ; then
@@ -242,6 +245,7 @@ debian_check(){
             mknod -m 666 "${DESTDIR}"/dev/ptmx c 5 2
             mknod -m 644 "${DESTDIR}"/dev/random c 1 8
             mknod -m 644 "${DESTDIR}"/dev/urandom c 1 9
+            mknod -m 777 "${DESTDIR}"/dev/null c 1 3
             mknod -m 666 "${DESTDIR}"/dev/zero c 1 5
             mknod -m 666 "${DESTDIR}"/dev/tty c 5 0
         else
