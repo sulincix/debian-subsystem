@@ -234,7 +234,7 @@ debian_check(){
         fi
     done
     if ! mount | grep "${DESTDIR}/tmp" &>/dev/null ; then
-        mount --make-private -t tmpfs tmpfs "${DESTDIR}/tmp"
+        mount --make-private --bind /tmp "${DESTDIR}/tmp"
     fi
     if ! mount | grep "${DESTDIR}/dev" &>/dev/null ; then
         isolate_dev=$(iniparser /etc/debian.conf "default" "isolate_dev")
