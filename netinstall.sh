@@ -9,9 +9,11 @@ if [[ $UID -ne 0 ]] ; then
 fi
 rm -rf /tmp/debian-subsystem /tmp/libselinux-dummy || true
 if [[ -d /var/lib/dpkg/info ]] ; then
-    apt install git wget make gcc -yq
+    apt install git busybox make polkit-1 libvte-common libvte2.91-common valac gcc -yq
 elif [[ -d /var/lib/dnf ]] ; then
-    dnf install glibc-static make gcc wget git -y
+    dnf install busybox make polkit-gnome vte gtk3 vala glibc-static make wget git -y
+elif [[ -f /etc/pacman.conf ]] ; then
+    pacman -Sy make vte3 vte-common gtk3 vala gcc wget git
 fi
 # Install dummy selinux
 git clone https://gitlab.com/sulinos/devel/libselinux-dummy

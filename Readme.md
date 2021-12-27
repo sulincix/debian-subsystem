@@ -52,19 +52,19 @@ It uses chroot environment and You can run chrooted cli/gui applications on debi
 
 ### Debian/Ubuntu:
 ```shell
-apt install -y busybox make polkit-1 libvte-common libvte2.91-common valac python3 python3-pip && pip3 install pygobject
+apt install -y busybox make polkit-1 libvte-common libvte2.91-common valac gcc
 ```
 
 ### Fedora:
 ```shell
-dnf install -y busybox make polkit-gnome vte gtk3 vala glibc-static && pip3 install pygobject
+dnf install -y busybox make polkit-gnome vte gtk3 vala glibc-static
 ```
 - Note: Fedora requires selinux disabled.
 
 ### Arch:
 
 ```shell
-pacman -Sy make vte3 vte-common gtk3 vala python3 python-pip && pip3 install pygobject
+pacman -Sy make vte3 vte-common gtk3 vala gcc
 ```
 
 #### clone:
