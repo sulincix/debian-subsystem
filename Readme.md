@@ -2,7 +2,7 @@
 # Debian subsystem for linux
 Debian subsystem integration for host distribution.
 
-It uses chroot environment and You can run chrooted cli/gui appilcations on debian.
+It uses chroot environment and You can run chrooted cli/gui applications on debian.
 
 ### Supported distributions
 * Debian
@@ -17,23 +17,32 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 * Manjaro
 * Voidlinux
 
+***
+
 ### Features
 * Written pure bash and C
 * Open files with subsystem applications
 * Open subsystem session
 * Open subsystem terminal
 * Home directory is common
-* Dont need service
+* Don't need service
+
+***
 
 ### Parts
 * Debian session
 * Debian terminal
 * Debian cli
 
+***
+## Installation
+
 ### Dependencies:
+
 #### Core:
 * make (for self update)
 * busybox
+
 #### Extra:
 * polkit (only need if droot not exists)
 * vte-2.91 (for d-term)
@@ -41,24 +50,60 @@ It uses chroot environment and You can run chrooted cli/gui appilcations on debi
 * pygobject (for d-term/python)
 * vala (for d-term/vala)
 
-Fedora users need to install glibc-static.
-### Install:
+### Debian:
+```shell
+su -c "apt install -y busybox make polkit-1 libvte-common libvte2.91-common valac python3 python3-pip && pip3 install pygobject"
+```
+
+### Ubuntu:
+```shell
+sudo apt install -y busybox make polkit-1 libvte-common libvte2.91-common valac python3 python3-pip && pip3 install pygobject
+```
+
+### Fedora:
+```shell
+sudo dnf in -y busybox make polkit-gnome vte gtk3 vala glibc-static && pip3 install pygobject
+```
+- Note: Fedora requires selinux disabled (I don't recomment to disable selinux btw)
+
+### Arch:
+
+```shell
+sudo pacman -S make vte3 vte-common gtk3 vala python3 python-pip && pip3 install  pygobjec
+```
+
+#### clone:
+
 ```shell
 git clone https://gitlab.com/sulincix/debian-subsystem
 cd debian-subsystem
 make
 make install DESTDIR=/
 ```
-Debian based distribution users must run this
+*Debian based distribution users must run this*:
+
 ```
  make fix-debian DESTDIR=/
 ```
 
-if you dont need terminal and session component you can run `make build-core` and `make install-core`
+if you don't need terminal and session component you can run `make build-core` and `make install-core`
 
 
 ### Install from single command:
 `bash <(curl https://gitlab.com/sulincix/debian-subsystem/-/raw/master/netinstall.sh)`
+
+***
+
+## Uninstallation
+
+```rm -rf /var/debian/```
+
+**Always double check to make sure home directory is umounted! **
+
+**you can umount with `debian-umount` command!**
+
+***
+
 
 ### Components:
 `pidone`           : pid namespace isolator.
@@ -80,6 +125,8 @@ if you dont need terminal and session component you can run `make build-core` an
 `droot`            : get a subsystem shell
 
 `pkexec-fake`      : polkit authentication with hosts pkexec
+
+***
 
 ### Usage:
 You can use `debian` command to run debian subsystem shell. Subsystem shell **pid** value is **1** but **/proc** directory is common. So you can see host process in debian.
@@ -117,6 +164,8 @@ https://gitlab.com/sulinos/devel/libselinux-dummy
 
 Polkit authentication message is wrong. Because pkexec-fake component use fifo bridge and run `echo true` command as root and return status. so You will see **/bin/echo** command instead of original command.
 
+***
+
 ### Bug report:
 https://gitlab.com/sulincix/debian-subsystem/-/issues
 
@@ -125,7 +174,9 @@ https://gitlab.com/sulincix/debian-subsystem/-/issues
 * https://github.com/sulincix/debian-subsystem
 * https://kod.pardus.org.tr/sulincix/debian-subsystem
 
-### Bugs:
+***
+
+### Known bugs:
 * gnome-session not working as subsystem session
 * shell job control not available (if chroot command is symlink of busybox)
 * selinux enforcing mode not supported. (subsystem will set permissive mode automatically)
