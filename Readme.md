@@ -52,12 +52,13 @@ It uses chroot environment and You can run chrooted cli/gui applications on debi
 
 ### Debian/Ubuntu:
 ```shell
-apt install -y busybox make polkit-1 libvte-common libvte2.91-common valac gcc
+# busybox-static recommended for better compability
+apt install -y busybox-static make polkit-1 libvte-common libvte2.91-common valac gcc
 ```
 
 ### Fedora:
 ```shell
-dnf install -y busybox make polkit-gnome vte gtk3 vala glibc-static
+dnf install -y busybox make polkit-gnome vte gtk3 vala glibc-static gcc
 ```
 - Note: Fedora requires selinux disabled.
 
