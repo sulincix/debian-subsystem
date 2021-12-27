@@ -50,26 +50,21 @@ It uses chroot environment and You can run chrooted cli/gui applications on debi
 * pygobject (for d-term/python)
 * vala (for d-term/vala)
 
-### Debian:
+### Debian/Ubuntu:
 ```shell
-su -c "apt install -y busybox make polkit-1 libvte-common libvte2.91-common valac python3 python3-pip && pip3 install pygobject"
-```
-
-### Ubuntu:
-```shell
-sudo apt install -y busybox make polkit-1 libvte-common libvte2.91-common valac python3 python3-pip && pip3 install pygobject
+apt install -y busybox make polkit-1 libvte-common libvte2.91-common valac python3 python3-pip && pip3 install pygobject
 ```
 
 ### Fedora:
 ```shell
-sudo dnf in -y busybox make polkit-gnome vte gtk3 vala glibc-static && pip3 install pygobject
+dnf install -y busybox make polkit-gnome vte gtk3 vala glibc-static && pip3 install pygobject
 ```
-- Note: Fedora requires selinux disabled (I don't recomment to disable selinux btw)
+- Note: Fedora requires selinux disabled.
 
 ### Arch:
 
 ```shell
-sudo pacman -S make vte3 vte-common gtk3 vala python3 python-pip && pip3 install  pygobjec
+pacman -Sy make vte3 vte-common gtk3 vala python3 python-pip && pip3 install pygobject
 ```
 
 #### clone:
@@ -96,7 +91,7 @@ if you don't need terminal and session component you can run `make build-core` a
 
 ## Uninstallation
 
-```rm -rf /var/debian/```
+```rm -rf /var/debian/``` or ```debian-umount --remove```
 
 **Always double check to make sure home directory is umounted! **
 
@@ -142,7 +137,7 @@ Distribution configs defined by `/etc/debian.conf` file. if you want to run anot
 
 You can send command to subsystem shell. 
 
-```
+```shell
 # type 1
 echo "ls -la /" | debian
 # type 2
