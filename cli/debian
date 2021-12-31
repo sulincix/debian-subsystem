@@ -8,7 +8,12 @@ if [[ "$1" == "--help" ]] ; then
     echo "  --update       : Install update if exists."
     echo "  --system       : Change target subsystem."
     echo "  --hostctl      : Use hostctl daemon."
+    echo "  --fork         : Create fork process."
     exit 0
+fi
+if [[ "$1" == "--fork" ]] ; then
+    use_fork="true"
+    shift
 fi
 if [[ "$1" == "--hostctl" ]] ; then
     use_hostctl="true"
@@ -34,6 +39,8 @@ elif [[ "$1" == "-c" ]] ; then
     shift
     if [[ "${use_hostctl}" == "true" ]] && ls ${DESTDIR}/run/hostctl &>/dev/null  ; then
         echo 'echo "'$*'" | '$(get_root)' /usr/lib/sulin/dsl/dsl.sh' > ${DESTDIR}/run/hostctl
+    elif [[ "${use_fork}" == "true" ]] &>/dev/null  ; then
+        echo "$*" | $(get_root) /usr/lib/sulin/dsl/dsl.sh &
     else
         echo "$*" | exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
      fi
