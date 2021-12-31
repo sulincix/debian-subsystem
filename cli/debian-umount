@@ -2,7 +2,7 @@
 cd /usr/lib/sulin/dsl
 source variable.sh
 source functions.sh
-[[ $UID -ne 0 ]] && echo "You must be root! $UID" && exit 1
+isroot
 trim(){
     while read line ; do
         echo $line

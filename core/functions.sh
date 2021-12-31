@@ -10,6 +10,13 @@ else
         echo "$1 $2"
     }
 fi
+isroot(){
+    if [[ $UID -ne 0 ]] ; then
+        echo "You must be root! $UID" 
+        exit 1
+    fi
+}
+
 wsl_block(){
     var=$(uname -r)
     [[ ! -f /proc/cpuinfo ]] && return 1
@@ -19,23 +26,16 @@ wsl_block(){
         return 1
     fi
 }
-trim(){
-    while read line ; do
-        echo $line
-    done
-}
 check_update(){
     cd /tmp
     if [[ "$(iniparser /etc/debian.conf default updates)" != "false" ]] ; then
+        msg "Info" "updates disabled by config"
         return
     fi
     CHECK_URL="https://gitlab.com/sulincix/debian-subsystem"
     timeout 3 $wget -c "${CHECK_URL}/-/raw/master/debian/changelog" -O ver &>/dev/null || return 1
     if  [[ "$(md5sum ver | cut -f 1 -d ' ')" != "$(md5sum /usr/lib/sulin/dsl/changelog  | cut -f 1 -d ' ')" ]] ; then
         msg "Info" "new version available."
-        msg "Info" "unmounting debian and stop hostctl"
-        umount_all
-        ps ax  | grep -v grep | grep hostctl-daemon | trim | cut  -d " " -f 1 | xargs kill -9 &>/dev/null || true
         msg "Info" "downloading"
         $wget -c "${CHECK_URL}/-/archive/master/debian-subsystem-master.zip" &>/dev/null || return 0
         unzip debian-subsystem-master.zip >/dev/null
@@ -56,39 +56,31 @@ common_init(){
     if [[ -f ${DESTDIR}/run/debian ]] ; then
         return
     fi
+    mkdir -p ${DESTDIR}/usr/share/applications/
     cp -prf /usr/lib/sulin/dsl/debrun ${DESTDIR}/bin/debrun
-    chown root ${DESTDIR}/bin/debrun
-    chmod u+s ${DESTDIR}/bin/debrun
     cp -prf /usr/lib/sulin/dsl/hostctl ${DESTDIR}/bin/hostctl
     cp -prf /usr/lib/sulin/dsl/debxdg ${DESTDIR}/bin/debxdg
     cp -prf /usr/lib/sulin/dsl/debxdg.conf ${DESTDIR}/etc/debxdg.conf
-    [[ -f ${DESTDIR}/bin/iniparser ]] || cp -prf $(which iniparser) ${DESTDIR}/bin/iniparser
+    cp -pf /usr/lib/sulin/dsl/d-term.desktop ${DESTDIR}/usr/share/applications/
+    cp -prf $(which iniparser) ${DESTDIR}/bin/iniparser
+    chown root ${DESTDIR}/bin/debrun
+    chmod u+s ${DESTDIR}/bin/debrun
     if [[ -f /usr/lib/sulin/dsl/pkexec-fake ]] ; then
         cp -prf /usr/lib/sulin/dsl/pkexec-fake ${DESTDIR}/usr/bin/pkexec
         chown root ${DESTDIR}/usr/bin/pkexec
         chmod u+s ${DESTDIR}/usr/bin/pkexec
     fi
-    if [[ ! -d ${DESTDIR}/var/share ]] ; then
-        mkdir -p ${DESTDIR}/var/share
-        ln -s ../../usr/share/icons  ${DESTDIR}/var/share/icons
-        ln -s ../../usr/share/themes  ${DESTDIR}/var/share/themes
-        ln -s ../../usr/share/fonts  ${DESTDIR}/var/share/fonts
-    fi
-    if [[ ! -d /usr/lib/sulin/dsl/share ]] ; then
-        mkdir -p /usr/lib/sulin/dsl/share
-        ln -s ../../../../share/icons /usr/lib/sulin/dsl/share/icons
-        ln -s ../../../../share/themes /usr/lib/sulin/dsl/share/themes
-        ln -s ../../../../share/fonts /usr/lib/sulin/dsl/share/fonts
-    fi
+    mkdir -p /usr/lib/sulin/dsl/share ${DESTDIR}/var/share
+    for dir in icons themes fonts ; do
+        ln -s ../../usr/share/$dir  ${DESTDIR}/var/share/$dir 2>/dev/null || true
+        ln -s ../../../../share/$dir /usr/lib/sulin/dsl/share/$dir 2>/dev/null || true
+    done
     cat /etc/machine-id > ${DESTDIR}/etc/machine-id
     rm -f ${DESTDIR}/etc/resolv.conf &>/dev/null|| true
     cat /etc/resolv.conf > ${DESTDIR}/etc/resolv.conf
     if [[ "$(readlink /bin/sh)" != "bash" ]] ; then
         rm -f /bin/sh
         ln -s bash /bin/sh
-    fi
-    if [[ -d ${DESTDIR}/usr/share/applications/ ]] ; then
-        cp -pf /usr/lib/sulin/dsl/d-term.desktop ${DESTDIR}/usr/share/applications/
     fi
     chmod 777 "${DESTDIR}/tmp"
     local username="$(grep '1000' /etc/passwd | cut -f 1 -d ':')"
