@@ -1,0 +1,19 @@
+#!/bin/bash
+tool_init(){
+    which archstrap &>/dev/null && return 0
+    msg "Installing:" "archstrap"
+    cd /tmp
+    $wget -c "https://gitlab.com/tearch-linux/applications-and-tools/archstrap/-/raw/master/archstrap.sh" -O archstrap.sh || fail_exit "Failed to fetch arch-bootstrap"
+    cp -fp archstrap.sh /usr/bin/archstrap
+    chmod 755 /usr/bin/archstrap
+}
+system_init(){
+    ls ${DESTDIR}/usr/lib/os-release &>/dev/null && return 0
+    arch="$(uname -m)"
+    archstrap "${DESTDIR}" -r "${REPO}" || fail_exit "Failed to install archlinux chroot"
+    cp -pf /usr/lib/sulin/dsl/data/hostctl-alpm.hook ${DESTDIR}/usr/share/libalpm/hooks/hostctl-alpm.hook
+    msg "Creating user:" "debian"
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
+    mkdir -p "${DESTDIR}/home/${USERNAME}"
+}
+

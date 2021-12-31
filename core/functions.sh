@@ -51,113 +51,6 @@ check_update(){
     fi
     rm -f /tmp/ver &>/dev/null
 }
-debian_init(){
-    ls ${DESTDIR}/etc/os-release &>/dev/null && return 0
-    if ! which debootstrap &>/dev/null; then
-        msg "Installing:" "debootstrap"
-        cd /tmp
-        $wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip || fail_exit "Failed to fetch debootstrap source"
-        unzip debootstrap.zip  >/dev/null
-        cd debootstrap-master
-        make >/dev/null || fail_exit "Failed to install debootstrap"
-        make install  >/dev/null || fail_exit "Failed to install debootstrap"
-        cd /tmp
-        rm -rf /tmp/debootstrap-master
-    fi
-    [[ $(uname -m) == "x86_64" ]] && arch=amd64
-    [[ $(uname -m) == "aarch64" ]] && arch=arm64
-    [[ $(uname -m) == "i686" ]] && arch=i386
-    [[ "$arch" == "" ]] && msg "Error" "Unsupported arch $(uname -m)" && exit 1
-    if [[ "$DIST" == "ubuntu-latest" ]] ; then
-        DIST=$($wget -O - https://cdimage.ubuntu.com/daily-live/current/  | grep "desktop-amd64.iso" | head -n 1 | sed "s/.*href=\"//g;s/-.*//g")
-    fi
-    
-    ls /usr/share/debootstrap/scripts/${DIST} &>/dev/null || ln -s stable /usr/share/debootstrap/scripts/${DIST}
-    debootstrap --arch=$arch --extractor=ar --no-merged-usr --no-check-gpg --extractor=ar "${DIST}" "${DESTDIR}" "${REPO}" || fail_exit "Failed to install debian chroot"
-    cp -pf /usr/lib/sulin/dsl/data/01norecommend ${DESTDIR}/etc/apt/apt.conf.d/01norecommend
-    cp -pf /usr/lib/sulin/dsl/data/99hostctl ${DESTDIR}/etc/apt/apt.conf.d/99hostctl
-    msg "Creating user:" "debian"
-    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir -p "${DESTDIR}/home/${USERNAME}"
-}
-arch_init(){
-    ls ${DESTDIR}/usr/lib/os-release &>/dev/null && return 0
-    if ! which archstrap &>/dev/null; then
-        msg "Installing:" "archstrap"
-        cd /tmp
-        $wget -c "https://gitlab.com/tearch-linux/applications-and-tools/archstrap/-/raw/master/archstrap.sh" -O archstrap.sh || fail_exit "Failed to fetch arch-bootstrap"
-        cp -fp archstrap.sh /usr/bin/archstrap
-        chmod 755 /usr/bin/archstrap
-    fi
-    arch="$(uname -m)"
-    archstrap "${DESTDIR}" -r "${REPO}" || fail_exit "Failed to install archlinux chroot"
-    sync
-    cp -pf /usr/lib/sulin/dsl/data/hostctl-alpm.hook ${DESTDIR}/usr/share/libalpm/hooks/hostctl-alpm.hook
-    msg "Creating user:" "debian"
-    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir -p "${DESTDIR}/home/${USERNAME}"
-}
-alpine_init(){
-ls ${DESTDIR}/etc/alpine-release &>/dev/null && return 0
-    if ! which apk &>/dev/null; then
-        msg "Installing:" "apk-tools"
-        mkdir -p /tmp/apk
-        cd /tmp/apk
-        arch="$(uname -m)"
-        apktools=$($wget -O - https://dl-cdn.alpinelinux.org/alpine/latest-stable/main/$arch/ | grep "apk-tools-static" | sed "s/^.*=\"//g;s/\".*//g")
-        $wget -c "https://dl-cdn.alpinelinux.org/alpine/latest-stable/main/$arch/$apktools" -O apk-tools-static.apk || fail_exit "Failed to fetch apt-tools"
-        tar -zxf apk-tools-static.apk
-        cp -pf sbin/apk.static /bin/apk
-        chmod +x /bin/apk
-    fi
-    arch="$(uname -m)"
-    apk --arch $arch -X "${REPO}/main/" -U --allow-untrusted --root ${DESTDIR} --initdb add alpine-base bash || fail_exit "Failed to install archlinux chroot"
-    sync
-    echo "${REPO}/main/" > ${DESTDIR}/etc/apk/repositories
-    echo "${REPO}/community/" >> ${DESTDIR}/etc/apk/repositories
-    msg "Creating user:" "debian"
-    chroot "${DESTDIR}" adduser "${USERNAME}" -D -H -h "/home/${USERNAME}" -s /bin/ash || fail_exit "Failed to create debian user"
-    mkdir -p "${DESTDIR}/home/"${USERNAME}""
-}
-sulin_init(){
-    ls ${DESTDIR}/data/user &>/dev/null && return 0
-    if ! which sulinstrapt &>/dev/null ; then
-        msg "Installing:" "sulinstrapt"
-        cd /tmp
-        $wget -c "https://gitlab.com/sulinos/devel/inary/-/raw/develop/scripts/sulinstrapt" -O sulinstrapt.sh || fail_exit "Failed to fetch arch-bootstrap"
-        cp -fp sulinstrapt.sh /usr/bin/sulinstrapt
-        chmod 755 /usr/bin/sulinstrapt
-    fi
-    sulinstrapt "${DESTDIR}" -r "${REPO}"
-    chroot "${DESTDIR}" useradd d"${USERNAME}" -d "/data/user/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir -p "${DESTDIR}/data/user/${USERNAME}" || true
-}
-void_init(){
-    ls ${DESTDIR}/etc/os-release &>/dev/null && return 0
-    if ! which xbps-static &>/dev/null ; then
-        msg "Installing:" "xbps-static"
-        cd /tmp
-        arch="$(uname -m)"
-        $wget -c "https://alpha.de.repo.voidlinux.org/static/xbps-static-latest.$arch-musl.tar.xz" -O xbps-static-latest.x86_64-musl.tar.xz
-        tar -xf xbps-static-latest.x86_64-musl.tar.xz
-        cp -pf ./usr/bin/xbps-install.static /bin/xbps-install
-    fi
-    yes | SSL_NO_VERIFY_PEER=1 XBPS_ARCH=$arch xbps-install -f -S -r ${DESTDIR} -R "$REPO" base-system -y
-    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir -p "${DESTDIR}/home/${USERNAME}"
-}
-gentoo_init(){
-    ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
-    stage3=$($wget -O - https://www.gentoo.org/downloads/ | sed "s/.*href=\"//g" | sed "s/\".*//g" | grep "tar\." | grep -v "systemd" | \
-             grep -v "nomultilib" | grep -v "musl" | grep "amd64-" | grep -v "hardened" | sort -V | head -n 1)
-    curdir="$(pwd)"
-    mkdir -p ${DESTDIR} || true
-    cd ${DESTDIR} ; $wget -c "$stage3" -O gentoo.tar.xz ; tar -xvf /tmp/gentoo.tar.xz
-    rm -f gentoo.tar.xz
-    echo -e "GENTOO_MIRRORS=\"${REPO}\"" >> ${DESTDIR}/etc/make.conf
-    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir -p "${DESTDIR}/home/${USERNAME}"
-}
 
 common_init(){
     if [[ -f ${DESTDIR}/run/debian ]] ; then
@@ -194,6 +87,9 @@ common_init(){
         rm -f /bin/sh
         ln -s bash /bin/sh
     fi
+    if [[ -d ${DESTDIR}/usr/share/applications/ ]] ; then
+        cp -pf /usr/lib/sulin/dsl/d-term.desktop ${DESTDIR}/usr/share/applications/
+    fi
     chmod 777 "${DESTDIR}/tmp"
     local username="$(grep '1000' /etc/passwd | cut -f 1 -d ':')"
     if which pactl &>/dev/null; then
@@ -205,29 +101,28 @@ common_init(){
     fi
 }
 
-debian_check(){
+system_check(){
     set -e
     force_permissive=$(iniparser /etc/debian.conf "default" "force_permissive")
     if [[ ${force_permissive} != "false" ]] ; then
         setenforce 0 &>/dev/null || true
         sed -i "s/^SELINUX=.*/SELINUX=disabled/g" /etc/sysconfig/selinux &>/dev/null || true
     fi
-    if [[ "${DIST}" == "arch" ]] ; then
-        arch_init
-    elif [[ "${DIST}" == "alpine" ]] ; then
-        alpine_init
-    elif [[ "${DIST}" == "sulin" ]] ; then
-        sulin_init
-    elif [[ "${DIST}" == "void" ]] ; then
-        void_init
-    elif [[ "${DIST}" == "gentoo" ]] ; then
-        gentoo_init
+    if [[ -f /usr/lib/sulin/dsl/distro/${DIST} ]] ; then
+        source /usr/lib/sulin/dsl/distro/${DIST}
     else
-        debian_init
+        source /usr/lib/sulin/dsl/distro/debian
     fi
+    tool_init
+    system_init
     common_init
     sync_gid
     sync_desktop
+    bind_system
+    bind_extra
+}
+
+bind_system(){
     for i in proc root; do
         if ! mount | grep "${DESTDIR}/$i" &>/dev/null ; then
             mount --make-private --bind /$i "${DESTDIR}/$i"
@@ -262,6 +157,9 @@ debian_check(){
         mkdir -p "${DESTDIR}/run/user/1000/cache"
         chroot "${DESTDIR}"  chown ${USERNAME} -R "/run/user/1000"
     fi
+}
+
+bind_extra(){
     mkdir -p "${DESTDIR}/home" || true
     if ! mount | grep "${DESTDIR}/home" &>/dev/null ; then
         common_home=$(iniparser /etc/debian.conf "default" "common_home")
@@ -269,15 +167,10 @@ debian_check(){
             mount --make-private -o rw,nodev,nosuid --bind "/${HOMEDIR}" "${DESTDIR}/home/${USERNAME}"
         fi
     fi
-    if [[ -d ${DESTDIR}/usr/share/applications/ ]] ; then
-        cp -pf /usr/lib/sulin/dsl/d-term.desktop ${DESTDIR}/usr/share/applications/
-    fi
-    if [[ ! -d ${DESTDIR}/system ]] ; then
-        mkdir -p ${DESTDIR}/system || true
-    fi
     if ! mount | grep "${DESTDIR}/system" &>/dev/null ; then
         bind_system=$(iniparser /etc/debian.conf "default" "bind_system")
         if [[ ${bind_system} != "false" ]] ; then
+            mkdir -p ${DESTDIR}/system
             mount --make-private -o ro,nodev,nosuid,noexec --bind / "${DESTDIR}/system"
         else
             rmdir "${DESTDIR}/system" &>/dev/null || true

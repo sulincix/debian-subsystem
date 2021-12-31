@@ -14,7 +14,7 @@ wsl_block || {
         read -s -n 1
     done
 }
-debian_check || {
+system_check || {
     msg "Error" "Debian installation failed."
     msg "Info" "Press any key to exit"
     read -s -n 1 && exit 1

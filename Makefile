@@ -23,6 +23,8 @@ clean:
 	make -C polkit clean
 
 install-core: install-cli
+	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl/distro || true
+	install distro/* $(DESTDIR)/usr/lib/sulin/dsl/distro/
 
 install-extra: install-polkit install-terminal
 	mkdir -p $(DESTDIR)/etc/menus/application-merged/ || true

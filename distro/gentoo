@@ -1,0 +1,17 @@
+#!/bin/bash
+tool_init(){
+    : # do nothing
+}
+system_init(){
+    ls ${DESTDIR}/etc/make.conf &>/dev/null && return 0
+    stage3=$($wget -O - https://www.gentoo.org/downloads/ | sed "s/.*href=\"//g" | sed "s/\".*//g" | grep "tar\." | grep -v "systemd" | \
+             grep -v "nomultilib" | grep -v "musl" | grep "amd64-" | grep -v "hardened" | sort -V | head -n 1)
+    curdir="$(pwd)"
+    mkdir -p ${DESTDIR} || true
+    cd ${DESTDIR} ; $wget -c "$stage3" -O gentoo.tar.xz ; tar -xvf /tmp/gentoo.tar.xz
+    rm -f gentoo.tar.xz
+    echo -e "GENTOO_MIRRORS=\"${REPO}\"" >> ${DESTDIR}/etc/make.conf
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
+    mkdir -p "${DESTDIR}/home/${USERNAME}"
+}
+

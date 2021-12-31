@@ -1,0 +1,32 @@
+#!/bin/bash
+tool_init(){
+    which debootstrap &>/dev/null && return 0
+    msg "Installing:" "debootstrap"
+    cd /tmp
+    $wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip || fail_exit "Failed to fetch debootstrap source"
+    unzip debootstrap.zip  >/dev/null
+    cd debootstrap-master
+    make >/dev/null || fail_exit "Failed to install debootstrap"
+    make install  >/dev/null || fail_exit "Failed to install debootstrap"
+    cd /tmp
+    rm -rf /tmp/debootstrap-master
+
+}
+system_init(){
+    ls ${DESTDIR}/etc/os-release &>/dev/null && return 0
+    [[ $(uname -m) == "x86_64" ]] && arch=amd64
+    [[ $(uname -m) == "aarch64" ]] && arch=arm64
+    [[ $(uname -m) == "i686" ]] && arch=i386
+    [[ "$arch" == "" ]] && msg "Error" "Unsupported arch $(uname -m)" && exit 1
+    if [[ "$DIST" == "ubuntu-latest" ]] ; then
+        DIST=$($wget -O - https://cdimage.ubuntu.com/daily-live/current/  | grep "desktop-amd64.iso" | head -n 1 | sed "s/.*href=\"//g;s/-.*//g")
+    fi
+    
+    ls /usr/share/debootstrap/scripts/${DIST} &>/dev/null || ln -s stable /usr/share/debootstrap/scripts/${DIST}
+    debootstrap --arch=$arch --extractor=ar --no-merged-usr --no-check-gpg --extractor=ar "${DIST}" "${DESTDIR}" "${REPO}" || fail_exit "Failed to install debian chroot"
+    cp -pf /usr/lib/sulin/dsl/data/01norecommend ${DESTDIR}/etc/apt/apt.conf.d/01norecommend
+    cp -pf /usr/lib/sulin/dsl/data/99hostctl ${DESTDIR}/etc/apt/apt.conf.d/99hostctl
+    msg "Creating user:" "debian"
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
+    mkdir -p "${DESTDIR}/home/${USERNAME}"
+}
