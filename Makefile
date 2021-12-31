@@ -41,7 +41,7 @@ install-polkit:
 install-cli:
 	mkdir -p $(DESTDIR)/usr/bin/ || true
 	mkdir -p $(DESTDIR)/etc/profile.d/ || true
-	[ -f cli/droot ] && install cli/droot $(DESTDIR)/usr/bin/
+	[[ -f cli/droot ]] && install cli/droot $(DESTDIR)/usr/bin/
 	chmod u+s $(DESTDIR)/usr/bin/droot || true
 	install cli/debian $(DESTDIR)/usr/bin/debian
 	install cli/debian-umount $(DESTDIR)/usr/bin/debian-umount
@@ -70,9 +70,9 @@ install: install-core install-session install-extra
 install-terminal:
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	mkdir -p $(DESTDIR)/usr/share/applications/ || true
-	[ -f terminal/d-term ] && install terminal/d-term $(DESTDIR)/usr/lib/sulin/dsl/d-term || true
+	[[ -f terminal/d-term ]] && install terminal/d-term $(DESTDIR)/usr/lib/sulin/dsl/d-term || true
+	[[ -f terminal/d-term ]] || install terminal/d-term.py $(DESTDIR)/usr/lib/sulin/dsl/d-term
 	install terminal/d-term.desktop $(DESTDIR)/usr/lib/sulin/dsl/
-	[ -f terminal/d-term ] || install terminal/d-term.py $(DESTDIR)/usr/lib/sulin/dsl/d-term
 	install terminal/debian-terminal $(DESTDIR)/usr/bin/debian-terminal
 	install terminal/debian.desktop $(DESTDIR)/usr/share/applications/
 
