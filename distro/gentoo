@@ -11,7 +11,9 @@ system_init(){
     cd ${DESTDIR} ; $wget -c "$stage3" -O gentoo.tar.xz ; tar -xvf /tmp/gentoo.tar.xz
     rm -f gentoo.tar.xz
     echo -e "GENTOO_MIRRORS=\"${REPO}\"" >> ${DESTDIR}/etc/make.conf
-    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
-    mkdir -p "${DESTDIR}/home/${USERNAME}"
 }
 
+create_user(){
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create user"
+    mkdir -p "${DESTDIR}/home/${USERNAME}"
+}

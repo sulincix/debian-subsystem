@@ -1,7 +1,6 @@
 #!/bin/bash
 tool_init(){
     which apk &>/dev/null && return 0
-    msg "Installing:" "apk-tools"
     mkdir -p /tmp/apk
     cd /tmp/apk
     arch="$(uname -m)"
@@ -19,7 +18,9 @@ system_init(){
     sync
     echo "${REPO}/main/" > ${DESTDIR}/etc/apk/repositories
     echo "${REPO}/community/" >> ${DESTDIR}/etc/apk/repositories
-    msg "Creating user:" "debian"
-    chroot "${DESTDIR}" adduser "${USERNAME}" -D -H -h "/home/${USERNAME}" -s /bin/ash || fail_exit "Failed to create debian user"
+
+}
+create_user(){
+    chroot "${DESTDIR}" adduser "${USERNAME}" -D -H -h "/home/${USERNAME}" -s /bin/ash || fail_exit "Failed to create user"
     mkdir -p "${DESTDIR}/home/"${USERNAME}""
 }

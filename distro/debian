@@ -1,7 +1,6 @@
 #!/bin/bash
 tool_init(){
     which debootstrap &>/dev/null && return 0
-    msg "Installing:" "debootstrap"
     cd /tmp
     $wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip || fail_exit "Failed to fetch debootstrap source"
     unzip debootstrap.zip  >/dev/null
@@ -25,8 +24,9 @@ system_init(){
     ls /usr/share/debootstrap/scripts/${DIST} &>/dev/null || ln -s stable /usr/share/debootstrap/scripts/${DIST}
     debootstrap --arch=$arch --extractor=ar --no-merged-usr --no-check-gpg --extractor=ar "${DIST}" "${DESTDIR}" "${REPO}" || fail_exit "Failed to install debian chroot"
     cp -pf /usr/lib/sulin/dsl/data/01norecommend ${DESTDIR}/etc/apt/apt.conf.d/01norecommend
-    cp -pf /usr/lib/sulin/dsl/data/99hostctl ${DESTDIR}/etc/apt/apt.conf.d/99hostctl
-    msg "Creating user:" "debian"
-    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
+    cp -pf /usr/lib/sulin/dsl/data/99hostctl ${DESTDIR}/etc/apt/apt.conf.d/99hostctls
+}
+create_user(){
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create user"
     mkdir -p "${DESTDIR}/home/${USERNAME}"
 }

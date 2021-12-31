@@ -1,7 +1,6 @@
 #!/bin/bash
 tool_init(){
     which sulinstrapt &>/dev/null && return 0
-    msg "Installing:" "sulinstrapt"
     cd /tmp
     $wget -c "https://gitlab.com/sulinos/devel/inary/-/raw/develop/scripts/sulinstrapt" -O sulinstrapt.sh || fail_exit "Failed to fetch arch-bootstrap"
     cp -fp sulinstrapt.sh /usr/bin/sulinstrapt
@@ -10,6 +9,9 @@ tool_init(){
 system_init(){
     ls ${DESTDIR}/data/user &>/dev/null && return 0
     sulinstrapt "${DESTDIR}" -r "${REPO}"
-    chroot "${DESTDIR}" useradd d"${USERNAME}" -d "/data/user/${USERNAME}" -s /bin/bash || fail_exit "Failed to create debian user"
+}
+create_user(){
+    chroot "${DESTDIR}" useradd d"${USERNAME}" -d "/data/user/${USERNAME}" -s /bin/bash || fail_exit "Failed to create user"
     mkdir -p "${DESTDIR}/data/user/${USERNAME}"
+    ln -s data/user "${DESTDIR}/home"
 }

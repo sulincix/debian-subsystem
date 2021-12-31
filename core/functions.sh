@@ -115,6 +115,9 @@ system_check(){
     fi
     tool_init
     system_init
+    if [[ ! -d "${DESTDIR}/home/${USERNAME}" ]] ; then
+        create_user
+    fi
     common_init
     sync_gid
     sync_desktop
