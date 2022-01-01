@@ -15,12 +15,16 @@ elif [[ -d /var/lib/dnf ]] ; then
 elif [[ -f /etc/pacman.conf ]] ; then
     pacman -Sy make vte3 vte-common gtk3 vala gcc wget git
 fi
-# Install dummy selinux
-git clone https://gitlab.com/sulinos/devel/libselinux-dummy
 git clone https://gitlab.com/sulincix/debian-subsystem
 
-cd /tmp/libselinux-dummy
-make && make install
+# Install dummy selinux
+if [[ ! -d /var/lib/dnf ]] ; then
+    # libselinux-dummy kill fedora 35
+    git clone https://gitlab.com/sulinos/devel/libselinux-dummy
+    cd /tmp/libselinux-dummy
+    make && make install
+fi
+
 sed -i "s/^SELINUX=.*/SELINUX=disabled/g" /etc/sysconfig/selinux &>/dev/null || true
 
 cd /tmp/debian-subsystem
