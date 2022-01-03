@@ -80,7 +80,7 @@ int main(int argc, char argv[]){
     }else{
         strcat(cmd," 'exec ");
     }
-    strcat(cmd,arg2cmd(argc,argv));
+    strcat(cmd,arg2cmd(argc,(char**)argv));
             strcat(cmd,"'");
     char *args[] = { "bash", "-c", cmd, NULL };
     execvp("bash", args);
