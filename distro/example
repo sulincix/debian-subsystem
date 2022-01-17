@@ -1,0 +1,14 @@
+#!/bin/bash
+tool_init(){
+    : tool init functions here
+    : $wget is fetcher
+}
+system_init(){
+    : chroot creation functions here
+    : ${DESTDIR} is target
+    : ${REPO} is repository
+}
+create_user(){
+    : user creation functions here
+    : ${USERNAME} is current user
+}

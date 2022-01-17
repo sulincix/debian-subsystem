@@ -184,7 +184,6 @@ bind_extra(){
             mount --bind /dev/null $dev || true        
         done
     fi
-    
 }
 umount_all(){
     for i in system dev/pts root dev/shm dev sys proc run tmp home/"${USERNAME}" var/lib/flatpak ; do

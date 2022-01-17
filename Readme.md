@@ -4,6 +4,8 @@ Debian subsystem integration for host distribution.
 
 It uses chroot environment and You can run chrooted cli/gui applications on debian.
 
+Documentations available in **/doc**
+
 ### Supported distributions
 * Debian
 * Devuan
