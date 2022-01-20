@@ -12,6 +12,7 @@ Homepage: https://gitlab.com/sulincix/debian-subsystem
 
 Package: debian-subsystem
 Architecture: all
+Replaces: gnome-menus
 Depends: ${misc:Depends}, ${shlibs:Depends}, libc6,
           xz-utils,
           zstd,

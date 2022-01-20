@@ -3,7 +3,6 @@ if ( $ARGV[0] eq "build" ) {
     system("make");
     system("make install DESTDIR=debian/debian-subsystem");
     system("make fix-debian DESTDIR=debian/debian-subsystem");
-    system("rm -rf debian/debian-subsystem/usr/share/desktop-directories/");
 }
 if ( $ARGV[0] eq "clean" ) {
     system("dh clean");
