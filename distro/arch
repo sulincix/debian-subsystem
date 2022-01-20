@@ -12,8 +12,8 @@ system_init(){
     archstrap "${DESTDIR}" -r "${REPO}" || fail_exit "Failed to install archlinux chroot"
     cp -pf /usr/lib/sulin/dsl/data/hostctl-alpm.hook ${DESTDIR}/usr/share/libalpm/hooks/hostctl-alpm.hook
     # Disable checkspace and siglevel
-    sed -i "s/^Checkspace/#&/g" ${DESTDIR}/etc/pacman.conf
-    sed -i "s/.*SigLevel.*/SigLevel = Never/g" ${DESTDIR}/etc/pacman.conf
+    sed -i "s/^CheckSpace/#&/g" ${DESTDIR}/etc/pacman.conf
+    sed -i "s/^SigLevel.*/SigLevel = Never/g" ${DESTDIR}/etc/pacman.conf
 }
 create_user(){
     chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create user"
