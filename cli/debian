@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 if [[ "$1" == "--help" ]] ; then
-    echo "debian [options]"
+    echo "$0 [options]"
     echo "  --help         : Write this message"
     echo "  -c             : Run command from subsystem"
     echo "  --no-install   : Do not install if not installed."
