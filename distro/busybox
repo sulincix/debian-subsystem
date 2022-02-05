@@ -1,0 +1,30 @@
+#!/bin/bash
+tool_init(){
+    : 
+}
+system_init(){
+    ls ${DESTDIR}/etc/os-release &>/dev/null && return 0
+    [[ $(uname -m) == "x86_64" ]] && arch=amd64
+    [[ $(uname -m) == "aarch64" ]] && arch=arm64
+    [[ $(uname -m) == "i686" ]] && arch=i386
+    busybox=$(wget -O - https://deb.debian.org/debian/pool/main/b/busybox/ | sed "s/.*href=\"//g;s/\".*//g" | \
+        grep -e "busybox-static.*$arch.deb" | sort -V | tail -n 1)
+    mkdir -p "${DESTDIR}"
+    cd "${DESTDIR}"
+    wget https://deb.debian.org/debian/pool/main/b/busybox/$busybox
+    ar x $busybox
+    tar -xf data.tar.*
+    rm -f $busybox debian-binary data.tar.* control.tar.*
+    mkdir -p "${DESTDIR}"/bin "${DESTDIR}"/dev "${DESTDIR}"/sys "${DESTDIR}"/proc "${DESTDIR}"/tmp "${DESTDIR}"/var/log
+    mkdir -p "${DESTDIR}"/var/lib "${DESTDIR}"/var/cache "${DESTDIR}"/home "${DESTDIR}"/etc "${DESTDIR}"/root
+    chroot "${DESTDIR}" /bin/busybox --install -s /bin
+    echo '#!/bin/ash' > "${DESTDIR}"/bin/bash
+    echo 'exec ash $*' >> "${DESTDIR}"/bin/bash
+    chmod +x "${DESTDIR}"/bin/bash
+    touch "${DESTDIR}"/etc/os-release
+}
+create_user(){
+    mkdir -p "${DESTDIR}"/home/${USERNAME}
+    echo "root:x:0:0:root:/root:/bin/ash" > "${DESTDIR}"/etc/passwd
+    echo "${USERNAME}:x:1000:1000:${USERNAME}:/home/${USERNAME}:/bin/ash" >> "${DESTDIR}"/etc/passwd
+}

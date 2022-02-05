@@ -82,8 +82,8 @@ int main(int argc, char argv[]){
     }
     strcat(cmd,arg2cmd(argc,(char**)argv));
             strcat(cmd,"'");
-    char *args[] = { "bash", "-c", cmd, NULL };
-    execvp("bash", args);
+    char *args[] = { "sh", "-c", cmd, NULL };
+    execvp("sh", args);
 
 }
 

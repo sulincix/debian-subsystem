@@ -257,6 +257,8 @@ run(){
     export USERNAME=${u}
     if [[ -f ${DESTDIR}/${SHELL} ]] ; then
         export SHELL=${s}
+    elif [[ "${SYSTEM}" == "busybox" ]] ; then
+        export SHELL=/bin/ash
     else
         export SHELL=/bin/bash
     fi
