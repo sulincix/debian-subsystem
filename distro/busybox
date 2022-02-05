@@ -16,7 +16,7 @@ system_init(){
     tar -xf data.tar.*
     rm -f $busybox debian-binary data.tar.* control.tar.*
     mkdir -p "${DESTDIR}"/bin "${DESTDIR}"/dev "${DESTDIR}"/sys "${DESTDIR}"/proc "${DESTDIR}"/tmp "${DESTDIR}"/var/log
-    mkdir -p "${DESTDIR}"/var/lib "${DESTDIR}"/var/cache "${DESTDIR}"/home "${DESTDIR}"/etc "${DESTDIR}"/root
+    mkdir -p "${DESTDIR}"/var/lib "${DESTDIR}"/var/cache "${DESTDIR}"/home "${DESTDIR}"/etc "${DESTDIR}"/root "${DESTDIR}"/run
     chroot "${DESTDIR}" /bin/busybox --install -s /bin
     echo '#!/bin/ash' > "${DESTDIR}"/bin/bash
     echo 'exec ash $*' >> "${DESTDIR}"/bin/bash
