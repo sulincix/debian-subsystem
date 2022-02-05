@@ -9,6 +9,9 @@ if [[ "$1" == "--help" ]] ; then
     echo "  --system       : Change target subsystem."
     echo "  --hostctl      : Use hostctl daemon."
     echo "  --fork         : Create fork process."
+    echo "  --umount       : Umount subsystem."
+    echo "  --kill         : Kill running process under subsystem"
+    echo "  --remove       : Remove subsystem."
     exit 0
 fi
 if [[ "$1" == "--fork" ]] ; then
@@ -55,6 +58,26 @@ elif [[ "$1" == "--update" ]] ; then
     sync_gid
     msg "Info" "Sync applications"
     sync_desktop
+elif [[ "$1" == "--umount" ]] ; then
+    umount_all
+    ps ax | grep -v grep | grep "hostctl" | tr -s ' ' | cut -f "1" -d " " | xargs kill -9 &>/dev/null || true
+    rm -f "${DESTDIR}"/run/hostctl
+    shift
+elif [[ "$1" == "--kill" ]] ; then
+    isroot
+    set +e
+    PID_LIST=$(ps aux | grep -v grep | grep dsl.sh | tr -s ' ' | cut -f 2 -d ' ')
+    for p in ${PID_LIST[@]} ; do
+        msg "Kill" "$p"
+        kill -9 $p || true
+    done
+    pactl unload-module module-native-protocol-tcp &>/dev/null
+    set -e
+elif [[ "$1" == "--remove" ]] ; then
+    isroot
+    umount_all
+    rm -rf "${DESTDIR}"
+    rm -rf /usr/share/applications/debian/*.desktop
 else
     exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
 fi

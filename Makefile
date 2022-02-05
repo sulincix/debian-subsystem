@@ -44,7 +44,6 @@ install-cli:
 	[[ -f cli/droot ]] && install cli/droot $(DESTDIR)/usr/bin/
 	chmod u+s $(DESTDIR)/usr/bin/droot || true
 	install cli/debian $(DESTDIR)/usr/bin/debian
-	install cli/debian-umount $(DESTDIR)/usr/bin/debian-umount
 	install cli/profile $(DESTDIR)/etc/profile.d/99-dsl.sh
 
 
