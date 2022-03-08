@@ -94,11 +94,11 @@ if you don't need terminal and session component you can run `make build-core` a
 
 ## Uninstallation
 
-```rm -rf /var/debian/``` or ```debian-umount --remove```
+```rm -rf /var/debian/``` or ```debian --umount --remove```
 
 **Always double check to make sure home directory is umounted! **
 
-**you can umount with `debian-umount` command!**
+**you can umount with `debian --umount` command!**
 
 ***
 
@@ -115,8 +115,6 @@ if you don't need terminal and session component you can run `make build-core` a
 `debian-session`   : run Xsession on subsystem
 
 `debian-terminal`  : open a subsystem terminal
-
-`debian-umount`    : umount all binding os subsystem
 
 `debian-xdg-open`  : Open file with xdg-open from debian
 
