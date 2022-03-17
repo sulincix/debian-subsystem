@@ -35,7 +35,9 @@ if [[ "$1" == "--no-install" ]] ; then
     fi
     shift
 fi
-
+if [[ "$1" == "" ]] ; then
+    exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
+fi
 if [[ -f "$1" ]] ; then
     cat $1 | exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
 fi
@@ -77,9 +79,7 @@ if [[ "$1" == "--remove" ]] ; then
     umount_all
     rm -rf "${DESTDIR}"
     rm -rf /usr/share/applications/debian/*.desktop
-fi
-if [[ "$1" == "" ]] ; then
-    exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
+    shift
 fi
 if [[ "$1" == "-c" ]] ; then
     shift
@@ -90,5 +90,5 @@ if [[ "$1" == "-c" ]] ; then
         echo "$*" | $(get_root) /usr/lib/sulin/dsl/dsl.sh &
     else
         echo "$*" | exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
-     fi
-if
+    fi
+fi
