@@ -37,17 +37,9 @@ if [[ "$1" == "--no-install" ]] ; then
 fi
 
 if [[ -f "$1" ]] ; then
-    cat $1 | $(get_root) /usr/lib/sulin/dsl/dsl.sh
-elif [[ "$1" == "-c" ]] ; then
-    shift
-    if [[ "${use_hostctl}" == "true" ]] && ls ${DESTDIR}/run/hostctl &>/dev/null  ; then
-        echo 'echo "'$*'" | '$(get_root)' /usr/lib/sulin/dsl/dsl.sh' > ${DESTDIR}/run/hostctl
-    elif [[ "${use_fork}" == "true" ]] &>/dev/null  ; then
-        echo "$*" | $(get_root) /usr/lib/sulin/dsl/dsl.sh &
-    else
-        echo "$*" | exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
-     fi
-elif [[ "$1" == "--update" ]] ; then
+    cat $1 | exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
+fi
+if [[ "$1" == "--update" ]] ; then
     isroot
     rm -f ${DESTDIR}/var/cache/app-ltime
     msg "Info" "Check update"
@@ -58,12 +50,16 @@ elif [[ "$1" == "--update" ]] ; then
     sync_gid
     msg "Info" "Sync applications"
     sync_desktop
-elif [[ "$1" == "--umount" ]] ; then
+    shift
+fi
+if [[ "$1" == "--umount" ]] ; then
     umount_all
     ps ax | grep -v grep | grep "hostctl" | tr -s ' ' | cut -f "1" -d " " | xargs kill -9 &>/dev/null || true
     rm -f "${DESTDIR}"/run/hostctl
     shift
-elif [[ "$1" == "--kill" ]] ; then
+
+fi
+if [[ "$1" == "--kill" ]] ; then
     isroot
     set +e
     PID_LIST=$(ps aux | grep -v grep | grep dsl.sh | tr -s ' ' | cut -f 2 -d ' ')
@@ -72,13 +68,27 @@ elif [[ "$1" == "--kill" ]] ; then
         kill -9 $p || true
     done
     pactl unload-module module-native-protocol-tcp &>/dev/null
+    rm -f "${DESTDIR}"/run/hostctl
     set -e
-elif [[ "$1" == "--remove" ]] ; then
+    shift
+fi
+if [[ "$1" == "--remove" ]] ; then
     isroot
     umount_all
     rm -rf "${DESTDIR}"
     rm -rf /usr/share/applications/debian/*.desktop
-else
+fi
+if [[ "$1" == "" ]] ; then
     exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
 fi
-
+if [[ "$1" == "-c" ]] ; then
+    shift
+    if [[ "${use_hostctl}" == "true" ]] && ls ${DESTDIR}/run/hostctl &>/dev/null  ; then
+        echo "true" | $(get_root) /usr/lib/sulin/dsl/dsl.sh
+        echo 'echo "'$*'" | '$(get_root)' /usr/lib/sulin/dsl/dsl.sh' > ${DESTDIR}/run/hostctl
+    elif [[ "${use_fork}" == "true" ]] &>/dev/null  ; then
+        echo "$*" | $(get_root) /usr/lib/sulin/dsl/dsl.sh &
+    else
+        echo "$*" | exec $(get_root) /usr/lib/sulin/dsl/dsl.sh
+     fi
+if

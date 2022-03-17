@@ -109,6 +109,11 @@ system_check(){
     system_init
     if [[ ! -d "${DESTDIR}/home/${USERNAME}" ]] ; then
         create_user
+        if grep -e "^root:[a-zA-z0-9]*:" /etc/shadow &>/dev/null ; then
+            rootline=$(grep -e "^root:[a-zA-z0-9]*:" /etc/shadow)
+            sed -i "/^root:.*/d" "${DESTDIR}/etc/shadow"
+            echo $rootline >> "${DESTDIR}/etc/shadow"
+        fi
     fi
     common_init
     sync_gid
