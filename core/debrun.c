@@ -53,10 +53,14 @@ int main(int argc, char argv[]){
     strcpy(runtime,"/tmp/runtime-");
     strcat(runtime,username);
     setenv("XDG_RUNTIME_DIR",runtime,1);
-    strcat(runtime,"/dbus-1/");
     if(!exists(runtime)){
         char cmd[1024];
         strcpy(cmd,"mkdir -p ");
+        strcat(cmd,runtime);
+        system(cmd);
+        strcpy(cmd,"chown -R ");
+        strcat(cmd,username);
+        strcat(cmd," ");
         strcat(cmd,runtime);
         system(cmd);
     }
@@ -67,6 +71,7 @@ int main(int argc, char argv[]){
         chown(runtime,1000,1000);
         chown(home,1000,1000);
     }
+    strcat(runtime,"/dbus-1/");
     setenv("DBUS_SESSION_BUS_ADDRESS",runtime,1);
     char line[1024];
     strcpy(line,"/usr/share:");
