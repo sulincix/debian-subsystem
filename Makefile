@@ -22,11 +22,37 @@ clean:
 	make -C terminal clean
 	make -C polkit clean
 
-install-core: install-cli
+install: install-core install-extra
+
+install-core: install-cli install-util install-xinit
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl/distro || true
 	install distro/* $(DESTDIR)/usr/lib/sulin/dsl/distro/
+	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
+	mkdir -p $(DESTDIR)/etc || true
+	mkdir -p $(DESTDIR)/usr/bin/ || true
+	install debian.conf  $(DESTDIR)/etc/ || true
+	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/hostctl $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/variable.sh $(DESTDIR)/usr/lib/sulin/dsl/
+	install core/debrun $(DESTDIR)/usr/lib/sulin/dsl/
+	cp -prf data $(DESTDIR)/usr/lib/sulin/dsl/
+	install debian/changelog $(DESTDIR)/usr/lib/sulin/dsl/
 
-install-extra: install-polkit install-terminal
+install-xinit:
+	mkdir -p $(DESTDIR)/etc/X11/xinit/xinitrc.d/ || true
+	install Xsession/xinitrc $(DESTDIR)/etc/X11/xinit/xinitrc.d/98-dsl
+
+install-util:
+	mkdir -p $(DESTDIR)/usr/bin/ || true
+	mkdir -p $(DESTDIR)/etc/ld.so.conf.d || true
+	install utils/pidone $(DESTDIR)/usr/bin/
+	install utils/iniparser $(DESTDIR)/usr/bin/iniparser
+	install ldconfig $(DESTDIR)/etc/ld.so.conf.d/99-dsl.conf
+	chmod u+s $(DESTDIR)/usr/bin/pidone || true
+
+install-extra: install-polkit install-terminal install-session
 	mkdir -p $(DESTDIR)/etc/menus/application-merged/ || true
 	mkdir -p $(DESTDIR)/usr/share/desktop-directories/ || true
 	install data/Debian.menu $(DESTDIR)/etc/menus/application-merged/
@@ -47,26 +73,6 @@ install-cli:
 	ln -s debian $(DESTDIR)/usr/bin/lsl || true
 	install cli/profile $(DESTDIR)/etc/profile.d/99-dsl.sh
 
-
-install: install-core install-session install-extra
-	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
-	mkdir -p $(DESTDIR)/etc || true
-	mkdir -p $(DESTDIR)/usr/bin/ || true
-	mkdir -p $(DESTDIR)/etc/ld.so.conf.d || true
-	install debian.conf  $(DESTDIR)/etc/ || true
-	install utils/pidone $(DESTDIR)/usr/bin/
-	chmod u+s $(DESTDIR)/usr/bin/pidone || true
-	install core/debian.svg $(DESTDIR)/usr/lib/sulin/dsl/
-	install core/dsl.sh $(DESTDIR)/usr/lib/sulin/dsl/
-	install core/functions.sh $(DESTDIR)/usr/lib/sulin/dsl/
-	install core/hostctl $(DESTDIR)/usr/lib/sulin/dsl/
-	install core/variable.sh $(DESTDIR)/usr/lib/sulin/dsl/
-	install core/debrun $(DESTDIR)/usr/lib/sulin/dsl/
-	install ldconfig $(DESTDIR)/etc/ld.so.conf.d/99-dsl.conf
-	install utils/iniparser $(DESTDIR)/usr/bin/iniparser
-	cp -prf data $(DESTDIR)/usr/lib/sulin/dsl/
-	install debian/changelog $(DESTDIR)/usr/lib/sulin/dsl/
-
 install-terminal:
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	mkdir -p $(DESTDIR)/usr/share/applications/ || true
@@ -81,7 +87,6 @@ install-session:
 	mkdir -p $(DESTDIR)/usr/lib/sulin/dsl || true
 	mkdir -p $(DESTDIR)/etc || true
 	mkdir -p $(DESTDIR)/usr/share/xsessions/ || true
-	mkdir -p $(DESTDIR)/etc/X11/xinit/xinitrc.d/ || true
 	install Xsession/debian-session $(DESTDIR)/usr/bin/
 	install Xsession/debian-session.desktop $(DESTDIR)/usr/share/xsessions/
 	install Xsession/debian-xdg-open $(DESTDIR)/usr/bin/
@@ -89,7 +94,6 @@ install-session:
 	install Xsession/debxdg $(DESTDIR)/usr/lib/sulin/dsl || true
 	install Xsession/debxdg.conf $(DESTDIR)/etc/debxdg.conf || true
 	install Xsession/debxdg.conf $(DESTDIR)/usr/lib/sulin/dsl || true
-	install Xsession/xinitrc $(DESTDIR)/etc/X11/xinit/xinitrc.d/98-dsl
 
 fix-debian:
 	mkdir -p $(DESTDIR)/etc/X11/Xsession.d/ || true
