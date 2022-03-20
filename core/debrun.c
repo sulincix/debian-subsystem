@@ -53,6 +53,7 @@ int main(int argc, char argv[]){
     strcpy(runtime,"/tmp/runtime-");
     strcat(runtime,username);
     setenv("XDG_RUNTIME_DIR",runtime,1);
+    strcat(runtime,"/dbus-1/");
     if(!exists(runtime)){
         char cmd[1024];
         strcpy(cmd,"mkdir -p ");
@@ -66,6 +67,7 @@ int main(int argc, char argv[]){
         chown(runtime,1000,1000);
         chown(home,1000,1000);
     }
+    setenv("DBUS_SESSION_BUS_ADDRESS",runtime,1);
     char line[1024];
     strcpy(line,"/usr/share:");
     if (getenv("XDG_DATA_DIRS")!= NULL){
@@ -81,7 +83,7 @@ int main(int argc, char argv[]){
         strcat(cmd," 'exec ");
     }
     strcat(cmd,arg2cmd(argc,(char**)argv));
-            strcat(cmd,"'");
+    strcat(cmd,"'");
     char *args[] = { "sh", "-c", cmd, NULL };
     execvp("sh", args);
 
