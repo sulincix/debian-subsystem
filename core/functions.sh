@@ -154,6 +154,8 @@ bind_system(){
     fi
     if ! mount | grep "${DESTDIR}/run" &>/dev/null ; then
         mount --make-private -t tmpfs tmpfs "${DESTDIR}/run"
+        mkdir -p "${DESTDIR}/run/shm"
+        chmod 777 "${DESTDIR}/run/shm"
         mkdir -p "${DESTDIR}/run/user/1000/cache"
         chroot "${DESTDIR}"  chown ${USERNAME} -R "/run/user/1000"
     fi
