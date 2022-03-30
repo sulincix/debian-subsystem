@@ -34,8 +34,8 @@ int main(int argc,char *argv[]) {
       strcat(cmd,"\" ");
   }
   uid = getuid();
-  uid_t i = setuid(0);
-  if(getuid()!=0 || i != 0){
+  uid_t uid = setuid(0);
+  if(getuid()!=0 || uid != 0){
     fputs("Suid permissions are missing. Enter root password to set permission.\n",stderr);
     if(0 != system("su -c \"chown root $(which pidone); chmod u+s $(which pidone);\"")) {
       fputs("setuid() failing - operation not permitted\n",stderr);
@@ -44,7 +44,7 @@ int main(int argc,char *argv[]) {
       execvp(argv[0],argv);
     }
   }  
-  pid_t pid = clone(child_fn, child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | CLONE_NEWIPC | CLONE_NEWCGROUP | CLONE_VM | CLONE_VFORK | SIGCHLD , NULL);
+  pid_t pid = clone(child_fn, child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS | CLONE_NEWIPC | CLONE_VM | CLONE_VFORK | SIGCHLD , NULL);
   setuid(0);
  
   waitpid(pid, NULL, 0);
