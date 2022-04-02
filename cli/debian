@@ -84,7 +84,7 @@ if [[ "$1" == "--remove" ]] ; then
 fi
 if [[ "$1" == "--passwd" ]] ; then
     isroot
-    exec chroot "${DESTDIR}" passwd
+    exec chroot "${DESTDIR}" usermod -p $(openssl passwd "$2") root
 fi
 if [[ "$1" == "-c" ]] ; then
     shift
