@@ -208,6 +208,9 @@ sync_gid(){
         if grep "$group" "${DESTDIR}/etc/group" &>/dev/null ; then
             ogid=$(grep "$group" "${DESTDIR}/etc/group" | cut -f 3 -d ":")
             sed -i "s/$group:x:$ogid:/$group:x:$gid:/g" "${DESTDIR}/etc/group" &>/dev/null || true
+        else
+            msg "Add" "$group:$gid"
+            echo "$line" >> "${DESTDIR}/etc/group"
         fi
     done
 }
