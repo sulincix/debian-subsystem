@@ -12,6 +12,7 @@ if [[ "$1" == "--help" ]] ; then
     echo "  --umount       : Umount subsystem."
     echo "  --kill         : Kill running process under subsystem"
     echo "  --remove       : Remove subsystem."
+    echo "  --passwd       : Change root password."
     exit 0
 fi
 if [[ "$1" == "--fork" ]] ; then
@@ -80,6 +81,10 @@ if [[ "$1" == "--remove" ]] ; then
     rm -rf "${DESTDIR}"
     rm -rf /usr/share/applications/debian/*.desktop
     shift
+fi
+if [[ "$1" == "--passwd" ]] ; then
+    isroot
+    exec chroot "${DESTDIR}" passwd
 fi
 if [[ "$1" == "-c" ]] ; then
     shift
