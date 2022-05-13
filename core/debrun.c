@@ -4,8 +4,12 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <string.h>
 #include <pwd.h>
+#include <string.h>
+
+#ifndef F_OK
+#define F_OK 0
+#endif
 
 int exists(char* fname);
 int cmd_exists(char* cmd);
