@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+tool_init(){
+    : not required
+}
+system_init(){
+    ls ${DESTDIR}/etc/os-release &>/dev/null && return 0
+    curdir="$(pwd)"
+    mkdir -p ${DESTDIR} /tmp/fedora/rootfs
+    cd /tmp/fedora
+    link="${REPO}/Rawhide"
+    version=$(wget -O - "$link" | sed "s/.*href=\"//g;s/\".*//g;s/\/$//g" | grep "^[0-9].*" | sort -V | tail -n 1)
+    wget -c -O fedora.tar.xz $link/$version/images/Fedora-Container-Base-Rawhide-$version.$(uname -m).tar.xz
+    tar -xf fedora.tar.xz
+    mv ./*/layer.tar ./rootfs
+    cd ./rootfs
+    tar -xf layer.tar
+    cp -prf ./* ${DESTDIR}/
+    cat /etc/resolv.conf > "${DESTDIR}/etc/resolv.conf"
+    rm -rf /tmp/fedora
+    cd "$curdir"
+    chroot ${DESTDIR} dnf update
+    chroot ${DESTDIR} dnf install util-linux -y
+}
+create_user(){
+    chroot "${DESTDIR}" useradd "${USERNAME}" -d "/home/${USERNAME}" -s /bin/bash || fail_exit "Failed to create user"
+    mkdir -p "${DESTDIR}/home/${USERNAME}"
+}
