@@ -18,6 +18,7 @@ Documentations available in **/doc**
 * Archlinux
 * Manjaro
 * Voidlinux
+* Fedora (Rawhide)
 
 ***
 
