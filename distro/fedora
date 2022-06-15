@@ -3,7 +3,7 @@ set -e
 tool_init(){
     which fdstrap &>/dev/null && return 0
     cd /tmp
-    $wget -c https://gitlab.com/tearch-linux/fdstrap/-/raw/main/fdstrap.sh -O fdstrap.sh || fail_exit "Failed to fetch arch-bootstrap"
+    $wget -c https://gitlab.com/tearch-linux/applications-and-tools/fdstrap/-/raw/main/fdstrap.sh -O fdstrap.sh || fail_exit "Failed to fetch arch-bootstrap"
     cp -fp fdstrap.sh /usr/bin/fdstrap
     chmod 755 /usr/bin/fdstrap
 }
