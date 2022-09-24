@@ -256,7 +256,7 @@ run(){
     b=${SYSTEM}
     r=${ROOTMODE}
     u=${USERNAME}
-    xhost +localhost &>/dev/null || true
+    xhost +local: &>/dev/null || true
     for e in $(env | sed "s/=.*//g") ; do
         unset "$e" &>/dev/null || true
     done
