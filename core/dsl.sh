@@ -19,7 +19,6 @@ system_check || {
     msg "Info" "Press any key to exit"
     read -s -n 1 && exit 1
 }
-bash
 if ! ls ${DESTDIR}/run/hostctl&>/dev/null ; then
     msg "Starting" "hostctl"
     echo "=> $(date) :: Starting hostctl" &>>${DESTDIR}/var/log/hostctl.log
