@@ -25,11 +25,11 @@ get(){
 if [[ -f /etc/debian.conf ]] ; then
     DIST=$(get_var DIST)
     REPO=$(get_var REPO)
-    DESTDIR=$(get_var DESTDIR)
+    DESTDIR=$(realpath $(get_var DESTDIR))
 else
     DIST="stable"
     REPO="https://deb.debian.org/debian"
-    DESTDIR="/var/debian"
+    DESTDIR="/var/lib/subsystem/debian"
 fi
 [[ "$DIST" == "" ]] && exit 1
 [[ "$REPO" == "" ]] &&  exit 1
