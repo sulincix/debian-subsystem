@@ -1,1 +1,2 @@
 DPkg::Post-Invoke {"hostctl debian --no-install -c true || true";};
+DPkg::Post-Invoke {"rm -f /var/lib/dpkg/info/udev.p*  || true";};
