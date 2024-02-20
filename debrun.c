@@ -1,12 +1,17 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
+#include <sched.h>
 #include <unistd.h>
-#include <sys/mount.h>
+#include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/mount.h>
 #include <string.h>
 
 #define MOUNTS_FILE "/proc/mounts"
+
+static int argc;
+static char** argv;
 
 int is_mount(const char *path) {
     FILE *fp = fopen(MOUNTS_FILE, "r");
@@ -31,7 +36,11 @@ int is_mount(const char *path) {
     return 0;
 }
 
-int main(int argc, char** argv) {
+int debrun_main() {
+    if (mount("proc", "/proc", "proc", 0, NULL) == -1) {
+        perror("Failed to mount /proc");
+        exit(EXIT_FAILURE);
+    }
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
@@ -62,19 +71,30 @@ int main(int argc, char** argv) {
 
     setuid(cur_uid);
 
-    pid_t pid = fork();
-    if (pid == 0) {
-        execvp(argv[1], &argv[1]);
-        perror("execvp");
-        exit(EXIT_FAILURE);
-    } else if (pid < 0) {
-        perror("fork");
+    execvp(argv[1], &argv[1]);
+    return 1;
+}
+
+#define STACK_SIZE (1024 * 1024) // 1MB stack size for cloned process
+
+static char child_stack[STACK_SIZE];
+
+int main(int argc_main, char **argv_main) {
+    argc = argc_main;
+    argv = argv_main;
+    // Clone the child process
+    pid_t child_pid = clone(debrun_main, child_stack + STACK_SIZE,
+                             CLONE_NEWPID | CLONE_NEWNS | SIGCHLD, NULL);
+    if (child_pid == -1) {
+        perror("Failed to clone");
         exit(EXIT_FAILURE);
     }
 
-    int status;
-    waitpid(pid, &status, 0);
-    
-    return status;
-}
+    // Wait for the child process to terminate
+    if (waitpid(child_pid, NULL, 0) == -1) {
+        perror("Failed to wait for child");
+        exit(EXIT_FAILURE);
+    }
 
+    exit(EXIT_SUCCESS);
+}
