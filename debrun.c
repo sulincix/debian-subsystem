@@ -37,12 +37,6 @@ int is_mount(const char *path) {
 }
 
 int debrun_main() {
-    if (!is_mount("/debian/proc")) {
-        if (mount("proc", "/debian/proc", "proc", 0, NULL) == -1) {
-            perror("Failed to mount /proc");
-            exit(EXIT_FAILURE);
-        }
-    }
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
@@ -55,7 +49,7 @@ int debrun_main() {
         exit(EXIT_FAILURE);
     }
 
-    const char* debian_dirs[] = {"/debian/home", "/debian/etc/passwd", "/debian/dev", "/debian/sys", "/debian/run"};
+    const char* debian_dirs[] = {"/debian/home", "/debian/etc/passwd", "/debian/dev", "/debian/proc", "/debian/sys", "/debian/run"};
 
     for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
         if (!is_mount(debian_dirs[i])) {
