@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 
     for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
         if (!is_mount(debian_dirs[i])) {
-            if (mount(debian_dirs[i] + 8, debian_dirs[i], NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
+            if (mount(debian_dirs[i] + 7, debian_dirs[i], NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
             }
