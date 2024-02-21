@@ -96,11 +96,18 @@ static int debrun_process() {
 
     if(!isdir("/debian/var/lib/lsl/exports/")){
         create_dir("/debian/var/lib/lsl/exports/");
+        create_dir("/debian/var/lib/lsl/imports/");
         symlink("../../../../usr/share/themes", "/debian/var/lib/lsl/exports/themes");
         symlink("../../../../usr/share/icons", "/debian/var/lib/lsl/exports/icons");
         symlink("../../../../usr/share/fonts", "/debian/var/lib/lsl/exports/fonts");
+        symlink("../system/usr/share/themes/", "/debian/var/lib/lsl/imports/themes");
+        symlink("../system/usr/share/icons/", "/debian/var/lib/lsl/imports/icons");
+        symlink("../system/usr/share/fonts/", "/debian/var/lib/lsl/imports/fonts");
     }
+    if(!isdir("/debian/var/lib/lsl/system/")){
+        create_dir("/debian/var/lib/lsl/system/");
 
+    }
     const char* debian_dirs[] = {"/debian/home", "/debian/etc/passwd", "/debian/dev", "/debian/proc", "/debian/sys", "/debian/run"};
 
     for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
@@ -112,6 +119,12 @@ static int debrun_process() {
         }
     }
 
+    if (!is_mount("/debian/var/lib/lsl/system")) {
+        if (mount("/", "/debian/var/lib/lsl/system", NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
+                perror("mount");
+                exit(EXIT_FAILURE);
+        }
+    }
     if (chroot("/debian") != 0) {
         perror("chroot");
         exit(EXIT_FAILURE);
