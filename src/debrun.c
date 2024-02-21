@@ -4,9 +4,11 @@
 #include <sched.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/mount.h>
 #include <string.h>
+#include <dirent.h>
 
 #include <lsl.h>
 
@@ -38,6 +40,47 @@ int is_mount(const char *path) {
     return 0;
 }
 
+int isdir(char *path){
+    if(path == NULL){
+        return 0;
+    }
+    DIR* dir = opendir(path);
+    if(dir){
+        closedir(dir);
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+
+#define c_mkdir(A, B) \
+    if (mkdir(A, B) < 0) { \
+        fprintf(stderr, "Error: %s %s\n", "failed to create directory.", A); \
+}
+
+void create_dir(const char *dir) {
+    char tmp[1024];
+    char *p = NULL;
+    size_t len;
+
+    snprintf(tmp, sizeof(tmp),"%s",dir);
+    len = strlen(tmp);
+    if (tmp[len - 1] == '/')
+        tmp[len - 1] = 0;
+    for (p = tmp + 1; *p; p++)
+        if (*p == '/') {
+            *p = 0;
+            if(!isdir(tmp))
+                c_mkdir(tmp, 0755);
+            *p = '/';
+        }
+    if(!isdir(tmp))
+        c_mkdir(tmp, 0755);
+}
+
+
+
 static int debrun_process() {
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
@@ -49,6 +92,12 @@ static int debrun_process() {
     if (getuid() != 0) {
         fprintf(stderr, "Root privileges required.\n");
         exit(EXIT_FAILURE);
+    }
+
+    if(!isdir("/debian/var/lib/lsl/exports/")){
+        create_dir("/debian/var/lib/lsl/exports/");
+        symlink("../../../../usr/share/themes", "/debian/var/lib/lsl/exports/themes");
+        symlink("../../../../usr/share/icons", "/debian/var/lib/lsl/exports/icons");
     }
 
     const char* debian_dirs[] = {"/debian/home", "/debian/etc/passwd", "/debian/dev", "/debian/proc", "/debian/sys", "/debian/run"};
