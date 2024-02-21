@@ -8,6 +8,8 @@
 #include <sys/mount.h>
 #include <string.h>
 
+#include <lsl.h>
+
 #define MOUNTS_FILE "/proc/mounts"
 
 static int argc;
@@ -36,7 +38,7 @@ int is_mount(const char *path) {
     return 0;
 }
 
-int debrun_main() {
+static int debrun_process() {
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
@@ -75,11 +77,11 @@ int debrun_main() {
 
 static char child_stack[STACK_SIZE];
 
-int main(int argc_main, char **argv_main) {
+int debrun_main(int argc_main, char **argv_main) {
     argc = argc_main;
     argv = argv_main;
     // Clone the child process
-    pid_t child_pid = clone(debrun_main, child_stack + STACK_SIZE,
+    pid_t child_pid = clone(debrun_process, child_stack + STACK_SIZE,
                              CLONE_NEWPID | CLONE_NEWNS | SIGCHLD, NULL);
     if (child_pid == -1) {
         perror("Failed to clone");
