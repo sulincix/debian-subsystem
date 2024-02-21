@@ -39,13 +39,12 @@ char* generate_desktop(char* path) {
                     strcat(ctx, line+strlen(areas[i]));
                 }
                 if(startswith(line, "Name=") || startswith(line, "GenericName=") ) {
-                    strcat(ctx, " (on debian)\n");
+                    strcat(ctx, " (on subsystem)\n");
                 } else {
                     strcat(ctx, "\n");
                 }
             }
         }
     }
-    system("update-desktop-database /debian/var/lib/lsl/exports/applications/");
     return strdup(ctx);
 }

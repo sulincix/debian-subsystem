@@ -90,13 +90,13 @@ int sync_desktop() {
     struct dirent *ep;
     char path[1024];
     char path2[1024];
-    dp = opendir ("/debian/var/lib/lsl/exports/applications");
+    dp = opendir ("/var/lib/subsystem/var/lib/lsl/exports/applications");
     if (dp != NULL) {
         while ((ep = readdir (dp)) != NULL) {
             if((ep->d_name)[0] == '.'){
                 continue;
             }
-            strcpy(path,"/debian/var/lib/lsl/exports/applications/");
+            strcpy(path,"/var/lib/subsystem/var/lib/lsl/exports/applications/");
             strcat(path, ep->d_name);
             remove(path);
         }
@@ -104,15 +104,15 @@ int sync_desktop() {
       perror ("Couldn't open the directory");
       return -1;
     }
-    dp = opendir ("/debian/usr/share/applications/");
+    dp = opendir ("/var/lib/subsystem/usr/share/applications/");
     if (dp != NULL) {
         while ((ep = readdir (dp)) != NULL) {
             if((ep->d_name)[0] == '.'){
                 continue;
             }
-            strcpy(path,"/debian/usr/share/applications/");
+            strcpy(path,"/var/lib/subsystem/usr/share/applications/");
             strcat(path, ep->d_name);
-            strcpy(path2,"/debian/var/lib/lsl/exports/applications/debian-");
+            strcpy(path2,"/var/lib/subsystem/var/lib/lsl/exports/applications/subsystem-");
             strcat(path2, ep->d_name);
             FILE *out = fopen(path2, "w");
             fprintf(out, "%s",generate_desktop(path));
