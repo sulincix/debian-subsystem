@@ -86,7 +86,8 @@ int debrun_main(int argc, char **argv) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
     }
-
+    char cur_dir[1024];
+    getcwd(cur_dir, sizeof(cur_dir));
     uid_t cur_uid = getuid();
     setuid(0);
     if (getuid() != 0) {
@@ -138,7 +139,7 @@ int debrun_main(int argc, char **argv) {
     }
 
     setuid(cur_uid);
-
+    chdir(cur_dir);
     execvp(argv[1], &argv[1]);
     return 1;
 }
