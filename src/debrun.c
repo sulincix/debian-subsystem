@@ -99,6 +99,7 @@ static int debrun_process() {
     sync_desktop();
     if(!isdir("/debian/var/lib/lsl/exports/")){
         create_dir("/debian/var/lib/lsl/exports/");
+        create_dir("/debian/var/lib/lsl/exports/applications");
         create_dir("/debian/var/lib/lsl/imports/");
         symlink("../../../../usr/share/themes", "/debian/var/lib/lsl/exports/themes");
         symlink("../../../../usr/share/icons", "/debian/var/lib/lsl/exports/icons");

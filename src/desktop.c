@@ -25,9 +25,9 @@ char* generate_desktop(char* path) {
             strcat(ctx,line);
         }
         char* areas[] = {"Name=", "Version=", "Type=",
-            "GenericName=","Comment=", "Keywords=",
+            "GenericName=","Comment=", "Keywords=","NoDisplay=",
             "Icon=", "Terminal=", "MimeType=", "Exec="};
-        for(int i=0;i<10;i++){
+        for(int i=0;i<11;i++){
             if(startswith(line, areas[i])){
                 line[strlen(line)-1] = '\0';
                 if(startswith(line, "Exec=")){
@@ -46,5 +46,6 @@ char* generate_desktop(char* path) {
             }
         }
     }
+    system("update-desktop-database /debian/var/lib/lsl/exports/applications/");
     return strdup(ctx);
 }
