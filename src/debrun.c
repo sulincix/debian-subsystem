@@ -30,7 +30,6 @@ int is_mount(const char *path) {
     while (fgets(line, sizeof(line), fp) != NULL) {
         if (sscanf(line, "%255s %255s %255s", mount_point, device, mount_type) == 3) {
             if (strcmp(path, device) == 0) {
-                printf("%s %s\n", path, device);
                 fclose(fp);
                 return 1;
             }
@@ -120,7 +119,7 @@ int debrun_main(int argc, char **argv) {
         strcpy(debian_dir, "/var/lib/subsystem");
         strcat(debian_dir,debian_dirs[i]);
         if (!is_mount(debian_dir)) {
-            if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND , NULL) != 0) {
+            if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
             }
