@@ -98,6 +98,7 @@ static int debrun_process() {
         create_dir("/debian/var/lib/lsl/exports/");
         symlink("../../../../usr/share/themes", "/debian/var/lib/lsl/exports/themes");
         symlink("../../../../usr/share/icons", "/debian/var/lib/lsl/exports/icons");
+        symlink("../../../../usr/share/fonts", "/debian/var/lib/lsl/exports/fonts");
     }
 
     const char* debian_dirs[] = {"/debian/home", "/debian/etc/passwd", "/debian/dev", "/debian/proc", "/debian/sys", "/debian/run"};
