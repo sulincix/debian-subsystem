@@ -1,6 +1,8 @@
+#define _XOPEN_SOURCE 700
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 
 #include <lsl.h>
 
@@ -81,6 +83,48 @@ void sync_gid(const char *DESTDIR) {
     fflush(dest_file);
     fclose(source_file);
     fclose(dest_file);
+}
+
+int sync_desktop() {
+    DIR *dp;
+    struct dirent *ep;
+    char path[1024];
+    char path2[1024];
+    dp = opendir ("/debian/var/lib/lsl/exports/applications");
+    if (dp != NULL) {
+        while ((ep = readdir (dp)) != NULL) {
+            if((ep->d_name)[0] == '.'){
+                continue;
+            }
+            strcpy(path,"/debian/var/lib/lsl/exports/applications/");
+            strcat(path, ep->d_name);
+            remove(path);
+        }
+    } else  {
+      perror ("Couldn't open the directory");
+      return -1;
+    }
+    dp = opendir ("/debian/usr/share/applications/");
+    if (dp != NULL) {
+        while ((ep = readdir (dp)) != NULL) {
+            if((ep->d_name)[0] == '.'){
+                continue;
+            }
+            strcpy(path,"/debian/usr/share/applications/");
+            strcat(path, ep->d_name);
+            strcpy(path2,"/debian/var/lib/lsl/exports/applications/debian-");
+            strcat(path2, ep->d_name);
+            FILE *out = fopen(path2, "w");
+            fprintf(out, "%s",generate_desktop(path));
+            fflush(out);
+            fclose(out);
+        }
+        closedir (dp);
+        return 0;
+    } else  {
+      perror ("Couldn't open the directory");
+      return -1;
+    }
 }
 
 void sync_uid(const char *DESTDIR) {

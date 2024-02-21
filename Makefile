@@ -3,8 +3,9 @@ LIBDIR=/lib
 SHELL=bash -ex
 build: clean
 	mkdir build
-	gcc -o build/liblsl.so $(wildcard src/*.c) -Isrc -shared -fPIC
-	gcc -o build/lsl src/cli/lsl.c -Lbuild -llsl -Isrc
+	gcc -o build/liblsl.so $(wildcard src/*.c) -Isrc -shared -fPIC -g3
+	gcc -o build/lsl src/cli/lsl.c -Lbuild -llsl -Isrc -g3
+	gcc -o build/test src/cli/test.c -Lbuild -llsl -Isrc -g3
 
 clean:
 	rm -rf build

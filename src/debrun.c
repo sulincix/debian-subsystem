@@ -96,6 +96,7 @@ static int debrun_process() {
 
     sync_uid("/debian/");
     sync_gid("/debian/");
+    sync_desktop();
     if(!isdir("/debian/var/lib/lsl/exports/")){
         create_dir("/debian/var/lib/lsl/exports/");
         create_dir("/debian/var/lib/lsl/imports/");
