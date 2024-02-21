@@ -94,6 +94,8 @@ static int debrun_process() {
         exit(EXIT_FAILURE);
     }
 
+    sync_uid("/debian/");
+    sync_gid("/debian/");
     if(!isdir("/debian/var/lib/lsl/exports/")){
         create_dir("/debian/var/lib/lsl/exports/");
         create_dir("/debian/var/lib/lsl/imports/");
@@ -108,7 +110,7 @@ static int debrun_process() {
         create_dir("/debian/var/lib/lsl/system/");
 
     }
-    const char* debian_dirs[] = {"/debian/home", "/debian/etc/passwd", "/debian/dev", "/debian/proc", "/debian/sys", "/debian/run"};
+    const char* debian_dirs[] = {"/debian/home", "/debian/dev", "/debian/proc", "/debian/sys", "/debian/run"};
 
     for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
         if (!is_mount(debian_dirs[i])) {
