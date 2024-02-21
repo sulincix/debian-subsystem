@@ -30,6 +30,7 @@ int is_mount(const char *path) {
     while (fgets(line, sizeof(line), fp) != NULL) {
         if (sscanf(line, "%255s %255s %255s", mount_point, device, mount_type) == 3) {
             if (strcmp(path, device) == 0) {
+                printf("%s %s\n", path, device);
                 fclose(fp);
                 return 1;
             }
@@ -81,7 +82,7 @@ void create_dir(const char *dir) {
 
 
 
-static int debrun_process() {
+int debrun_main(int argc, char **argv) {
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
@@ -116,10 +117,10 @@ static int debrun_process() {
 
     for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
         char debian_dir[1024];
-        strcpy(debian_dir, "/var/lib/subsystem/");
+        strcpy(debian_dir, "/var/lib/subsystem");
         strcat(debian_dir,debian_dirs[i]);
-        if (!is_mount(debian_dirs[i])) {
-            if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
+        if (!is_mount(debian_dir)) {
+            if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND , NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
             }
@@ -127,7 +128,7 @@ static int debrun_process() {
     }
 
     if (!is_mount("/var/lib/subsystem/var/lib/lsl/system")) {
-        if (mount("/", "/var/lib/subsystem/var/lib/lsl/system", NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
+        if (mount("/", "/var/lib/subsystem/var/lib/lsl/system", NULL, MS_SILENT | MS_BIND, NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
         }
@@ -141,28 +142,4 @@ static int debrun_process() {
 
     execvp(argv[1], &argv[1]);
     return 1;
-}
-
-#define STACK_SIZE (1024 * 1024) // 1MB stack size for cloned process
-
-static char child_stack[STACK_SIZE];
-
-int debrun_main(int argc_main, char **argv_main) {
-    argc = argc_main;
-    argv = argv_main;
-    // Clone the child process
-    pid_t child_pid = clone(debrun_process, child_stack + STACK_SIZE,
-                             CLONE_NEWPID | CLONE_NEWNS | SIGCHLD, NULL);
-    if (child_pid == -1) {
-        perror("Failed to clone");
-        exit(EXIT_FAILURE);
-    }
-
-    // Wait for the child process to terminate
-    if (waitpid(child_pid, NULL, 0) == -1) {
-        perror("Failed to wait for child");
-        exit(EXIT_FAILURE);
-    }
-
-    exit(EXIT_SUCCESS);
 }
