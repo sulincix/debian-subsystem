@@ -112,11 +112,14 @@ static int debrun_process() {
         create_dir("/var/lib/subsystem/var/lib/lsl/system/");
 
     }
-    const char* debian_dirs[] = {"/var/lib/subsystem/home", "/var/lib/subsystem/dev", "/var/lib/subsystem/proc", "/var/lib/subsystem/sys", "/var/lib/subsystem/run"};
+    const char* debian_dirs[] = {"/home", "/dev", "/proc", "/sys", "/run", "/tmp"};
 
     for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
+        char debian_dir[1024];
+        strcpy(debian_dir, "/var/lib/subsystem/");
+        strcat(debian_dir,debian_dirs[i]);
         if (!is_mount(debian_dirs[i])) {
-            if (mount(debian_dirs[i] + 7, debian_dirs[i], NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
+            if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
             }
