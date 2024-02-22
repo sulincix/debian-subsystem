@@ -92,10 +92,9 @@ int sync_desktop() {
     char path2[1024];
     char* dirs[] = {"applications/", "xsessions/"};
     for(int i=0;i<(sizeof(dirs) / sizeof(char*));i++) {
-            strcpy(path,"/var/lib/subsystem/var/lib/lsl/exports/");
-            strcat(path, dirs[i]);
+        strcpy(path,"/var/lib/subsystem/var/lib/lsl/exports/");
+        strcat(path, dirs[i]);
 	    dp = opendir (path);
-            puts(path);
 	    if (dp != NULL) {
 		while ((ep = readdir (dp)) != NULL) {
 		    if((ep->d_name)[0] == '.'){
