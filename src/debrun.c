@@ -11,6 +11,7 @@
 #include <dirent.h>
 
 #include <lsl.h>
+#include <config.h>
 
 #define MOUNTS_FILE "/proc/mounts"
 
@@ -101,6 +102,7 @@ int debrun_main(int argc, char **argv) {
     if(!isdir("/var/lib/subsystem/var/lib/lsl/exports/")){
         create_dir("/var/lib/subsystem/var/lib/lsl/exports/");
         create_dir("/var/lib/subsystem/var/lib/lsl/exports/applications");
+        create_dir("/var/lib/subsystem/var/lib/lsl/exports/xsessions");
         create_dir("/var/lib/subsystem/var/lib/lsl/imports/");
         symlink("../../../../usr/share/themes", "/var/lib/subsystem/var/lib/lsl/exports/themes");
         symlink("../../../../usr/share/icons", "/var/lib/subsystem/var/lib/lsl/exports/icons");
@@ -113,7 +115,7 @@ int debrun_main(int argc, char **argv) {
         create_dir("/var/lib/subsystem/var/lib/lsl/system/");
 
     }
-    const char* debian_dirs[] = {"/home", "/dev", "/proc", "/sys", "/run", "/tmp"};
+    const char* debian_dirs[] = {HOME, "/dev", "/proc", "/sys", "/run", "/tmp"};
 
     for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
         char debian_dir[1024];

@@ -90,40 +90,45 @@ int sync_desktop() {
     struct dirent *ep;
     char path[1024];
     char path2[1024];
-    dp = opendir ("/var/lib/subsystem/var/lib/lsl/exports/applications");
-    if (dp != NULL) {
-        while ((ep = readdir (dp)) != NULL) {
-            if((ep->d_name)[0] == '.'){
-                continue;
-            }
-            strcpy(path,"/var/lib/subsystem/var/lib/lsl/exports/applications/");
-            strcat(path, ep->d_name);
-            remove(path);
-        }
-    } else  {
-      perror ("Couldn't open the directory");
-      return -1;
-    }
-    dp = opendir ("/var/lib/subsystem/usr/share/applications/");
-    if (dp != NULL) {
-        while ((ep = readdir (dp)) != NULL) {
-            if((ep->d_name)[0] == '.'){
-                continue;
-            }
-            strcpy(path,"/var/lib/subsystem/usr/share/applications/");
-            strcat(path, ep->d_name);
-            strcpy(path2,"/var/lib/subsystem/var/lib/lsl/exports/applications/subsystem-");
-            strcat(path2, ep->d_name);
-            FILE *out = fopen(path2, "w");
-            fprintf(out, "%s",generate_desktop(path));
-            fflush(out);
-            fclose(out);
-        }
-        closedir (dp);
-        return 0;
-    } else  {
-      perror ("Couldn't open the directory");
-      return -1;
+    char* dirs[] = {"applications/", "xsessions/"};
+    for(int i=0;i<(sizeof(dirs) / sizeof(char*));i++) {
+            strcpy(path,"/var/lib/subsystem/var/lib/lsl/exports/");
+            strcat(path, dirs[i]);
+	    dp = opendir (path);
+            puts(path);
+	    if (dp != NULL) {
+		while ((ep = readdir (dp)) != NULL) {
+		    if((ep->d_name)[0] == '.'){
+		        continue;
+		    }
+		    strcpy(path,"/var/lib/subsystem/var/lib/lsl/exports/");
+		    strcat(path, dirs[i]);
+		    strcat(path, ep->d_name);
+		    remove(path);
+		}
+	    }
+	    strcpy(path,"/var/lib/subsystem/usr/share/");
+            strcat(path, dirs[i]);
+	    dp = opendir (path);
+	    if (dp != NULL) {
+		while ((ep = readdir (dp)) != NULL) {
+		    if((ep->d_name)[0] == '.'){
+		        continue;
+		    }
+		    strcpy(path,"/var/lib/subsystem/usr/share/");
+		    strcat(path, dirs[i]);
+		    strcat(path, ep->d_name);
+		    strcpy(path2,"/var/lib/subsystem/var/lib/lsl/exports/");
+		    strcat(path2,dirs[i]);
+		    strcat(path2,"subsystem-");
+		    strcat(path2, ep->d_name);
+		    FILE *out = fopen(path2, "w");
+		    fprintf(out, "%s",generate_desktop(path));
+		    fflush(out);
+		    fclose(out);
+		}
+		closedir (dp);
+	    }
     }
 }
 

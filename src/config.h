@@ -1,0 +1,1 @@
+#define HOME "/home"
