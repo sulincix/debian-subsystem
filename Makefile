@@ -20,12 +20,15 @@ install:
 	mkdir -p $(DESTDIR)/bin/
 	mkdir -p $(DESTDIR)/$(LIBDIR)
 	mkdir -p $(DESTDIR)/etc/xdg/menus/
+	mkdir -p $(DESTDIR)/usr/share/applications/
 	mkdir -p $(DESTDIR)/usr/share/desktop-directories/
 	install build/lsl $(DESTDIR)/bin/lsl
 	install build/liblsl.so $(DESTDIR)/$(LIBDIR)
 	install data/lsl.env $(DESTDIR)/etc/profile.d/lsl.sh
 	install data/subsystem.menu $(DESTDIR)/etc/xdg/menus/
 	install data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/
+	install data/lsl.desktop $(DESTDIR)/usr/share/applications/
+	install data/lsl-root.desktop $(DESTDIR)/usr/share/applications/
 	if [ -d /var/lib/dpkg/info ] ; then \
 	    mkdir -p $(DESTDIR)/etc/X11/ ;\
 	    install data/lsl.env  $(DESTDIR)/etc/X11/Xsession.d/91-lsl ;\

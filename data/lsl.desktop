@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Subsystem Terminal
+Comment=Enter subsystem terminal
+Exec=/bin/lsl /bin/bash
+Terminal=true
+Type=Application
+Icon=subsystem
+Categories=System;
