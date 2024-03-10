@@ -1,7 +1,5 @@
 # Debian subsystem for Linux
-Debian subsystem integration for host distribution.
-
-It uses chroot environment and You can run chrooted cli/gui applications on debian.
+The Debian subsystem integration enhances host distributions by enabling the execution of chrooted command-line and graphical applications from Debian. This integration relies on a chroot environment to facilitate seamless operation of Debian applications within the host environment.
 
 ## How to build
 ```
@@ -11,11 +9,15 @@ make
 make install
 # set suid bit
 chmod u+s /bin/lsl
-# copy rootfs into /var/lib/subsystem directory
+# copy rootfs into /var/lib/subsystem directory (or use debootstrap)
+debootstrap --arch=amd64 stable /var/lib/subsystem
 ```
 
-### Build pam module (optional)
-pam module automatically sync subsystem during login. This feature is optional is default disabled.
+### Optional: Building PAM Module
+
+A PAM module is available to automatically synchronize the subsystem during login, though it's disabled by default.
+To build and enable the PAM module, use the following commands:
+
 ```
 # build pam module
 make pam
@@ -23,7 +25,7 @@ make pam
 make install_pam
 # enable module
 echo -e "auth\toptional\tpam_lsl.so" >> /etc/pam.d/system-auth
-# Note: system-auth file name may different on your system.
+# Note: The file name may vary on your system.
 ```
 
 ## How to use
