@@ -22,6 +22,7 @@ install:
 	mkdir -p $(DESTDIR)/etc/xdg/menus/
 	mkdir -p $(DESTDIR)/usr/share/applications/
 	mkdir -p $(DESTDIR)/usr/share/desktop-directories/
+	mkdir -p $(DESTDIR)/usr/share/icons/hicolor/scalable/apps
 	install build/lsl $(DESTDIR)/bin/lsl
 	install build/liblsl.so $(DESTDIR)/$(LIBDIR)
 	install data/lsl.env $(DESTDIR)/etc/profile.d/lsl.sh
@@ -29,6 +30,7 @@ install:
 	install data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/
 	install data/lsl.desktop $(DESTDIR)/usr/share/applications/
 	install data/lsl-root.desktop $(DESTDIR)/usr/share/applications/
+	install data/subsystem.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/
 	if [ -d /var/lib/dpkg/info ] ; then \
 	    mkdir -p $(DESTDIR)/etc/X11/ ;\
 	    install data/lsl.env  $(DESTDIR)/etc/X11/Xsession.d/91-lsl ;\

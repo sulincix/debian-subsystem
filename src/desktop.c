@@ -34,7 +34,11 @@ char* generate_desktop(char* path) {
                     strcat(ctx, areas[i]);
                     strcat(ctx, "lsl ");
                     strcat(ctx, line+strlen(areas[i]));
-                }else {
+                }else if(startswith(line, "Categories=")) {
+                    strcat(ctx, areas[i]);
+                    strcat(ctx, "subsystem;");
+                    strcat(ctx, line+strlen(areas[i]));
+                } else {
                     strcat(ctx, areas[i]);
                     strcat(ctx, line+strlen(areas[i]));
                 }
@@ -42,11 +46,6 @@ char* generate_desktop(char* path) {
                     strcat(ctx, " (on subsystem)\n");
                 } else {
                     strcat(ctx, "\n");
-                }
-                if(startswith(line, "Categories=")) {
-                    strcat(ctx, areas[i]);
-                    strcat(ctx, "subsystem;");
-                    strcat(ctx, line+strlen(areas[i]));
                 }
             }
         }
