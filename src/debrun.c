@@ -142,6 +142,9 @@ int debrun_main(int argc, char **argv) {
 
     setuid(cur_uid);
     chdir(cur_dir);
+    // noninteractive mode
+    setenv("DEBIAN_FRONTEND", "noninteractive",1);
+    setenv("DEBCONF_NONINTERACTIVE_SEEN", "true",1);
     execvp(argv[1], &argv[1]);
     return 1;
 }
