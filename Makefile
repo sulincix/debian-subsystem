@@ -19,10 +19,13 @@ install:
 	mkdir -p  $(DESTDIR)/etc/profile.d/
 	mkdir -p $(DESTDIR)/bin/
 	mkdir -p $(DESTDIR)/$(LIBDIR)
+	mkdir -p $(DESTDIR)/etc/xdg/menus/applications-merged/
+	mkdir -p $(DESTDIR)/usr/share/desktop-directories/
 	install build/lsl $(DESTDIR)/bin/lsl
 	install build/liblsl.so $(DESTDIR)/$(LIBDIR)
-
 	install data/lsl.env $(DESTDIR)/etc/profile.d/lsl.sh
+	install data/subsystem.menu $(DESTDIR)/etc/xdg/menus/applications-merged/
+	install data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/
 	if [ -d /var/lib/dpkg/info ] ; then \
 	    mkdir -p $(DESTDIR)/etc/X11/ ;\
 	    install data/lsl.env  $(DESTDIR)/etc/X11/Xsession.d/91-lsl ;\
@@ -34,4 +37,4 @@ install:
 
 install_pam:
 	mkdir -p $(DESTDIR)/$(PAMDIR)
-   	install build/pam_lsl.so $(DESTDIR)/$(PAMDIR)
+	install build/pam_lsl.so $(DESTDIR)/$(PAMDIR)

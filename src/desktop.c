@@ -10,7 +10,7 @@ int startswith(char* line, char* msg) {
     return 0 == strncmp(line, msg, strlen(msg));
 }
 
-#define MAX_LINE_LENGTH 1024
+#define MAX_LINE_LENGTH 1024*1024
 char* generate_desktop(char* path) {
     char* ctx = malloc(1024*1024*1024*sizeof(char));
     strcpy(ctx,"");
@@ -26,8 +26,8 @@ char* generate_desktop(char* path) {
         }
         char* areas[] = {"Name=", "Version=", "Type=",
             "GenericName=","Comment=", "Keywords=","NoDisplay=",
-            "Icon=", "Terminal=", "MimeType=", "Exec="};
-        for(int i=0;i<11;i++){
+            "Icon=", "Terminal=", "MimeType=", "Exec=", "Categories="};
+        for(int i=0;i<12;i++){
             if(startswith(line, areas[i])){
                 line[strlen(line)-1] = '\0';
                 if(startswith(line, "Exec=")){
@@ -42,6 +42,11 @@ char* generate_desktop(char* path) {
                     strcat(ctx, " (on subsystem)\n");
                 } else {
                     strcat(ctx, "\n");
+                }
+                if(startswith(line, "Categories=")) {
+                    strcat(ctx, areas[i]);
+                    strcat(ctx, "subsystem;");
+                    strcat(ctx, line+strlen(areas[i]));
                 }
             }
         }

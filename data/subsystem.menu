@@ -1,0 +1,12 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+ "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+<Menu>
+  <Name>Subsystem</Name>
+  <Menu>
+    <Name>Subsystem</Name>
+    <Directory>Subsystem.directory</Directory>
+    <Include>
+        <Category>Subsystem</Category>
+    </Include>
+  </Menu>
+</Menu>
