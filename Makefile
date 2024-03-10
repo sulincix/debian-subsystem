@@ -19,12 +19,12 @@ install:
 	mkdir -p  $(DESTDIR)/etc/profile.d/
 	mkdir -p $(DESTDIR)/bin/
 	mkdir -p $(DESTDIR)/$(LIBDIR)
-	mkdir -p $(DESTDIR)/etc/xdg/menus/applications-merged/
+	mkdir -p $(DESTDIR)/etc/xdg/menus/
 	mkdir -p $(DESTDIR)/usr/share/desktop-directories/
 	install build/lsl $(DESTDIR)/bin/lsl
 	install build/liblsl.so $(DESTDIR)/$(LIBDIR)
 	install data/lsl.env $(DESTDIR)/etc/profile.d/lsl.sh
-	install data/subsystem.menu $(DESTDIR)/etc/xdg/menus/applications-merged/
+	install data/subsystem.menu $(DESTDIR)/etc/xdg/menus/
 	install data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/
 	if [ -d /var/lib/dpkg/info ] ; then \
 	    mkdir -p $(DESTDIR)/etc/X11/ ;\
