@@ -96,9 +96,6 @@ int debrun_main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    sync_uid("/var/lib/subsystem/");
-    sync_gid("/var/lib/subsystem/");
-    sync_desktop();
     if(!isdir("/var/lib/subsystem/var/lib/lsl/exports/")){
         create_dir("/var/lib/subsystem/var/lib/lsl/exports/");
         create_dir("/var/lib/subsystem/var/lib/lsl/exports/applications");
@@ -115,6 +112,9 @@ int debrun_main(int argc, char **argv) {
         create_dir("/var/lib/subsystem/var/lib/lsl/system/");
 
     }
+    sync_uid("/var/lib/subsystem/");
+    sync_gid("/var/lib/subsystem/");
+    sync_desktop();
     const char* debian_dirs[] = {HOME, "/dev", "/proc", "/sys", "/run", "/tmp"};
 
     for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {

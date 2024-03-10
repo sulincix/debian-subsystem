@@ -38,7 +38,7 @@ void sync_gid(const char *DESTDIR) {
         sscanf(line, "%[^:]:x:%[^:]:%[^:]:%s", group, gid, users);
         users[strlen(users)-1] = '\0';
         int found = 0;
-        if(strlen(line_orig) < 4) {
+        if(strlen(line) < 4) {
             continue;
         }
         while (fgets(line_orig, sizeof(line_orig), dest_file)) {
