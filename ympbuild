@@ -18,6 +18,11 @@ arch=('x86_64')
 
 cd $name-$version
 
+prepare(){
+    # /home is /data/user for turkman linux
+    sed -i "s|/home|/data/user|g" src/config.h
+}
+
 build () {
     make $jobs
     if use pam ; then
