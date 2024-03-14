@@ -13,18 +13,25 @@ makedepends=()
 md5sums=('SKIP')
 group=()
 uses=()
+uses_extra=(pam)
 arch=('x86_64')
 
 cd $name-$version
 
 build () {
     make $jobs
+    if use pam ; then
+        make pam
+    fi
 }
 
 package () {
     make install DESTDIR=$DESTDIR $jobs
+    if use pam ; then
+        make install_pam
+    fi
     mkdir -p $DESTDIR/etc/sysconf.d
     echo "#!/bin/sh" > $DESTDIR/etc/sysconf.d/debian-subsystem
-    echo "chmod 4755 /usr/bin/lsl" >> $DESTDIR/etc/sysconf.d/debian-subsystem 
+    echo "chmod 4755 /bin/lsl" >> $DESTDIR/etc/sysconf.d/debian-subsystem 
 }
 
