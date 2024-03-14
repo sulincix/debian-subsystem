@@ -83,6 +83,7 @@ void create_dir(const char *dir) {
 
 
 int debrun_main(int argc, char **argv) {
+    umask(0022);
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
@@ -121,6 +122,9 @@ int debrun_main(int argc, char **argv) {
         char debian_dir[1024];
         strcpy(debian_dir, "/var/lib/subsystem");
         strcat(debian_dir,debian_dirs[i]);
+        if(!isdir(debian_dir)){
+            create_dir(debian_dir);
+        }
         if (!is_mount(debian_dir)) {
             if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
                 perror("mount");
@@ -130,7 +134,7 @@ int debrun_main(int argc, char **argv) {
     }
 
     if (!is_mount("/var/lib/subsystem/var/lib/lsl/system")) {
-        if (mount("/", "/var/lib/subsystem/var/lib/lsl/system", NULL, MS_SILENT | MS_BIND, NULL) != 0) {
+        if (mount("/", "/var/lib/subsystem/var/lib/lsl/system", NULL, MS_SILENT | MS_BIND |MS_RDONLY , NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
         }
