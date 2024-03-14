@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+name='debian-subsystem'
+release='1'
+version='master'
+url='https://gitlab.com/sulincix/debian-subsystem'
+description='Easy way to use debian chroot'
+email='parduscix@yandex.ru'
+maintainer='sulincix'
+license=('GPLv3')
+source=('https://gitlab.com/sulincix/debian-subsystem/-/archive/master/debian-subsystem-master.zip')
+depends=()
+makedepends=()
+md5sums=('SKIP')
+group=()
+uses=()
+arch=('x86_64')
+
+cd $name-$version
+
+build () {
+    make $jobs
+}
+
+package () {
+    make install DESTDIR=$DESTDIR $jobs
+    mkdir -p $DESTDIR/etc/sysconf.d
+    echo "#!/bin/sh" > $DESTDIR/etc/sysconf.d/debian-subsystem
+    echo "chmod 4755 /usr/bin/lsl" >> $DESTDIR/etc/sysconf.d/debian-subsystem 
+}
+

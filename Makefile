@@ -32,10 +32,10 @@ install:
 	install data/lsl-root.desktop $(DESTDIR)/usr/share/applications/
 	install data/subsystem.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/
 	if [ -d /var/lib/dpkg/info ] ; then \
-	    mkdir -p $(DESTDIR)/etc/X11/ ;\
+	    mkdir -p $(DESTDIR)/etc/X11/Xsession.d/ ;\
 	    install data/lsl.env  $(DESTDIR)/etc/X11/Xsession.d/91-lsl ;\
 	else \
-	    mkdir -p $(DESTDIR)/etc/X11/xinit ;\
+	    mkdir -p $(DESTDIR)/etc/X11/xinit/xinitrc.d/ ;\
 	    install data/lsl.env  $(DESTDIR)/etc/X11/xinit/xinitrc.d/91-lsl ;\
 	fi
 	chmod u+s $(DESTDIR)/bin/lsl || true
