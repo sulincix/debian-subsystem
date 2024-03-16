@@ -10,7 +10,7 @@ build: clean
 
 
 pam: build
-	gcc -o build/pam_lsl.so src/pam/module.c -Lbuild -lpam -llsl -Isrc -shared -g3    
+	gcc -o build/pam_lsl.so src/pam/module.c -Lbuild -lpam -llsl -Isrc -shared -g3
 
 clean:
 	rm -rf build
@@ -20,7 +20,9 @@ install:
 	mkdir -p $(DESTDIR)/bin/
 	mkdir -p $(DESTDIR)/$(LIBDIR)
 	mkdir -p $(DESTDIR)/etc/xdg/menus/
+	mkdir -p $(DESTDIR)/usr/libexec/
 	mkdir -p $(DESTDIR)/usr/share/applications/
+	mkdir -p $(DESTDIR)/usr/libexec/
 	mkdir -p $(DESTDIR)/usr/share/desktop-directories/
 	mkdir -p $(DESTDIR)/usr/share/icons/hicolor/scalable/apps
 	install build/lsl $(DESTDIR)/bin/lsl
@@ -31,6 +33,7 @@ install:
 	install data/lsl.desktop $(DESTDIR)/usr/share/applications/
 	install data/lsl-root.desktop $(DESTDIR)/usr/share/applications/
 	install data/subsystem.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/
+	install data/debian-init.sh $(DESTDIR)/usr/libexec/
 	if [ -d /var/lib/dpkg/info ] ; then \
 	    mkdir -p $(DESTDIR)/etc/X11/Xsession.d/ ;\
 	    install data/lsl.env  $(DESTDIR)/etc/X11/Xsession.d/91-lsl ;\
