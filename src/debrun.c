@@ -84,12 +84,6 @@ void create_dir(const char *dir) {
 
 int debrun_main(int argc, char **argv) {
     umask(0022);
-    if(!isdir("/var/lib/subsystem/usr/share")){
-        int status = system("/usr/bin/env bash /usr/libexec/debian-init.sh");
-        if(status != 0){
-            exit(status);
-        }
-    }
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
@@ -101,6 +95,14 @@ int debrun_main(int argc, char **argv) {
     if (getuid() != 0) {
         fprintf(stderr, "Root privileges required.\n");
         exit(EXIT_FAILURE);
+    }
+
+    // install and run debootstrap if does not exists
+    if(!isdir("/var/lib/subsystem/usr/share")){
+        int status = system("/usr/bin/env bash /usr/libexec/debian-init.sh");
+        if(status != 0){
+            exit(status);
+        }
     }
 
     if(!isdir("/var/lib/subsystem/var/lib/lsl/exports/")){
