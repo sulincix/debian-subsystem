@@ -137,7 +137,7 @@ int debrun_main(int argc, char **argv) {
             create_dir(debian_dir);
         }
         if (!is_mount(debian_dir)) {
-            if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND | MS_REC, NULL) != 0) {
+            if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
             }
@@ -145,7 +145,7 @@ int debrun_main(int argc, char **argv) {
     }
 
     if (!is_mount("/var/lib/subsystem/var/lib/lsl/system")) {
-        if (mount("/", "/var/lib/subsystem/var/lib/lsl/system", NULL, MS_SILENT | MS_BIND |MS_RDONLY , NULL) != 0) {
+        if (mount("/", "/var/lib/subsystem/var/lib/lsl/system", NULL, MS_SILENT | MS_BIND | MS_PRIVATE |MS_RDONLY , NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
         }
