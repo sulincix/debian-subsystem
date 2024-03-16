@@ -11,7 +11,6 @@
 #include <dirent.h>
 
 #include <lsl.h>
-#include <config.h>
 
 #define MOUNTS_FILE "/proc/mounts"
 
@@ -124,9 +123,13 @@ int debrun_main(int argc, char **argv) {
     sync_uid("/var/lib/subsystem/");
     sync_gid("/var/lib/subsystem/");
     sync_desktop();
-    const char* debian_dirs[] = {HOME, "/dev", "/proc", "/sys", "/run", "/tmp"};
+    const char* debian_dirs[] = {"/dev", "/proc", "/sys", "/run", "/tmp",
+        getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
 
     for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
+        if(debian_dirs[i] == NULL){
+            continue;
+        }
         char debian_dir[1024];
         strcpy(debian_dir, "/var/lib/subsystem");
         strcat(debian_dir,debian_dirs[i]);
