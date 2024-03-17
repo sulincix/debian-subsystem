@@ -167,8 +167,9 @@ int debrun_main(int argc, char **argv) {
     execvp(argv[1], &argv[1]);
     return 1;
 }
+
 #define startswith(A,B) strncmp(A, B, strlen(A))
-void umount_all(){
+static void umount_path(char* path){
     FILE *fp = fopen(MOUNTS_FILE, "r");
     if (fp == NULL) {
         perror("fopen");
@@ -180,7 +181,8 @@ void umount_all(){
 
     while (fgets(line, sizeof(line), fp) != NULL) {
         if (sscanf(line, "%255s %255s %255s", device, mount_point, mount_type) == 3) {
-            if (startswith("/var/lib/subsystem/", mount_point) == 0) {
+            if (startswith(path, mount_point) == 0) {
+                printf("Unbind: %s\n", mount_point);
                 umount2(mount_point, MNT_DETACH);
             }
         }
@@ -188,3 +190,12 @@ void umount_all(){
 
     fclose(fp);
 }
+
+void umount_all(){
+    umount_path("/var/lib/subsystem");
+}
+
+void umount_run_user(){
+    umount_path("/var/lib/subsystem/run");
+}
+

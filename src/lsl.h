@@ -6,4 +6,5 @@ int sync_desktop();
 int debrun_main(int argc_main, char **argv_main);
 char* generate_desktop(char* path);
 void umount_all();
+void umount_run_user();
 #endif

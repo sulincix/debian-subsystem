@@ -25,6 +25,6 @@ PAM_EXTERN int pam_sm_authenticate( pam_handle_t *pamh, int flags,int argc, cons
 }
 
 PAM_EXTERN int pam_sm_close_session(pam_handle_t *pamh, int flags, int argc, const char **argv) {
-    umount_all();
+    umount_run_user();
     return PAM_SUCCESS;
 }
