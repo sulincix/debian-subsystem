@@ -28,8 +28,8 @@ int is_mount(const char *path) {
     char mount_point[256], device[256], mount_type[256];
 
     while (fgets(line, sizeof(line), fp) != NULL) {
-        if (sscanf(line, "%255s %255s %255s", mount_point, device, mount_type) == 3) {
-            if (strcmp(path, device) == 0) {
+        if (sscanf(line, "%255s %255s %255s", device, mount_point, mount_type) == 3) {
+            if (strcmp(path, mount_point) == 0) {
                 fclose(fp);
                 return 1;
             }
@@ -86,6 +86,10 @@ int debrun_main(int argc, char **argv) {
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
+    }
+    if(strcmp(argv[1], "-u") == 0){
+        umount_all();
+        return 0;
     }
     char cur_dir[1024];
     getcwd(cur_dir, sizeof(cur_dir));
@@ -162,4 +166,25 @@ int debrun_main(int argc, char **argv) {
     setenv("DEBCONF_NONINTERACTIVE_SEEN", "true",1);
     execvp(argv[1], &argv[1]);
     return 1;
+}
+#define startswith(A,B) strncmp(A, B, strlen(A))
+void umount_all(){
+    FILE *fp = fopen(MOUNTS_FILE, "r");
+    if (fp == NULL) {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+
+    char line[512];
+    char mount_point[256], device[256], mount_type[256];
+
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        if (sscanf(line, "%255s %255s %255s", device, mount_point, mount_type) == 3) {
+            if (startswith("/var/lib/subsystem/", mount_point) == 0) {
+                umount2(mount_point, MNT_DETACH);
+            }
+        }
+    }
+
+    fclose(fp);
 }
