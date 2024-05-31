@@ -17,7 +17,7 @@ static int argc;
 static char** argv;
 
 int debrun_main(int argc, char **argv) {
-    umask(0022);
+    mode_t u = umask(0022);
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
         exit(EXIT_FAILURE);
@@ -49,6 +49,8 @@ int debrun_main(int argc, char **argv) {
     // noninteractive mode
     setenv("DEBIAN_FRONTEND", "noninteractive",1);
     setenv("DEBCONF_NONINTERACTIVE_SEEN", "true",1);
+    setenv("TERM", "linux",1);
+    umask(u);
     execvp(argv[1], &argv[1]);
     return 1;
 }
