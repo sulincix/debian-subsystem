@@ -90,4 +90,5 @@ void cgroup_kill(){
     FILE* cg = fopen("/sys/fs/cgroup/debian/cgroup.kill", "w");
     fprintf(cg,"%d", 1);
     fclose(cg);
+    remove("/sys/fs/cgroup/debian/");
 }
