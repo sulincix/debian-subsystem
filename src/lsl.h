@@ -11,4 +11,6 @@ void umount_run_user();
 int isdir(char* path);
 void create_dir(char* path);
 void directory_init();
+void cgroup_init();
+void cgroup_kill();
 #endif

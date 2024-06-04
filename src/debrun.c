@@ -23,6 +23,7 @@ int debrun_main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
     if(strcmp(argv[1], "-u") == 0){
+        cgroup_kill();
         umount_all();
         return 0;
     }
@@ -35,6 +36,7 @@ int debrun_main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
     directory_init();
+    cgroup_init();
     mount_all();
     sync_uid("/var/lib/subsystem/");
     sync_gid("/var/lib/subsystem/");
@@ -43,7 +45,6 @@ int debrun_main(int argc, char **argv) {
         perror("chroot");
         exit(EXIT_FAILURE);
     }
-
     setuid(cur_uid);
     chdir(cur_dir);
     // noninteractive mode

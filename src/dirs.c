@@ -78,3 +78,16 @@ void directory_init(){
 
     }
 }
+
+void cgroup_init(){
+    create_dir("/sys/fs/cgroup/debian");
+    FILE* cg = fopen("/sys/fs/cgroup/debian/cgroup.procs", "w");
+    fprintf(cg,"%d", getpid());
+    fclose(cg);
+}
+
+void cgroup_kill(){
+    FILE* cg = fopen("/sys/fs/cgroup/debian/cgroup.kill", "w");
+    fprintf(cg,"%d", 1);
+    fclose(cg);
+}
