@@ -15,6 +15,14 @@
 
 #define MOUNTS_FILE "/proc/mounts"
 
+void disable_selinux(){
+    FILE *f = fopen("/sys/fs/selinux/enforce", "w");
+    if (f != NULL){
+        fprintf(f, "0");
+        fclose(f);
+    }
+}
+
 int is_mount(const char *path) {
     FILE *fp = fopen(MOUNTS_FILE, "r");
     if (fp == NULL) {

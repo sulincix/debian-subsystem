@@ -35,6 +35,7 @@ int debrun_main(int argc, char **argv) {
         fprintf(stderr, "Root privileges required.\n");
         exit(EXIT_FAILURE);
     }
+    disable_selinux();
     directory_init();
     cgroup_init();
     mount_all();

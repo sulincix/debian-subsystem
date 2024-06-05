@@ -13,4 +13,5 @@ void create_dir(char* path);
 void directory_init();
 void cgroup_init();
 void cgroup_kill();
+void disable_selinux();
 #endif
