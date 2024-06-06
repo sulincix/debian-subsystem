@@ -26,12 +26,14 @@ install_data:
 	mkdir -p $(DESTDIR)/usr/share/applications/
 	mkdir -p $(DESTDIR)/usr/share/desktop-directories/
 	mkdir -p $(DESTDIR)/usr/share/icons/hicolor/scalable/apps
+	mkdir -p $(DESTDIR)/usr/share/bash-completion/completions/
 	install data/subsystem.menu $(DESTDIR)/etc/xdg/menus/
 	install data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/
 	install data/lsl.desktop $(DESTDIR)/usr/share/applications/
 	install data/lsl-root.desktop $(DESTDIR)/usr/share/applications/
 	install data/subsystem.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/
 	install data/lsl.env $(DESTDIR)/etc/profile.d/lsl.sh
+	install data/bash-completion.sh $(DESTDIR)/usr/share/bash-completion/completions/lsl
 	if [ -d /var/lib/dpkg/info ] ; then \
 	    mkdir -p $(DESTDIR)/etc/X11/Xsession.d/ ;\
 	    install data/lsl.env  $(DESTDIR)/etc/X11/Xsession.d/91-lsl ;\
