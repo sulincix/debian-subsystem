@@ -80,6 +80,9 @@ void directory_init(){
 }
 
 void cgroup_init(){
+    if(getenv("LSL_NOCGROUP") != NULL){
+        return;
+    }
     create_dir("/sys/fs/cgroup/debian");
     FILE* cg = fopen("/sys/fs/cgroup/debian/cgroup.procs", "w");
     fprintf(cg,"%d", getpid());
@@ -87,6 +90,9 @@ void cgroup_init(){
 }
 
 void cgroup_kill(){
+    if(getenv("LSL_NOCGROUP") != NULL){
+        return;
+    }
     FILE* cg = fopen("/sys/fs/cgroup/debian/cgroup.kill", "w");
     fprintf(cg,"%d", 1);
     fclose(cg);
