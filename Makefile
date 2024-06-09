@@ -36,11 +36,12 @@ install_data:
 	install data/bash-completion.sh $(DESTDIR)/usr/share/bash-completion/completions/lsl
 	if [ -d /var/lib/dpkg/info ] ; then \
 	    mkdir -p $(DESTDIR)/etc/X11/Xsession.d/ ;\
-	    install data/lsl.env  $(DESTDIR)/etc/X11/Xsession.d/91-lsl ;\
+	    install data/lsl.xinit  $(DESTDIR)/etc/X11/Xsession.d/91-lsl ;\
 	else \
 	    mkdir -p $(DESTDIR)/etc/X11/xinit/xinitrc.d/ ;\
-	    install data/lsl.env  $(DESTDIR)/etc/X11/xinit/xinitrc.d/91-lsl ;\
+	    install data/lsl.xinit  $(DESTDIR)/etc/X11/xinit/xinitrc.d/91-lsl ;\
 	fi
+	
 
 install_lsl:
 	mkdir -p $(DESTDIR)/bin/
