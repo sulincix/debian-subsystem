@@ -43,6 +43,20 @@ sudo lsl apt install nano
 * Open files with subsystem applications
 * Home directory is common
 * Doesn't need a service
+* Simple cgroup controller
+* Simple sandbox environment
+
+### Notes:
+* To enable polkit, you need to disable the cgroup controller. Use the following command:
+```sh
+LSL_NOCGROUP=1 lsl ...
+```
+
+* If you want to disable the sandbox feature, you can do so with this command:
+
+```sh
+LSL_NOSANDBOX=1 lsl ...
+```
 
 ### Bug report:
 https://gitlab.com/sulincix/debian-subsystem/-/issues
