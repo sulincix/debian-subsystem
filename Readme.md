@@ -53,9 +53,30 @@ LSL_NOCGROUP=1 lsl ...
 ```
 
 * If you want to disable the sandbox feature, you can do so with this command:
-
 ```sh
 LSL_NOSANDBOX=1 lsl ...
+```
+
+* In a sandbox environment, the **UTS** namespace must be isolated.
+This necessitates the acceptance of xhost +local: to enable local connections to the X server.
+This command ensures that users within the same local environment can display graphical applications on the screen.
+
+* **udev** package post-install script broken.
+If you give an error, you must remove postinst file and fix instalation.
+```sh
+# remove postinst
+rm -f /var/lib/dpkg/info/udev.postinst
+# fix
+apt install -f
+```
+
+* If you have audio issue, you can try this:
+```sh
+# enable tcp server for pulseaudio or pipewire-pulse
+# run this command on host
+pactl load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1
+# you must set environment variable
+export PULSE_SERVER=127.0.0.1
 ```
 
 ### Bug report:
