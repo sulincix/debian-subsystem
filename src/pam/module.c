@@ -13,6 +13,7 @@ static bool is_running(){
 }
 
 PAM_EXTERN int pam_sm_open_session(pam_handle_t *pamh, int flags, int argc, const char **argv) {
+    (void) pamh; (void) flags; (void) argc; (void) argv;
     mode_t u = umask(0022);
     sync_uid("/var/lib/subsystem/");
     sync_gid("/var/lib/subsystem/");
@@ -23,6 +24,7 @@ PAM_EXTERN int pam_sm_open_session(pam_handle_t *pamh, int flags, int argc, cons
 }
 
 PAM_EXTERN int pam_sm_close_session(pam_handle_t *pamh, int flags, int argc, const char **argv) {
+    (void) pamh; (void) flags; (void) argc; (void) argv;
     create_dir("/sys/fs/cgroup/debian");
     if(!is_running()){
         umount_all();

@@ -6,14 +6,14 @@ build: clean lsl pam
 
 lsl:
 	mkdir -p build
-	$(CC) -o build/liblsl.so $(wildcard src/*.c) -Isrc -shared -fPIC -g3
-	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl -Isrc -g3
-	$(CC) -o build/test src/cli/test.c -Lbuild -llsl -Isrc -g3
+	$(CC) -o build/liblsl.so $(wildcard src/*.c) -Isrc -shared -fPIC -g3 -Wall -Wextra -Werror
+	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl -Isrc -g3 -Wall -Wextra -Werror
+	$(CC) -o build/test src/cli/test.c -Lbuild -llsl -Isrc -g3 -Wall -Wextra -Werror
 
 
 pam:
 	mkdir -p build
-	gcc -o build/pam_lsl.so src/pam/module.c -Lbuild -lpam -llsl -Isrc -shared -g3
+	gcc -o build/pam_lsl.so src/pam/module.c -Lbuild -lpam -llsl -Isrc -shared -g3 -Wall -Wextra -Werror
 
 clean:
 	rm -rf build

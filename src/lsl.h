@@ -14,4 +14,5 @@ void directory_init();
 void cgroup_init();
 void cgroup_kill();
 void disable_selinux();
+void execute_sandbox(char* cmd, char** argv);
 #endif

@@ -81,7 +81,7 @@ void mount_all(){
     const char* debian_dirs[] = {"/dev", "/proc", "/sys", "/run", "/tmp",
         getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
 
-    for (int i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
+    for (size_t i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
         if(debian_dirs[i] == NULL){
             continue;
         }

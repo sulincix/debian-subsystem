@@ -91,7 +91,7 @@ int sync_desktop() {
     char path[1024];
     char path2[1024];
     char* dirs[] = {"applications/", "xsessions/"};
-    for(int i=0;i<(sizeof(dirs) / sizeof(char*));i++) {
+    for(size_t i=0;i<(sizeof(dirs) / sizeof(char*));i++) {
         strcpy(path,"/var/lib/subsystem/var/lib/lsl/exports/");
         strcat(path, dirs[i]);
 	    dp = opendir (path);
@@ -129,6 +129,7 @@ int sync_desktop() {
 		closedir (dp);
 	    }
     }
+    return 0;
 }
 
 void sync_uid(const char *DESTDIR) {

@@ -15,7 +15,6 @@ char* generate_desktop(char* path) {
     char* ctx = malloc(1024*1024*1024*sizeof(char));
     strcpy(ctx,"");
     char line[MAX_LINE_LENGTH];
-    char line_orig[MAX_LINE_LENGTH];
     FILE *source_file = fopen(path, "r");
     if (source_file == NULL) {
         return NULL;

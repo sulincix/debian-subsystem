@@ -13,8 +13,7 @@
 #include <lsl.h>
 
 
-static int argc;
-static char** argv;
+uid_t cur_uid;
 
 int debrun_main(int argc, char **argv) {
     mode_t u = umask(0022);
@@ -29,7 +28,7 @@ int debrun_main(int argc, char **argv) {
     }
     char cur_dir[1024];
     getcwd(cur_dir, sizeof(cur_dir));
-    uid_t cur_uid = getuid();
+    cur_uid = getuid();
     setuid(0);
     if (getuid() != 0) {
         fprintf(stderr, "Root privileges required.\n");
@@ -46,14 +45,13 @@ int debrun_main(int argc, char **argv) {
         perror("chroot");
         exit(EXIT_FAILURE);
     }
-    setuid(cur_uid);
     chdir(cur_dir);
     // noninteractive mode
     setenv("DEBIAN_FRONTEND", "noninteractive",1);
     setenv("DEBCONF_NONINTERACTIVE_SEEN", "true",1);
     setenv("TERM", "linux",1);
     umask(u);
-    execvp(argv[1], &argv[1]);
+    execute_sandbox(argv[1], &argv[1]);
     return 1;
 }
 
