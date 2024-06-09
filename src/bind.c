@@ -69,15 +69,15 @@ static void umount_path(char* path){
     fclose(fp);
 }
 
-void umount_all(){
+void visible umount_all(){
     umount_path("/var/lib/subsystem");
 }
 
-void umount_run_user(){
+void visible umount_run_user(){
     umount_path("/var/lib/subsystem/run");
 }
 
-void mount_all(){
+void visible mount_all(){
     const char* debian_dirs[] = {"/dev", "/proc", "/sys", "/run", "/tmp",
         getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
 

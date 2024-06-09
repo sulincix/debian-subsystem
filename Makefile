@@ -6,9 +6,9 @@ build: clean lsl pam
 
 lsl:
 	mkdir -p build
-	$(CC) -o build/liblsl.so $(wildcard src/*.c) -Isrc -shared -fPIC -g3 -Wall -Wextra -Werror
-	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl -Isrc -g3 -Wall -Wextra -Werror
-	$(CC) -o build/test src/cli/test.c -Lbuild -llsl -Isrc -g3 -Wall -Wextra -Werror
+	$(CC) -o build/liblsl.so $(wildcard src/*.c) -fvisibility=hidden -Isrc -shared -fPIC -g3 -Wall -Wextra -Werror
+	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl -fvisibility=hidden -Isrc -g3 -Wall -Wextra -Werror
+	$(CC) -o build/test src/cli/test.c -Lbuild -llsl -fvisibility=hidden -Isrc -g3 -Wall -Wextra -Werror
 
 
 pam:

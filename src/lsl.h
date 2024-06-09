@@ -15,4 +15,5 @@ void cgroup_init();
 void cgroup_kill();
 void disable_selinux();
 void execute_sandbox(char* cmd, char** argv);
+#define visible __attribute__((visibility("default")))
 #endif

@@ -15,7 +15,7 @@
 
 uid_t cur_uid;
 
-int debrun_main(int argc, char **argv) {
+int visible debrun_main(int argc, char **argv) {
     mode_t u = umask(0022);
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
