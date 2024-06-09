@@ -70,7 +70,7 @@ rm -f /var/lib/dpkg/info/udev.postinst
 apt install -f
 ```
 
-* If you have audio issue, you can try this:
+* If you have an audio issue, you can try this:
 ```sh
 # enable tcp server for pulseaudio or pipewire-pulse
 # run this command on host
