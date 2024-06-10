@@ -6,8 +6,8 @@ build: clean lsl pam
 
 lsl:
 	mkdir -p build
-	$(CC) -o build/liblsl.so $(wildcard src/*.c) -fvisibility=hidden -Isrc -shared -fPIC -g3 -Wall -Wextra -Werror
-	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl -fvisibility=hidden -Isrc -g3 -Wall -Wextra -Werror
+	$(CC) -o build/liblsl.so $(wildcard src/*.c) -fno-plt -O3 -s -fvisibility=hidden -Isrc -shared -fPIC -g3 -Wall -Wextra -Werror -Wno-unused-result
+	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl -fno-plt -O3 -s -fvisibility=hidden -Isrc -g3 -Wall -Wextra -Werror
 	$(CC) -o build/test src/cli/test.c $(wildcard src/*.c) -fvisibility=hidden -Isrc -g3 -Wall -Wextra -Werror
 
 
@@ -41,7 +41,6 @@ install_data:
 	    mkdir -p $(DESTDIR)/etc/X11/xinit/xinitrc.d/ ;\
 	    install data/lsl.xinit  $(DESTDIR)/etc/X11/xinit/xinitrc.d/91-lsl ;\
 	fi
-	
 
 install_lsl:
 	mkdir -p $(DESTDIR)/bin/
