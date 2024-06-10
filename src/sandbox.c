@@ -36,14 +36,15 @@ void execute_sandbox(char* cmd, char** argv){
         execvp(cmd, argv);
         perror("execvp");
     }
-    size_t i=0;
-    for(i=0;argv[i] != NULL; i++);
+    size_t len=0;
+    for(len=0;argv[len] != NULL; len++);
     command = strdup(cmd);
-    args = calloc(i,sizeof(char*));
-    for(i=0;argv[i] != NULL; i++){
+    args = calloc(len+1,sizeof(char*));
+    for(size_t i=0;i<len; i++){
         args[i] = strdup(argv[i]);
     }
-    pid_t pid = clone(execsnd, 
+    args[len] = NULL;
+    pid_t pid = clone(execsnd,
         child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS |
              CLONE_NEWIPC | CLONE_VM | CLONE_VFORK | SIGCHLD , NULL
     );
@@ -53,7 +54,7 @@ void execute_sandbox(char* cmd, char** argv){
     }
     int status;
     waitpid(pid, &status, 0);
-    for (size_t j = 0; j < i; j++) {
+    for (size_t j = 0; j < len; j++) {
         free(args[j]);
     }
     free(args);
