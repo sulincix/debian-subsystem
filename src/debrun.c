@@ -1,5 +1,6 @@
 #define _GNU_SOURCE
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <sched.h>
 #include <unistd.h>
@@ -55,3 +56,33 @@ int visible debrun_main(int argc, char **argv) {
     return 1;
 }
 
+
+static bool is_running(){
+     struct stat st;
+     stat("/sys/fs/cgroup/debian/cgroup.procs", &st);
+     return st.st_size != 0;
+}
+
+void visible pam_begin(){
+    if (getuid() != 0) {
+        fprintf(stderr, "Root privileges required .\n");
+        exit(EXIT_FAILURE);
+    }
+    mode_t u = umask(0022);
+    sync_uid("/var/lib/subsystem/");
+    sync_gid("/var/lib/subsystem/");
+    sync_desktop();
+    mount_all();
+    umask(u);
+}
+
+void visible pam_exit(){
+    if (getuid() != 0) {
+        fprintf(stderr, "Root privileges required.\n");
+        exit(EXIT_FAILURE);
+    }
+    create_dir("/sys/fs/cgroup/debian");
+    if(!is_running()){
+        umount_all();
+    }
+}

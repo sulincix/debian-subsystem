@@ -12,7 +12,7 @@ void msg(const char *action, const char *info) {
     printf("%s: %s\n", action, info);
 }
 
-void visible sync_gid(const char *DESTDIR) {
+void sync_gid(const char *DESTDIR) {
     char line[MAX_LINE_LENGTH];
     char line_orig[MAX_LINE_LENGTH];
     FILE *source_file = fopen("/etc/group", "r");
@@ -85,7 +85,7 @@ void visible sync_gid(const char *DESTDIR) {
     fclose(dest_file);
 }
 
-int visible sync_desktop() {
+int sync_desktop() {
     DIR *dp;
     struct dirent *ep;
     char path[1024];
@@ -132,7 +132,7 @@ int visible sync_desktop() {
     return 0;
 }
 
-void visible sync_uid(const char *DESTDIR) {
+void sync_uid(const char *DESTDIR) {
     char line[MAX_LINE_LENGTH];
     char line_orig[MAX_LINE_LENGTH];
     FILE *source_file = fopen("/etc/passwd", "r");
