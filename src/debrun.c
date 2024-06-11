@@ -64,10 +64,6 @@ static bool is_running(){
 }
 
 void visible pam_begin(){
-    if (getuid() != 0) {
-        fprintf(stderr, "Root privileges required .\n");
-        exit(EXIT_FAILURE);
-    }
     mode_t u = umask(0022);
     sync_uid("/var/lib/subsystem/");
     sync_gid("/var/lib/subsystem/");
@@ -77,10 +73,6 @@ void visible pam_begin(){
 }
 
 void visible pam_exit(){
-    if (getuid() != 0) {
-        fprintf(stderr, "Root privileges required.\n");
-        exit(EXIT_FAILURE);
-    }
     create_dir("/sys/fs/cgroup/debian");
     if(!is_running()){
         umount_all();
