@@ -19,19 +19,19 @@ arch=('x86_64')
 cd $name-$version
 
 build () {
-    make $jobs
+    make lsl
     if use pam ; then
         make pam
     fi
 }
 
 package () {
-    make install DESTDIR=$DESTDIR $jobs
+    make install_data install_lsl DESTDIR=$DESTDIR
     if use pam ; then
-        make install_pam
+        make install_pam DESTDIR=$DESTDIR
     fi
     mkdir -p $DESTDIR/etc/sysconf.d
     echo "#!/bin/sh" > $DESTDIR/etc/sysconf.d/debian-subsystem
-    echo "chmod 4755 /bin/lsl" >> $DESTDIR/etc/sysconf.d/debian-subsystem 
+    echo "chmod 4755 /bin/lsl" >> $DESTDIR/etc/sysconf.d/debian-subsystem
 }
 
