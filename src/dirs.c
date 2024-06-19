@@ -85,6 +85,9 @@ void cgroup_init(){
     }
     create_dir("/sys/fs/cgroup/debian");
     FILE* cg = fopen("/sys/fs/cgroup/debian/cgroup.procs", "w");
+    if(cg == NULL){
+       return;
+    }
     fprintf(cg,"%d", getpid());
     fclose(cg);
 }
@@ -93,7 +96,13 @@ void cgroup_kill(){
     if(getenv("LSL_NOCGROUP") != NULL){
         return;
     }
+    if(!isdir("/sys/fs/cgroup/debian/")){
+        return;
+    }
     FILE* cg = fopen("/sys/fs/cgroup/debian/cgroup.kill", "w");
+    if(cg == NULL){
+       return;
+    }
     fprintf(cg,"%d", 1);
     fclose(cg);
     remove("/sys/fs/cgroup/debian/");
