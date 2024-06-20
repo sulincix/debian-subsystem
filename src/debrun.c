@@ -10,17 +10,13 @@
 #include <sys/mount.h>
 #include <string.h>
 #include <dirent.h>
-#include <sys/ptrace.h>
 
 #include <lsl.h>
-
 
 uid_t cur_uid;
 
 int visible debrun_main(int argc, char **argv) {
-    if (ptrace(PTRACE_TRACEME, 0, NULL, 0) == -1){
-        exit(1);
-    }
+
     mode_t u = umask(0022);
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
