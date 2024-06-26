@@ -17,7 +17,7 @@ static int execsnd() {
         perror("sethostname");
         return -1;
     }
-    if (mount("proc", "/proc", "proc", 0, NULL) != 0) {
+    if (mount("proc", "/proc", "proc", MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME, NULL) != 0) {
         perror("mount");
         return -1;
     }

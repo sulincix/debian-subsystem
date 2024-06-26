@@ -78,9 +78,14 @@ void umount_run_user(){
 }
 
 void mount_all(){
-    const char* debian_dirs[] = {"/dev", "/proc", "/sys", "/run", "/tmp",
+    const char* debian_dirs[] = {"/dev", "/sys", "/run", "/tmp",
         getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
-
+    if(getenv("LSL_NOSANDBOX") != NULL && !is_mount("/var/lib/subsystem/proc")){
+        if (mount("/proc", "/var/lib/subsystem/proc", NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
+            perror("mount");
+            exit(EXIT_FAILURE);
+        }
+    }
     for (size_t i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
         if(debian_dirs[i] == NULL){
             continue;
