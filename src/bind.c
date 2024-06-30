@@ -10,7 +10,6 @@
 #include <string.h>
 #include <dirent.h>
 
-
 #include <lsl.h>
 
 #define MOUNTS_FILE "/proc/mounts"
@@ -46,7 +45,6 @@ int is_mount(const char *path) {
     return 0;
 }
 
-
 #define startswith(A,B) strncmp(A, B, strlen(A))
 static void umount_path(char* path){
     FILE *fp = fopen(MOUNTS_FILE, "r");
@@ -69,19 +67,24 @@ static void umount_path(char* path){
     fclose(fp);
 }
 
-void umount_all(){
-    umount_path("/var/lib/subsystem");
+void umount_all(char* subsystem_dir){
+    char path[1024];
+    strcpy(path, subsystem_dir);
+    umount_path(path);
 }
 
-void umount_run_user(){
-    umount_path("/var/lib/subsystem/run");
+void umount_run_user(char* subsystem_dir){
+    char path[1024];
+    strcpy(path, subsystem_dir);
+    strcat(path, "/run");
+    umount_path(path);
 }
 
-void mount_all(){
+void mount_all(char* subsystem_dir){
     const char* debian_dirs[] = {"/dev", "/sys", "/run", "/tmp",
         getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
-    if(getenv("LSL_NOSANDBOX") != NULL && !is_mount("/var/lib/subsystem/proc")){
-        if (mount("/proc", "/var/lib/subsystem/proc", NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
+    if(getenv("LSL_NOSANDBOX") != NULL && !is_mount(subsystem_dir)){
+        if (mount("/proc", subsystem_dir, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
             perror("mount");
             exit(EXIT_FAILURE);
         }
@@ -91,8 +94,8 @@ void mount_all(){
             continue;
         }
         char debian_dir[1024];
-        strcpy(debian_dir, "/var/lib/subsystem");
-        strcat(debian_dir,debian_dirs[i]);
+        strcpy(debian_dir, subsystem_dir);
+        strcat(debian_dir, debian_dirs[i]);
         if(!isdir(debian_dir)){
             create_dir(debian_dir);
         }
@@ -104,11 +107,14 @@ void mount_all(){
         }
     }
 
-    if (!is_mount("/var/lib/subsystem/var/lib/lsl/system")) {
-        if (mount("/", "/var/lib/subsystem/var/lib/lsl/system", NULL, MS_SILENT | MS_BIND | MS_PRIVATE |MS_RDONLY , NULL) != 0) {
-                perror("mount");
-                exit(EXIT_FAILURE);
+    char lsl_system_dir[1024];
+    strcpy(lsl_system_dir, subsystem_dir);
+    strcat(lsl_system_dir, "/var/lib/lsl/system");
+    if (!is_mount(lsl_system_dir)) {
+        if (mount("/", lsl_system_dir, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_RDONLY, NULL) != 0) {
+            perror("mount");
+            exit(EXIT_FAILURE);
         }
     }
-
 }
+

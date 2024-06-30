@@ -12,12 +12,12 @@ void msg(const char *action, const char *info) {
     printf("%s: %s\n", action, info);
 }
 
-void sync_gid(const char *DESTDIR) {
+void sync_gid(char* subsystem_path) {
     char line[MAX_LINE_LENGTH];
     char line_orig[MAX_LINE_LENGTH];
     FILE *source_file = fopen("/etc/group", "r");
     char dest_path[1024];
-    strcpy(dest_path, DESTDIR);
+    strcpy(dest_path, subsystem_path);
     strcat(dest_path, "/etc/group");
     char* ctx = malloc(1024*1024*1024*sizeof(char));
     strcpy(ctx,"");
@@ -85,59 +85,55 @@ void sync_gid(const char *DESTDIR) {
     fclose(dest_file);
 }
 
-int sync_desktop() {
+int sync_desktop(char* subsystem_path) {
     DIR *dp;
     struct dirent *ep;
     char path[1024];
     char path2[1024];
     char* dirs[] = {"applications/", "xsessions/"};
-    for(size_t i=0;i<(sizeof(dirs) / sizeof(char*));i++) {
-        strcpy(path,"/var/lib/subsystem/var/lib/lsl/exports/");
-        strcat(path, dirs[i]);
-	    dp = opendir (path);
-	    if (dp != NULL) {
-		while ((ep = readdir (dp)) != NULL) {
-		    if((ep->d_name)[0] == '.'){
-		        continue;
-		    }
-		    strcpy(path,"/var/lib/subsystem/var/lib/lsl/exports/");
-		    strcat(path, dirs[i]);
-		    strcat(path, ep->d_name);
-		    remove(path);
-		}
-	    }
-	    strcpy(path,"/var/lib/subsystem/usr/share/");
-            strcat(path, dirs[i]);
-	    dp = opendir (path);
-	    if (dp != NULL) {
-		while ((ep = readdir (dp)) != NULL) {
-		    if((ep->d_name)[0] == '.'){
-		        continue;
-		    }
-		    strcpy(path,"/var/lib/subsystem/usr/share/");
-		    strcat(path, dirs[i]);
-		    strcat(path, ep->d_name);
-		    strcpy(path2,"/var/lib/subsystem/var/lib/lsl/exports/");
-		    strcat(path2,dirs[i]);
-		    strcat(path2,"subsystem-");
-		    strcat(path2, ep->d_name);
-		    FILE *out = fopen(path2, "w");
-		    fprintf(out, "%s",generate_desktop(path));
-		    fflush(out);
-		    fclose(out);
-		}
-		closedir (dp);
-	    }
+    
+    for(size_t i = 0; i < (sizeof(dirs) / sizeof(char*)); i++) {
+        snprintf(path, sizeof(path), "%s/var/lib/lsl/exports/%s", subsystem_path, dirs[i]);
+        dp = opendir(path);
+        if (dp != NULL) {
+            while ((ep = readdir(dp)) != NULL) {
+                if ((ep->d_name)[0] == '.') {
+                    continue;
+                }
+                snprintf(path, sizeof(path), "%s/var/lib/lsl/exports/%s%s", subsystem_path, dirs[i], ep->d_name);
+                remove(path);
+            }
+            closedir(dp);
+        }
+
+        snprintf(path, sizeof(path), "%s/usr/share/%s", subsystem_path, dirs[i]);
+        dp = opendir(path);
+        if (dp != NULL) {
+            while ((ep = readdir(dp)) != NULL) {
+                if ((ep->d_name)[0] == '.') {
+                    continue;
+                }
+                snprintf(path, sizeof(path), "%s/usr/share/%s%s", subsystem_path, dirs[i], ep->d_name);
+                snprintf(path2, sizeof(path2), "%s/var/lib/lsl/exports/%ssubsystem-%s", subsystem_path, dirs[i], ep->d_name);
+                FILE *out = fopen(path2, "w");
+                if (out != NULL) {
+                    fprintf(out, "%s", generate_desktop(path)); // Assuming generate_desktop function exists
+                    fflush(out);
+                    fclose(out);
+                }
+            }
+            closedir(dp);
+        }
     }
     return 0;
 }
 
-void sync_uid(const char *DESTDIR) {
+void sync_uid(char* subsystem_path) {
     char line[MAX_LINE_LENGTH];
     char line_orig[MAX_LINE_LENGTH];
     FILE *source_file = fopen("/etc/passwd", "r");
     char dest_path[1024];
-    strcpy(dest_path, DESTDIR);
+    strcpy(dest_path, subsystem_path);
     strcat(dest_path, "/etc/passwd");
     char* ctx = malloc(1024*1024*1024*sizeof(char));
     strcpy(ctx,"");
