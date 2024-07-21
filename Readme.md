@@ -13,10 +13,13 @@ chmod u+s /bin/lsl
 debootstrap --arch=amd64 stable /var/lib/subsystem
 ```
 
+**Note:** If you have issue about undefined symbols you must use `make CFLAGS=-DNODLOPEN` for building.
+
 ### Optional: Building PAM Module
 
 A PAM module is available to automatically synchronize the subsystem during login, though it's disabled by default.
 To build and enable the PAM module, use the following commands:
+
 
 ```
 # build pam module

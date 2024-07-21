@@ -9,10 +9,10 @@ lsl:
 	$(CC) -o build/liblsl.so $(wildcard src/*.c) \
 	    -fno-plt -O3 -s -fvisibility=hidden -Isrc -shared \
 	    -fPIC -g3 -Wall -Wextra -Werror -Wno-unused-result \
-	    -nostdlib -lc
+	    -nostdlib -lc $(CFLAGS)
 	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl \
 	    -fno-plt -O3 -s -fvisibility=hidden -Isrc -g3 \
-	    -Wall -Wextra -Werror
+	    -Wall -Wextra -Werror $(CFLAGS)
 	$(CC) -o build/test src/cli/test.c $(wildcard src/*.c) -Isrc -g3 -Wall -Wextra -Werror
 
 

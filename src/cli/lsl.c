@@ -5,9 +5,14 @@
 
 #include <sys/ptrace.h>
 
+#ifndef NODLOPEN
 static int (*debrun_main)(int, char**);
 static char* error;
+#else
+#include <lsl.h>
+#endif
 int main(int argc, char** argv) {
+    #ifndef NODLOPEN
     void* handle = dlopen(NULL, RTLD_LAZY);
     if (!handle) {
         fputs (dlerror(), stderr);
@@ -18,5 +23,6 @@ int main(int argc, char** argv) {
         fputs(error, stderr);
         exit(1);
     }
+    #endif
     return debrun_main(argc, argv);
 }
