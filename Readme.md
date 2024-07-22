@@ -82,6 +82,17 @@ pactl load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1
 export PULSE_SERVER=127.0.0.1
 ```
 
+* If you want to remove subsystem you must unbind before. Then check /proc/mounts and remove:
+```sh
+# unbind
+lsl -u
+# check: empty output is normal.
+mount | grep "/var/lib/subsystem"
+# remove rootfs
+rm -rf /var/lib/subsystem
+```
+* If your distribution uses systemd. You cannot unbind. You can use live system for removing rootfs.
+
 ### Bug report:
 https://gitlab.com/sulincix/debian-subsystem/-/issues
 
