@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# Remove systemd.p* files before package installation
-echo "I hate systemd!"
-rm -vf /var/lib/dpkg/info/systemd.p* || true

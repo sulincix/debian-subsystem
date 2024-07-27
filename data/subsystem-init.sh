@@ -26,6 +26,14 @@ tool_init(){
     rm -rf /tmp/debootstrap-master
 
 }
+remove_systemd_debian(){
+    if [[ -f /var/lib/dpkg/info/systemd.list ]] ; then
+        rm -f /var/lib/dpkg/info/systemd.p*
+        apt install -yq sysv-rc libpam-elogind || true
+        apt-mark hold systemd || true
+    fi
+}
+
 system_init(){
     [[ $(uname -m) == "x86_64" ]] && arch=amd64
     [[ $(uname -m) == "aarch64" ]] && arch=arm64
@@ -48,4 +56,5 @@ if [[ -d /var/lib/subsystem/usr/share/ ]]; then
 fi
 
 tool_init
+remove_systemd_debian
 system_init
