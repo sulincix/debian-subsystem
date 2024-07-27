@@ -2,7 +2,7 @@ Source: lsl
 Section: utils
 Priority: optional
 Maintainer: Your Name <you@example.org>
-Build-Depends: make
+Build-Depends: make, libpam-dev
 Standards-Version: 4.3.0
 Homepage: https://gitlab.com/sulincix/debian-subsystem
 

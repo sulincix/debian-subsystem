@@ -53,7 +53,7 @@ install_lsl:
 	mkdir -p $(DESTDIR)/usr/libexec/
 	install build/lsl $(DESTDIR)/bin/lsl
 	install build/liblsl.so $(DESTDIR)/$(LIBDIR)
-	install data/debian-init.sh $(DESTDIR)/usr/libexec/
+	install data/subsystem-init.sh $(DESTDIR)/usr/libexec/
 	chmod u+s $(DESTDIR)/bin/lsl || true
 
 install_pam:
