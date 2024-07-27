@@ -8,6 +8,6 @@ Homepage: https://gitlab.com/sulincix/debian-subsystem
 
 Package: lsl
 Architecture: any
-Depends: libc6
+Depends: libc6, xz-utils, debootstrap
 Description: linux subsystem for linux
   lsl for debian
