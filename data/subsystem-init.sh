@@ -15,6 +15,7 @@ command_check(){
 tool_init(){
     echo "Installing debootstrap"
     which debootstrap &>/dev/null && return 0
+    command_check
     cd /tmp
     wget -c "https://salsa.debian.org/installer-team/debootstrap/-/archive/master/debootstrap-master.zip" -O debootstrap.zip || fail_exit "Failed to fetch debootstrap source"
     unzip debootstrap.zip  >/dev/null
@@ -46,6 +47,5 @@ if [[ -d /var/lib/subsystem/usr/share/ ]]; then
     exit 0
 fi
 
-command_check
 tool_init
 system_init
