@@ -76,40 +76,17 @@ void directory_init(char* subsystem_path){
         create_dir(imports_path);
     }
 
-    char themes_path[1024];
-    snprintf(themes_path, sizeof(themes_path), "%s/var/lib/lsl/exports/themes", subsystem_path);
-    if(access(themes_path, F_OK) == -1){
-        symlink("../../../../usr/share/themes", themes_path);
-    }
+    char* dirs[] = {"themes", "icons", "fonts", "pixmaps"};
+    for(size_t i=0; i<sizeof(dirs)/sizeof(char*) ;i++){
+        char path[1024];
+        snprintf(path, sizeof(path), "%s/var/lib/lsl/exports/%s", subsystem_path, dirs[i]);
+        if(access(path, F_OK) == -1){
+            char link[1024];
+            strcpy(link, "../../../../usr/share/");
+            strcat(link, dirs[i]);
+            symlink(link, path);
+        }
 
-    char icons_path[1024];
-    snprintf(icons_path, sizeof(icons_path), "%s/var/lib/lsl/exports/icons", subsystem_path);
-    if(access(icons_path, F_OK) == -1){
-        symlink("../../../../usr/share/icons", icons_path);
-    }
-
-    char fonts_path[1024];
-    snprintf(fonts_path, sizeof(fonts_path), "%s/var/lib/lsl/exports/fonts", subsystem_path);
-    if(access(fonts_path, F_OK) == -1){
-        symlink("../../../../usr/share/fonts", fonts_path);
-    }
-
-    char imports_themes_path[1024];
-    snprintf(imports_themes_path, sizeof(imports_themes_path), "%s/var/lib/lsl/imports/themes", subsystem_path);
-    if(access(imports_themes_path, F_OK) == -1){
-        symlink("../system/usr/share/themes/", imports_themes_path);
-    }
-
-    char imports_icons_path[1024];
-    snprintf(imports_icons_path, sizeof(imports_icons_path), "%s/var/lib/lsl/imports/icons", subsystem_path);
-    if(access(imports_icons_path, F_OK) == -1){
-        symlink("../system/usr/share/icons/", imports_icons_path);
-    }
-
-    char imports_fonts_path[1024];
-    snprintf(imports_fonts_path, sizeof(imports_fonts_path), "%s/var/lib/lsl/imports/fonts", subsystem_path);
-    if(access(imports_fonts_path, F_OK) == -1){
-        symlink("../system/usr/share/fonts/", imports_fonts_path);
     }
 
     char system_path[1024];
