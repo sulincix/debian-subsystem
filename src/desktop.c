@@ -26,7 +26,7 @@ char* generate_desktop(char* path) {
         char* areas[] = {"Name=", "Version=", "Type=",
             "GenericName=","Comment=", "Keywords=","NoDisplay=",
             "Icon=", "Terminal=", "MimeType=", "Exec=", "Categories="};
-        for(int i=0;i<12;i++){
+        for(size_t i=0; i<sizeof(areas)/sizeof(char*); i++){
             if(startswith(line, areas[i])){
                 line[strlen(line)-1] = '\0';
                 if(startswith(line, "Exec=")){
