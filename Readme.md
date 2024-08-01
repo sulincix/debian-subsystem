@@ -15,6 +15,8 @@ debootstrap --arch=amd64 stable /var/lib/subsystem
 
 **Note:** If you have issue about undefined symbols you must use `make CFLAGS=-DNODLOPEN` for building.
 
+**Note:** If you use systemd distribution. you must use `make CFLAGS=-DNOUNBIND` for building. unbinding on systemd is broken (yet).
+
 ### Optional: Building PAM Module
 
 A PAM module is available to automatically synchronize the subsystem during login, though it's disabled by default.

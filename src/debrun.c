@@ -21,7 +21,9 @@ int visible debrun_main(int argc, char **argv) {
     mode_t u = umask(0022);
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <command> [args...]\n", argv[0]);
+#ifndef NOUNBIND
         fprintf(stderr, "    -u        : unbind subsystem\n");
+#endif
         fprintf(stderr, "    -c <path> : subsystem path\n");
         exit(EXIT_FAILURE);
     }
@@ -34,11 +36,13 @@ int visible debrun_main(int argc, char **argv) {
             argv+=2;
         }
     }
+#ifndef NOUNBIND
     if(strcmp(argv[1], "-u") == 0){
         cgroup_kill(subsystem_path);
         umount_all(subsystem_path);
         return 0;
     }
+#endif
     char cur_dir[1024];
     getcwd(cur_dir, sizeof(cur_dir));
     cur_uid = getuid();
