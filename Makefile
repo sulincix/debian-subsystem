@@ -1,6 +1,7 @@
 DESTDIR=/
 LIBDIR=/lib
 PAMDIR=/lib64/security
+DISTRO=debian
 SHELL=bash -ex
 build: clean lsl pam
 
@@ -53,7 +54,7 @@ install_lsl:
 	mkdir -p $(DESTDIR)/usr/libexec/
 	install build/lsl $(DESTDIR)/bin/lsl
 	install build/liblsl.so $(DESTDIR)/$(LIBDIR)
-	install data/subsystem-init.sh $(DESTDIR)/usr/libexec/
+	install distro/$(DISTRO)/subsystem-init.sh $(DESTDIR)/usr/libexec/
 	chmod u+s $(DESTDIR)/bin/lsl || true
 
 install_pam:
