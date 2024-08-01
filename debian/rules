@@ -6,7 +6,7 @@ DEB_BUILD_OPTIONS=nostrip
 	dh $@
 
 override_dh_auto_build:
-	make CFLAGS=-DNODLOPEN -DNOUNBIND
+	make CFLAGS="-DNODLOPEN -DNOUNBIND"
 
 override_dh_auto_install:
-	make install DISTRO=archlinux
+	make install DISTRO=archlinux DESTDIR=debian/lsl
