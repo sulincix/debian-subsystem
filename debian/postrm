@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+set -o pipefail
+umount -lf /var/lib/subsystem/var/lib/lsl/system/ || true
+ls /var/lib/subsystem \
+    | grep -v dev \
+    | grep -v sys \
+    | grep -v proc \
+    | grep -v run \
+    | grep -v tmp \
+    | grep -v home \
+    | grep -v var \
+    | grep -v root \
+    | sed  "s|^|rm -rfv /var/lib/subsystem/|g" \
+    | sh -ex
