@@ -15,8 +15,11 @@ mkdir -p /var/lib/subsystem/
 cd /var/lib/subsystem/
 wget https://geo.mirror.pkgbuild.com/iso/latest/archlinux-bootstrap-x86_64.tar.zst -O - | zstdcat | \
 tar -xvf -
+ls /var/lib/subsystem/ | while read line ; do
+    rm -rf /var/lib/subsystem/root.x86_64/$line || true
+done
 mv root.x86_64/* ./
-rm -rf pkglist.x86_64.txt
+rm -rf pkglist.x86_64.txt root.x86_64
 cat /etc/resolv.conf > /var/lib/subsystem/etc/resolv.conf
 sed -i "s|#Server = https://geo.mirror.pkgbuild.com|Server = https://geo.mirror.pkgbuild.com|g" /var/lib/subsystem/etc/pacman.d/mirrorlist
 sed -i "s/^CheckSpace/#CheckSpace/g" /var/lib/subsystem/etc/pacman.conf

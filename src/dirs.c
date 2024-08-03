@@ -57,7 +57,7 @@ void directory_init(char* subsystem_path){
     // install and run debootstrap if does not exist
     char subsystem_etc_path[1024];
     snprintf(subsystem_etc_path, sizeof(subsystem_etc_path), "%s/etc/", subsystem_path);
-    if(!isdir(subsystem_path)){
+    if(!isdir(subsystem_etc_path)){
         int status = system("/usr/bin/env bash /usr/libexec/subsystem-init.sh");
         if(status != 0){
             exit(status);
