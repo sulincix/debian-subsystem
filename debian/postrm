@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 set -o pipefail
-umount -lf /var/lib/subsystem/var/lib/lsl/system/ || true
+if grep /var/lib/subsystem/var/lib/lsl/system /proc/mounts ; then
+umount -lf /var/lib/subsystem/var/lib/lsl/system/
+fi
 ls /var/lib/subsystem \
     | grep -v dev \
     | grep -v sys \
