@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 echo "Initial Setup Required. The Debian base will be downloaded. Do you want to continue? [Y/n]"
-read -n 1 -c
+read -n 1 c
 
 if ! [[ "$c" == "Y" || "$c" == "y" ]] ; then
     exit 1
