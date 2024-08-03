@@ -27,6 +27,7 @@ sed -i "s/#ParallelDownloads/ParallelDownloads/g" /var/lib/subsystem/etc/pacman.
 for dir in dev sys proc run ; do
     mount --bind /$dir /var/lib/subsystem/$dir
 done
+cat /etc/machine-id > /var/lib/subsystem/etc/machine-id
 chroot /var/lib/subsystem/ pacman-key --init
 chroot /var/lib/subsystem/ pacman-key --populate
 for dir in dev sys proc run ; do

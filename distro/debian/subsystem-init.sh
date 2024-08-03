@@ -46,6 +46,7 @@ system_init(){
         rm -rf /var/lib/subsystem/root/$line || true
     done
     mv /var/lib/subsystem/root/* /var/lib/subsystem/
+    cat /etc/machine-id > /var/lib/subsystem/etc/machine-id
 cat > /var/lib/subsystem/etc/apt/apt.conf.d/01norecommend <<EOF
 APT::Install-Recommends "0";
 APT::Install-Suggests "0";
