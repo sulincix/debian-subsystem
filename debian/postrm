@@ -1,8 +1,6 @@
 #!/bin/bash
-set -e
-set -o pipefail
 if grep /var/lib/subsystem/var/lib/lsl/system /proc/mounts ; then
-umount -lf /var/lib/subsystem/var/lib/lsl/system/
+    umount -lf /var/lib/subsystem/var/lib/lsl/system/
 fi
 ls /var/lib/subsystem \
     | grep -v dev \
@@ -14,4 +12,4 @@ ls /var/lib/subsystem \
     | grep -v var \
     | grep -v root \
     | sed  "s|^|rm -rfv /var/lib/subsystem/|g" \
-    | sh -ex
+    | sh -x
