@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ "$1" != "purge" ]] ; then
+    exit 0
+fi
 set -ex
 set -o pipefail
 if grep /var/lib/subsystem/var/lib/lsl/system /proc/mounts ; then

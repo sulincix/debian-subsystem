@@ -1,2 +1,3 @@
 #!/bin/sh
 chmod 4755 /usr/bin/lsl
+chmod 4755 /usr/bin/lsl-sandbox
