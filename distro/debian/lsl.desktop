@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Debian Terminal
+Comment=Enter Debian subsystem terminal
+Exec=/bin/lsl /bin/bash
+Terminal=true
+Type=Application
+Icon=subsystem
+Categories=System;

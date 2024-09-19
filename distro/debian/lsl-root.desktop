@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Debian Terminal (root)
+Comment=Enter Debian subsystem terminal as root
+Exec=pkexec /bin/lsl /bin/bash
+Terminal=true
+Type=Application
+Icon=subsystem
+Categories=System;

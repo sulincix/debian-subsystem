@@ -14,6 +14,9 @@ lsl:
 	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl \
 	    -fno-plt -O3 -s -fvisibility=hidden -Isrc -g3 \
 	    -Wall -Wextra -Werror $(CFLAGS)
+	$(CC) -o build/lsl-sandbox src/cli/lsl-sandbox.c -Lbuild -llsl \
+	    -fno-plt -O3 -s -fvisibility=hidden -Isrc -g3 \
+	    -Wall -Wextra -Werror $(CFLAGS)
 	$(CC) -o build/test src/cli/test.c $(wildcard src/*.c) -Isrc -g3 -Wall -Wextra -Werror
 
 
@@ -24,7 +27,7 @@ pam:
 clean:
 	rm -rf build
 
-install: install_lsl install_pam install_data
+install: install_lsl install_pam install_data install_distro
 
 install_data:
 	mkdir -p  $(DESTDIR)/etc/profile.d/
@@ -51,11 +54,19 @@ install_data:
 install_lsl:
 	mkdir -p $(DESTDIR)/bin/
 	mkdir -p $(DESTDIR)/$(LIBDIR)
-	mkdir -p $(DESTDIR)/usr/libexec/
 	install build/lsl $(DESTDIR)/bin/lsl
+	install build/lsl-sandbox $(DESTDIR)/bin/lsl-sandbox
 	install build/liblsl.so $(DESTDIR)/$(LIBDIR)
-	install distro/$(DISTRO)/subsystem-init.sh $(DESTDIR)/usr/libexec/
 	chmod u+s $(DESTDIR)/bin/lsl || true
+	chmod u+s $(DESTDIR)/bin/lsl-sandbox || true
+
+install_distro:
+	mkdir -p $(DESTDIR)/usr/libexec/
+	mkdir -p $(DESTDIR)/usr/share/applications/
+	install distro/$(DISTRO)/subsystem-init.sh $(DESTDIR)/usr/libexec/
+	install distro/$(DISTRO)/logo.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/subsystem.svg
+	install distro/$(DISTRO)/lsl.desktop $(DESTDIR)/usr/share/applications/
+	install distro/$(DISTRO)/lsl-root.desktop $(DESTDIR)/usr/share/applications/
 
 install_pam:
 	mkdir -p $(DESTDIR)/$(PAMDIR)

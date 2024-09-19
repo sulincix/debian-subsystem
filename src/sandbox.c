@@ -7,6 +7,8 @@
 #include <string.h>
 #include <sys/mount.h>
 
+#include <lsl.h>
+
 extern uid_t cur_uid;
 static char child_stack[1024*1024];
 
@@ -30,7 +32,19 @@ static int execsnd() {
     return -1;
 }
 
-void execute_sandbox(char* cmd, char** argv){
+void visible sandbox_init(){
+    cur_uid = getuid();
+}
+
+void visible execute_sandbox(char* cmd, char** argv){
+    if(cur_uid == 0){
+        cur_uid = getuid();
+        setuid(0);
+        if (getuid() != 0) {
+            fprintf(stderr, "You must be root.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
     if(getenv("LSL_NOSANDBOX") != NULL){
         (void)setuid(cur_uid);
         execvp(cmd, argv);

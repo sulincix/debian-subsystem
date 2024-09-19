@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Archlinux Terminal
+Comment=Enter Archlinux subsystem terminal
+Exec=/bin/lsl /bin/bash
+Terminal=true
+Type=Application
+Icon=subsystem
+Categories=System;
