@@ -1,6 +1,31 @@
 lsl (1.0) unstable; urgency=medium
 
-  [ Your Name ]
-  * init
+  [ Ali Riza Keskin ]
+  * rename cgroup
+  * command check after check debootstrap
+  * add missing dep
+  * I hate systemd
+  * remove systemd hooks after install
+  * systemd remove way changed
+  * systemd removed because buggy
+  * pixmap export
+  * array size fix
+  * archlinux subsystem added
+  * arch init configuration
+  * fix arch init
+  * add unbind disable option
+  * fix deb packaging
+  * fix suid bit on deb package
+  * initial setup message added
+  * fix init yesno
+  * 20x80 output fix
+  * subsystem remove for deb package
+  * fix postrm umount check
+  * postrm fix
+  * postrm fix
+  * postrm fix
+  * copy machine id
+  * imporvements
+  * do not remove rootfs during update
 
- -- Your Name <you@example.org>  Tue, 16 Jan 2024 01:09:17 +0300
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Tue, 24 Sep 2024 12:29:42 +0300
