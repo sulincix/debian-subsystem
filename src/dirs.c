@@ -91,7 +91,7 @@ void directory_init(char* subsystem_path){
         snprintf(path, sizeof(path), "%s/var/lib/lsl/imports/%s", subsystem_path, dirs[i]);
         if(access(path, F_OK) == -1){
             char link[1024];
-            strcpy(link, "../usr/share/");
+            strcpy(link, "../system/usr/share/");
             strcat(link, dirs[i]);
             symlink(link, path);
         }
