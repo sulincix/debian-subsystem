@@ -56,6 +56,10 @@ cat > /var/lib/subsystem/usr/sbin/policy-rc.d <<EOF
 exit 101
 EOF
     chmod +x /var/lib/subsystem/usr/sbin/policy-rc.d
+    if [ -f /etc/locale.gen ] ; then
+        cat /etc/locale.gen > /var/lib/subsystem/etc/locale.gen
+        chroot /var/lib/subsystem locale-gen
+    fi
 }
 
 if [[ -d /var/lib/subsystem/usr/share/ ]]; then
@@ -64,3 +68,4 @@ fi
 
 tool_init
 system_init
+

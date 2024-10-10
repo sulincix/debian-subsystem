@@ -33,3 +33,7 @@ chroot /var/lib/subsystem/ pacman-key --populate
 for dir in dev sys proc run ; do
     umount -lf /var/lib/subsystem/$dir
 done
+if [ -f /etc/locale.gen ] ; then
+    cat /etc/locale.gen > /var/lib/subsystem/etc/locale.gen
+    chroot /var/lib/subsystem locale-gen
+fi
