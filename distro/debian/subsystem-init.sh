@@ -51,7 +51,7 @@ system_init(){
     [[ "$arch" == "" ]] && fail_exit $(_ "Unsupported arch")" $(uname -m)"
     /usr/sbin/debootstrap --variant=minbase --arch=$arch --extractor=ar --no-check-gpg --extractor=ar stable /var/lib/subsystem/rootfs
     ls /var/lib/subsystem/ | while read line ; do
-        rm -rf /var/lib/subsystem/$line || true
+        rm -rf /var/lib/subsystem/rootfs/$line || true
     done
     mv /var/lib/subsystem/rootfs/* /var/lib/subsystem/
     cat /etc/machine-id > /var/lib/subsystem/etc/machine-id
