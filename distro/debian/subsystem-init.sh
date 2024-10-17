@@ -49,11 +49,11 @@ system_init(){
     [[ $(uname -m) == "aarch64" ]] && arch=arm64
     [[ $(uname -m) == "i686" ]] && arch=i386
     [[ "$arch" == "" ]] && fail_exit $(_ "Unsupported arch")" $(uname -m)"
-    debootstrap --variant=minbase --arch=$arch --extractor=ar --no-check-gpg --extractor=ar stable /var/lib/subsystem/rootfs
-    ls /var/lib/subsystem/ | while read line ; do
-        rm -rf /var/lib/subsystem/root/$line || true
+    /usr/sbin/debootstrap --variant=minbase --arch=$arch --extractor=ar --no-check-gpg --extractor=ar stable /var/lib/subsystem/rootfs
+    ls /var/lib/subsystem/ | | grep -v rootfs | while read line ; do
+        rm -rf /var/lib/subsystem/$line || true
     done
-    mv /var/lib/subsystem/root/* /var/lib/subsystem/
+    mv /var/lib/subsystem/rootfs/* /var/lib/subsystem/
     cat /etc/machine-id > /var/lib/subsystem/etc/machine-id
 cat > /var/lib/subsystem/etc/apt/apt.conf.d/01norecommend <<EOF
 APT::Install-Recommends "0";
