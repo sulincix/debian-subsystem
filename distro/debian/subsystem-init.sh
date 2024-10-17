@@ -1,4 +1,5 @@
 #!/bin/bash
+export PATH=/usr/bin:/usr/sbin:/bin:/sbin
 set -e
 set -o pipefail
 if ! command -v gettext &>/dev/null; then
