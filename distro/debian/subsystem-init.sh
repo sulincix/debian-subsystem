@@ -42,7 +42,6 @@ tool_init(){
     make install  >/dev/null || fail_exit $(_ "Failed to install debootstrap")
     cd /tmp
     rm -rf /tmp/debootstrap-master
-
 }
 
 system_init(){
@@ -69,6 +68,10 @@ EOF
         cat /etc/locale.gen > /var/lib/subsystem/etc/locale.gen
         chroot /var/lib/subsystem locale-gen
     fi
+    # convert to nosystemd
+    chroot /var/lib/subsystem/ apt install libpam-elogind -yq
+    chroot /var/lib/subsystem/ apt-mark hold systemd
+    ln -s true /bin/systemctl
 }
 
 if [[ -d /var/lib/subsystem/usr/share/ ]]; then
