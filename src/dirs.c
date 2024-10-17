@@ -68,8 +68,8 @@ void directory_init(char* subsystem_path){
     snprintf(exports_path, sizeof(exports_path), "%s/var/lib/lsl/exports/", subsystem_path);
     if(!isdir(exports_path)){
         create_dir(exports_path);
-        create_dir(strcat(exports_path, "applications"));
-        create_dir(strcat(exports_path, "xsessions"));
+        create_dir(strcat(exports_path, "applications/"));
+        create_dir(strcat(exports_path, "../xsessions"));
     }
 
     char imports_path[1024];

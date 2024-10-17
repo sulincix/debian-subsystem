@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 int startswith(char* line, char* msg) {
     if (strlen(line) < strlen(msg)) {
@@ -15,6 +16,9 @@ char* generate_desktop(char* path) {
     char* ctx = malloc(1024*1024*1024*sizeof(char));
     strcpy(ctx,"");
     char line[MAX_LINE_LENGTH];
+    if(access(path, F_OK) == 0){
+        return NULL;
+    }
     FILE *source_file = fopen(path, "r");
     if (source_file == NULL) {
         return NULL;
