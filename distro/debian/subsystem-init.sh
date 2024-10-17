@@ -50,7 +50,7 @@ system_init(){
     [[ $(uname -m) == "i686" ]] && arch=i386
     [[ "$arch" == "" ]] && fail_exit $(_ "Unsupported arch")" $(uname -m)"
     /usr/sbin/debootstrap --variant=minbase --arch=$arch --extractor=ar --no-check-gpg --extractor=ar stable /var/lib/subsystem/rootfs
-    ls /var/lib/subsystem/ | | grep -v rootfs | while read line ; do
+    ls /var/lib/subsystem/ | grep -v rootfs | while read line ; do
         rm -rf /var/lib/subsystem/$line || true
     done
     mv /var/lib/subsystem/rootfs/* /var/lib/subsystem/
