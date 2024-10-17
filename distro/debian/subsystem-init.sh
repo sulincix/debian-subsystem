@@ -73,7 +73,7 @@ EOF
     # convert to nosystemd
     chroot /var/lib/subsystem/ apt install libpam-elogind -yq
     chroot /var/lib/subsystem/ apt-mark hold systemd
-    ln -s true /bin/systemctl
+    ln -s true /bin/systemctl || true
 }
 
 if [[ -d /var/lib/subsystem/usr/share/ ]]; then
