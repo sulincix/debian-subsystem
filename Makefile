@@ -2,8 +2,8 @@ DESTDIR=/
 LIBDIR=/lib
 PAMDIR=/lib64/security
 DISTRO=debian
-SHELL=bash -ex
-build: clean lsl pam
+SHELL=bash -e
+build: clean lsl pam buildmo
 
 lsl:
 	mkdir -p build
@@ -26,8 +26,9 @@ pam:
 
 clean:
 	rm -rf build
+	rm -f po/*.mo
 
-install: install_lsl install_pam install_data install_distro
+install: install_lsl install_pam install_data install_distro installmo
 
 install_data:
 	mkdir -p  $(DESTDIR)/etc/profile.d/
@@ -71,3 +72,17 @@ install_distro:
 install_pam:
 	mkdir -p $(DESTDIR)/$(PAMDIR)
 	install build/pam_lsl.so $(DESTDIR)/$(PAMDIR)
+
+buildmo:
+	@echo "Building the mo files"
+	for file in `ls po/*.po`; do \
+		lang=`echo $$file | sed 's@po/@@' | sed 's/\.po//'`; \
+		msgfmt -o po/$$lang.mo $$file; \
+	done
+
+installmo:
+	for file in `ls po/*.po`; do \
+	    lang=`echo $$file | sed 's@po/@@' | sed 's/\.po//'`; \
+	    mkdir -p $(DESTDIR)/usr/share/locale/$$lang/LC_MESSAGES/; \
+	    install po/$$lang.mo $(DESTDIR)/usr/share/locale/$$lang/LC_MESSAGES/lsl.mo ;\
+	done

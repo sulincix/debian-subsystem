@@ -2,9 +2,17 @@
 export PATH=/usr/bin:/usr/sbin:/bin:/sbin
 set -e
 set -o pipefail
-clear
-echo "Initial Setup Required. The Archlinux base will be downloaded."
-echo "Do you want to continue? [Y/n]"
+if ! command -v gettext &>/dev/null; then
+    _(){
+        echo "$@"
+    }
+else
+    _(){
+        "gettext" "lsl" "$@" ; echo
+    }
+fi
+_ "Initial Setup Required. The Archlinux base will be downloaded."
+_ "Do you want to continue? [Y/n]"
 read -n 1 c
 
 if ! [[ "$c" == "Y" || "$c" == "y" ]] ; then

@@ -1,0 +1,50 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-17 08:10+0000\n"
+"PO-Revision-Date: 2022-10-18 11:11+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+
+#: distro/debian/subsystem-init.sh:9
+msgid "Initial Setup Required. The Debian base will be downloaded."
+msgstr "İlk Kurulum Gerekli. Debian tabanı indirilecek."
+
+#: distro/debian/subsystem-init.sh:10 distro/archlinux/subsystem-init.sh:11
+msgid "Do you want to continue? [Y/n]"
+msgstr "Devam etmek istiyor musunuz? [Y/n]"
+
+#: distro/debian/subsystem-init.sh:19
+msgid "press any key to exit"
+msgstr "çıkmak için bir tuşa basın"
+
+#: distro/debian/subsystem-init.sh:26
+msgid "not found"
+msgstr "bulunamadı"
+
+#: distro/debian/subsystem-init.sh:30
+msgid "Installing debootstrap"
+msgstr "Debootstrap yükleniyor"
+
+#: distro/debian/subsystem-init.sh:37 distro/debian/subsystem-init.sh:38
+msgid "Failed to install debootstrap"
+msgstr "Debootstrap yüklemesi başarısız"
+
+#: distro/debian/subsystem-init.sh:48
+msgid "Unsupported arch"
+msgstr "Desteklenmeyen mimari"
+
+#: distro/archlinux/subsystem-init.sh:10
+msgid "Initial Setup Required. The Archlinux base will be downloaded."
+msgstr "İlk Kurulum Gerekli. Archlinux tabanı indirilecek."
