@@ -64,6 +64,7 @@ cat > /var/lib/subsystem/usr/sbin/policy-rc.d <<EOF
 #!/bin/sh
 exit 101
 EOF
+    chroot /var/lib/subsystem apt install locales -yq
     chmod +x /var/lib/subsystem/usr/sbin/policy-rc.d
     if [ -f /etc/locale.gen ] ; then
         cat /etc/locale.gen > /var/lib/subsystem/etc/locale.gen
