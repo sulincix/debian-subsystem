@@ -21,6 +21,9 @@ static int execsnd() {
     }
 #ifndef NOUNBIND
     if(!is_mount("/proc")){
+        if(!isdir("/proc")){
+            create_dir("/proc");
+        }
         if (mount("proc", "/proc", "proc", MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME, NULL) != 0) {
             perror("mount");
             return -1;
