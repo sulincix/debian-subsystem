@@ -54,7 +54,9 @@ system_init(){
     ls /var/lib/subsystem/ | while read line ; do
         rm -rf /var/lib/subsystem/rootfs/$line || true
     done
-    mv /var/lib/subsystem/rootfs/* /var/lib/subsystem/
+    ls /var/lib/subsystem/rootfs/ | while read line ; do
+        mv /var/lib/subsystem/rootfs/$line /var/lib/subsystem/$line || true
+    done
     cat /etc/machine-id > /var/lib/subsystem/etc/machine-id
 cat > /var/lib/subsystem/etc/apt/apt.conf.d/01norecommend <<EOF
 APT::Install-Recommends "0";
