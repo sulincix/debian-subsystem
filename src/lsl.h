@@ -2,9 +2,9 @@
 #define _debian_h
 
 #ifdef DEBUG
-#define debug
+#define debug puts
 #else
-#define debug (void)puts
+#define debug
 #endif
 
 #define visible __attribute__((visibility("default")))
@@ -26,5 +26,5 @@ void execute_sandbox(char* cmd, char** argv);
 void sandbox_init();
 void pam_begin();
 void pam_exit();
-int is_mount(char* path);
+int is_mount(const char* path);
 #endif

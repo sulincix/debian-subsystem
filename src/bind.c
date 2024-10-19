@@ -88,7 +88,7 @@ void mount_all(char* subsystem_dir){
         strcpy(debian_dir, subsystem_dir);
         strcat(debian_dir, "/proc");
         if(!is_mount(subsystem_dir)){
-            debug(debian_dir);
+            (void)debug(debian_dir);
             if (mount("/proc", debian_dir, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
@@ -106,7 +106,7 @@ void mount_all(char* subsystem_dir){
             create_dir(debian_dir);
         }
         if (!is_mount(debian_dir)) {
-            debug(debian_dir);
+            (void)debug(debian_dir);
             if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
