@@ -97,7 +97,7 @@ void mount_all(char* subsystem_dir){
         char debian_dir[1024];
         strcpy(debian_dir, subsystem_dir);
         strcat(debian_dir, "/proc");
-        if(!is_mount(subsystem_dir)){
+        if(!is_mount(debian_dir)){
             (void)debug(debian_dir);
             if (mount("/proc", debian_dir, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
                 perror("mount");
