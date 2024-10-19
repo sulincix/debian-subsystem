@@ -88,7 +88,7 @@ void mount_all(char* subsystem_dir){
     }
 #endif
     const char* debian_dirs[] = {"/dev", "/sys", "/run", "/tmp",
-#ifndef NOUNBIND
+#ifdef NOUNBIND
         "/proc",
 #endif
         getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
@@ -106,7 +106,7 @@ void mount_all(char* subsystem_dir){
         }
     }
 #endif
-    for (size_t i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
+    for (size_t i = 0; i < sizeof(debian_dirs) / sizeof(char*); ++i) {
         if(debian_dirs[i] == NULL){
             continue;
         }
