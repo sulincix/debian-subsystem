@@ -26,8 +26,7 @@ void disable_selinux(){
 int is_mount(const char *path) {
     FILE *fp = fopen(MOUNTS_FILE, "r");
     if (fp == NULL) {
-        perror("fopen");
-        exit(EXIT_FAILURE);
+        return 0;
     }
 
     char line[512];

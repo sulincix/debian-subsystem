@@ -4,7 +4,7 @@
 #ifdef DEBUG
 #define debug
 #else
-#define debug puts
+#define debug (void)puts
 #endif
 
 #define visible __attribute__((visibility("default")))
