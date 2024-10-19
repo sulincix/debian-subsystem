@@ -74,6 +74,10 @@ EOF
     chroot /var/lib/subsystem/ apt install libpam-elogind -yq
     chroot /var/lib/subsystem/ apt-mark hold systemd
     ln -s true /var/lib/subsystem/bin/systemctl || true
+    # update hook
+cat > chroot/etc/apt/apt.conf.d/99subsystem << EOF
+DPkg::Post-Invoke {"chroot /var/lib/lsl/system lsl true || true";};
+EOF
 }
 
 if [[ -d /var/lib/subsystem/usr/share/ ]]; then

@@ -47,6 +47,7 @@ void visible execute_sandbox(char* cmd, char** argv){
     }
     if(getenv("LSL_NOSANDBOX") != NULL){
         (void)setuid(cur_uid);
+        unsetenv("LSL_NOSANDBOX");        
         execvp(cmd, argv);
         perror("execvp");
     }
