@@ -45,3 +45,15 @@ if [ -f /etc/locale.gen ] ; then
     cat /etc/locale.gen > /var/lib/subsystem/etc/locale.gen
     chroot /var/lib/subsystem locale-gen
 fi
+cat > /var/lib/subsystem//etc/pacman.d/hooks/subsystem.hook <<EOF
+[Trigger]
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Updating subsystem
+When = PostTransaction
+Exec = /usr/bin/chroot /var/lib/lsl/system lsl true || true
+EOF
