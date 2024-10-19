@@ -115,12 +115,14 @@ int sync_desktop(char* subsystem_path) {
                 }
                 snprintf(path, sizeof(path), "%s/usr/share/%s%s", subsystem_path, dirs[i], ep->d_name);
                 snprintf(path2, sizeof(path2), "%s/var/lib/lsl/exports/%ssubsystem-%s", subsystem_path, dirs[i], ep->d_name);
-                FILE *out = fopen(path2, "w");
-                char* ctx = generate_desktop(path);
-                if (out != NULL && ctx != NULL) {
-                    fprintf(out, "%s", ctx); // Assuming generate_desktop function exists
-                    fflush(out);
-                    fclose(out);
+                char* ctx = generate_desktop(path, subsystem_path);
+                if(ctx != NULL){
+                    FILE *out = fopen(path2, "w");
+                    if (out != NULL) {
+                        fprintf(out, "%s", ctx); // Assuming generate_desktop function exists
+                        fflush(out);
+                        fclose(out);
+                    }
                 }
             }
             closedir(dp);

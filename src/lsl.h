@@ -12,7 +12,7 @@ void sync_gid(char* subsystem_path);
 void sync_uid(char* subsystem_path);
 int sync_desktop(char* subsystem_path);
 int debrun_main(int argc_main, char **argv_main);
-char* generate_desktop(char* path);
+char* generate_desktop(char* path, char* subsystem_path);
 void mount_all(char* subsystem_dir);
 void umount_all(char* subsystem_dir);
 void umount_run_user(char* subsystem_dir);
