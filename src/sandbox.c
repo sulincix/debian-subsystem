@@ -19,12 +19,14 @@ static int execsnd() {
         perror("sethostname");
         return -1;
     }
+#ifndef NOUNBIND
     if(!is_mount("/proc")){
         if (mount("proc", "/proc", "proc", MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME, NULL) != 0) {
             perror("mount");
             return -1;
         }
     }
+#endif
     if (setuid(cur_uid) != 0) {
         perror("setuid");
         return -1;
