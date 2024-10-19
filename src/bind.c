@@ -84,6 +84,7 @@ void mount_all(char* subsystem_dir){
     const char* debian_dirs[] = {"/dev", "/sys", "/run", "/tmp",
         getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
     if(getenv("LSL_NOSANDBOX") != NULL && !is_mount(subsystem_dir)){
+        unsetenv("LSL_NOSANDBOX");
         char debian_dir[1024];
         strcpy(debian_dir, subsystem_dir);
         strcat(debian_dir, "/proc");
