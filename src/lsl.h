@@ -26,4 +26,5 @@ void execute_sandbox(char* cmd, char** argv);
 void sandbox_init();
 void pam_begin();
 void pam_exit();
+int is_mount(char* path);
 #endif
