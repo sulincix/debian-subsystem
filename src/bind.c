@@ -81,6 +81,11 @@ void umount_run_user(char* subsystem_dir){
 }
 
 void mount_all(char* subsystem_dir){
+    if (unshare(CLONE_NEWNS) == -1) {
+        perror("unshare");
+        exit(EXIT_FAILURE);
+    }
+
     const char* debian_dirs[] = {"/dev", "/sys", "/run", "/tmp",
         getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
     if(getenv("LSL_NOSANDBOX") != NULL){
