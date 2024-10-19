@@ -155,12 +155,13 @@ void sync_uid(char* subsystem_path) {
     char shell[MAX_LINE_LENGTH];
     char oname[MAX_LINE_LENGTH];
     char ouid[MAX_LINE_LENGTH];
+    char pass[MAX_LINE_LENGTH];
 
     fseek(source_file, 0 , SEEK_SET);
 
     int found = 0;
     while (fgets(line, sizeof(line), source_file)) {
-        sscanf(line, "%[^:]:x:%[^:]:%[^:]:%[^:]:%[^:]:%s", name, uid, gid, realname, home, shell);
+        sscanf(line, "%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%[^:]:%s", name, pass, uid, gid, realname, home, shell);
         fseek(dest_file, 0 , SEEK_SET);
         found = 0;
         while (fgets(line_orig, sizeof(line_orig), dest_file)) {
@@ -168,7 +169,9 @@ void sync_uid(char* subsystem_path) {
             if(strcmp(name, oname) == 0) {
                 found = 1;
                 strcat(ctx,name);
-                strcat(ctx,":x:");
+                strcat(ctx,":");
+                strcat(ctx,pass);
+                strcat(ctx,":");
                 strcat(ctx,uid);
                 strcat(ctx,":");
                 strcat(ctx,gid);
@@ -193,10 +196,10 @@ void sync_uid(char* subsystem_path) {
         if(strlen(line_orig) < 4) {
             continue;
         }
-        sscanf(line_orig, "%[^:]:x:%[^:]:", oname, ouid);
+        sscanf(line_orig, "%[^:]:%[^:]:%[^:]:", oname, pass, ouid);
         int found = 0;
         while (fgets(line, sizeof(line), source_file)) {
-            sscanf(line, "%[^:]:x:%[^:]:*", name, uid);
+            sscanf(line, "%[^:]:%[^:]:%[^:]:*", name, pass, uid);
             if (strcmp(oname, name) == 0) {
                 found = 1;
                 break;
