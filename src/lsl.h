@@ -1,5 +1,12 @@
 #ifndef _debian_h
 #define _debian_h
+
+#ifdef DEBUG
+#define debug
+#else
+#define debug puts
+#endif
+
 #define visible __attribute__((visibility("default")))
 void sync_gid(char* subsystem_path);
 void sync_uid(char* subsystem_path);

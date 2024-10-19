@@ -14,6 +14,7 @@
 
 #define MOUNTS_FILE "/proc/mounts"
 
+
 void disable_selinux(){
     FILE *f = fopen("/sys/fs/selinux/enforce", "w");
     if (f != NULL){
@@ -83,13 +84,16 @@ void umount_run_user(char* subsystem_dir){
 void mount_all(char* subsystem_dir){
     const char* debian_dirs[] = {"/dev", "/sys", "/run", "/tmp",
         getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
-    if(getenv("LSL_NOSANDBOX") != NULL && !is_mount(subsystem_dir)){
+    if(getenv("LSL_NOSANDBOX") != NULL){
         char debian_dir[1024];
         strcpy(debian_dir, subsystem_dir);
         strcat(debian_dir, "/proc");
-        if (mount("/proc", debian_dir, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
-            perror("mount");
-            exit(EXIT_FAILURE);
+        if(!is_mount(subsystem_dir)){
+            debug(debian_dir);
+            if (mount("/proc", debian_dir, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
+                perror("mount");
+                exit(EXIT_FAILURE);
+            }
         }
     }
     for (size_t i = 0; i < sizeof(debian_dirs) / sizeof(debian_dirs[0]); ++i) {
@@ -103,6 +107,7 @@ void mount_all(char* subsystem_dir){
             create_dir(debian_dir);
         }
         if (!is_mount(debian_dir)) {
+            debug(debian_dir);
             if (mount(debian_dirs[i], debian_dir, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_REC, NULL) != 0) {
                 perror("mount");
                 exit(EXIT_FAILURE);
