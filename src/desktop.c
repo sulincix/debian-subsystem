@@ -33,7 +33,7 @@ char* generate_desktop(char* path, char* subsystem_path) {
         if(link[0] == '/'){
             char fpath[1024];
             strcpy(fpath, subsystem_path);
-            strcat(fpath, path);
+            strcat(fpath, link);
             path = fpath;
         }
     }
