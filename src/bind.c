@@ -81,11 +81,12 @@ void umount_run_user(char* subsystem_dir){
 }
 
 void mount_all(char* subsystem_dir){
+#ifndef NOUNBIND
     if (unshare(CLONE_NEWNS) == -1) {
         perror("unshare");
         exit(EXIT_FAILURE);
     }
-
+#endif
     const char* debian_dirs[] = {"/dev", "/sys", "/run", "/tmp",
 #ifndef NOUNBIND
         "/proc",

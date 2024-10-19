@@ -64,8 +64,11 @@ void visible execute_sandbox(char* cmd, char** argv){
     }
     args[len] = NULL;
     pid_t pid = clone(execsnd,
-        child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | CLONE_NEWNS |
-             CLONE_NEWIPC | CLONE_VM | CLONE_VFORK | SIGCHLD , NULL
+        child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | 
+#ifndef NOUNBIND
+        CLONE_NEWNS |
+#endif
+        CLONE_NEWIPC | CLONE_VM | CLONE_VFORK | SIGCHLD , NULL
     );
     if (pid == -1) {
         perror("clone");
