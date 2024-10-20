@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Voidlinux Terminal (root)
+Comment=Enter Voidlinux subsystem terminal as root
+Exec=pkexec /bin/lsl /bin/bash
+Terminal=true
+Type=Application
+Icon=subsystem
+Categories=System;

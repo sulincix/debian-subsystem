@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Voidlinux Terminal
+Comment=Enter Voidlinux subsystem terminal
+Exec=/bin/lsl /bin/bash
+Terminal=true
+Type=Application
+Icon=subsystem
+Categories=System;
