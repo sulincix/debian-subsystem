@@ -27,3 +27,5 @@ wget https://repo-default.voidlinux.org/live/current/$fname -O - | xzcat | \
 tar -xvf -
 cat /etc/resolv.conf > /var/lib/subsystem/etc/resolv.conf
 cat /etc/machine-id > /var/lib/subsystem/etc/machine-id
+chroot /var/lib/subsystem/ xbps-pkgdb -ua
+chroot /var/lib/subsystem/ xbps-install -Syu
