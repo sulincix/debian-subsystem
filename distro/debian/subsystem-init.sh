@@ -50,7 +50,7 @@ system_init(){
     [[ $(uname -m) == "aarch64" ]] && arch=arm64
     [[ $(uname -m) == "i686" ]] && arch=i386
     [[ "$arch" == "" ]] && fail_exit $(_ "Unsupported arch")" $(uname -m)"
-    /usr/sbin/debootstrap --variant=minbase --arch=$arch --extractor=ar --no-check-gpg --extractor=ar stable /var/lib/subsystem/rootfs
+    /usr/sbin/debootstrap --variant=minbase --arch=$arch --no-check-gpg --extractor=ar stable /var/lib/subsystem/rootfs
     ls /var/lib/subsystem/ | while read line ; do
         rm -rf /var/lib/subsystem/rootfs/$line || true
     done
