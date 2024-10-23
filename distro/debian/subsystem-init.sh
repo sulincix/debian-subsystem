@@ -80,6 +80,9 @@ EOF
 cat > /var/lib/subsystem/etc/apt/apt.conf.d/99subsystem << EOF
 DPkg::Post-Invoke {"chroot /var/lib/lsl/system lsl true || true";};
 EOF
+    # _apt user
+    sed -i "/^_apt:x:.*/d" /var/lib/subsystem/etc/passwd
+    echo "_apt:x:0:0:root:/var/lib/dpkg:/bin/sh" >> /var/lib/subsystem/etc/passwd
 }
 
 if [[ -d /var/lib/subsystem/usr/share/ ]]; then
