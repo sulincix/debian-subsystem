@@ -74,10 +74,3 @@ int visible debrun_main(int argc, char **argv) {
     return 1;
 }
 
-static bool is_running(){
-     struct stat st;
-     char cgroup_procs_path[1024];
-     snprintf(cgroup_procs_path, sizeof(cgroup_procs_path), "%s/sys/fs/cgroup/debian/cgroup.procs", subsystem_path);
-     stat(cgroup_procs_path, &st);
-     return st.st_size != 0;
-}
