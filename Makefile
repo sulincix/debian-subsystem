@@ -1,9 +1,8 @@
 DESTDIR=/
 LIBDIR=/lib
-PAMDIR=/lib64/security
 DISTRO=debian
 SHELL=bash -e
-build: clean lsl pam buildmo
+build: clean lsl buildmo
 
 lsl:
 	mkdir -p build
@@ -20,15 +19,11 @@ lsl:
 	$(CC) -o build/test src/cli/test.c $(wildcard src/*.c) -Isrc -g3 -Wall -Wextra -Werror
 
 
-pam:
-	mkdir -p build
-	gcc -o build/pam_lsl.so src/pam/module.c -Lbuild -lpam -llsl -Isrc -shared -g3 -Wall -Wextra -Werror
-
 clean:
 	rm -rf build
 	rm -f po/*.mo
 
-install: install_lsl install_pam install_data install_distro installmo
+install: install_lsl install_data install_distro installmo
 
 install_data:
 	mkdir -p  $(DESTDIR)/etc/profile.d/
@@ -68,10 +63,6 @@ install_distro:
 	install distro/$(DISTRO)/logo.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/subsystem.svg
 	install distro/$(DISTRO)/lsl.desktop $(DESTDIR)/usr/share/applications/
 	install distro/$(DISTRO)/lsl-root.desktop $(DESTDIR)/usr/share/applications/
-
-install_pam:
-	mkdir -p $(DESTDIR)/$(PAMDIR)
-	install build/pam_lsl.so $(DESTDIR)/$(PAMDIR)
 
 buildmo:
 	@echo "Building the mo files"

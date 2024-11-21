@@ -81,20 +81,3 @@ static bool is_running(){
      stat(cgroup_procs_path, &st);
      return st.st_size != 0;
 }
-
-void visible pam_begin(){
-    mode_t u = umask(0022);
-    sync_uid(subsystem_path);
-    sync_gid(subsystem_path);
-    sync_desktop(subsystem_path);
-    mount_all(subsystem_path);
-    umask(u);
-}
-
-void visible pam_exit(){
-    create_dir(subsystem_path);
-    if(!is_running()){
-        umount_all(subsystem_path);
-    }
-}
-

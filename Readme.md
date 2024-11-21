@@ -17,21 +17,6 @@ debootstrap --arch=amd64 stable /var/lib/subsystem
 
 **Note:** If you use systemd distribution. you must use `make CFLAGS=-DNOUNBIND` for building. unbinding on systemd is broken (yet).
 
-### Optional: Building PAM Module
-
-A PAM module is available to automatically synchronize the subsystem during login, though it's disabled by default.
-To build and enable the PAM module, use the following commands:
-
-
-```
-# build pam module
-make pam
-# install pam module
-make install_pam
-# enable module
-echo -e "auth\toptional\tpam_lsl.so" >> /etc/pam.d/system-auth
-# Note: The file name may vary on your system.
-```
 
 ## How to use
 For creating shell:
