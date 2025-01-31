@@ -13,7 +13,7 @@
 
 #include <lsl.h>
 
-uid_t cur_uid;
+int cur_uid = -1;
 char *subsystem_path = "/var/lib/subsystem"; // Define the subsystem path
 
 int visible debrun_main(int argc, char **argv) {

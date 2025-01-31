@@ -9,7 +9,7 @@
 
 #include <lsl.h>
 
-extern uid_t cur_uid;
+extern int cur_uid;
 static char child_stack[1024*1024];
 
 static char* command;
@@ -39,12 +39,8 @@ static int execsnd() {
     return -1;
 }
 
-void visible sandbox_init(){
-    cur_uid = getuid();
-}
-
 void visible execute_sandbox(char* cmd, char** argv){
-    if(cur_uid == 0){
+    if(cur_uid == -1){
         cur_uid = getuid();
         setuid(0);
         if (getuid() != 0) {
@@ -53,7 +49,10 @@ void visible execute_sandbox(char* cmd, char** argv){
         }
     }
     if(getenv("LSL_NOSANDBOX") != NULL){
-        (void)setuid(cur_uid);
+        if (setuid(cur_uid) != 0) {
+            perror("setuid");
+            return;
+        }
         unsetenv("LSL_NOSANDBOX");        
         execvp(cmd, argv);
         perror("execvp");
