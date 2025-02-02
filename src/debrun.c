@@ -39,7 +39,7 @@ int visible debrun_main(int argc, char **argv) {
         }
     }
     if(strcmp(argv[1], "-u") == 0){
-        cgroup_kill(subsystem_path);
+        cgroup_kill("subsystem");
 #ifndef NOUNBIND
         umount_all(subsystem_path);
 #endif
@@ -55,7 +55,7 @@ int visible debrun_main(int argc, char **argv) {
     }
     disable_selinux();
     directory_init(subsystem_path);
-    cgroup_init(subsystem_path);
+    cgroup_init("subsystem");
     mount_all(subsystem_path);
     sync_uid(subsystem_path);
     sync_gid(subsystem_path);

@@ -105,16 +105,16 @@ void directory_init(char* subsystem_path){
     }
 }
 
-void cgroup_init(char* subsystem_path){
+void cgroup_init(char* subsystem_name){
     if(getenv("LSL_NOCGROUP") != NULL){
         return;
     }
     char cgroup_path[1024];
-    snprintf(cgroup_path, sizeof(cgroup_path), "%s/sys/fs/cgroup/subsystem", subsystem_path);
+    snprintf(cgroup_path, sizeof(cgroup_path), "/sys/fs/cgroup/%s", subsystem_name);
     create_dir(cgroup_path);
 
     char cgroup_procs_path[1024];
-    snprintf(cgroup_procs_path, sizeof(cgroup_procs_path), "%s/sys/fs/cgroup/subsystem/cgroup.procs", subsystem_path);
+    snprintf(cgroup_procs_path, sizeof(cgroup_procs_path), "/sys/fs/cgroup/%s/cgroup.procs", subsystem_name);
     FILE* cg = fopen(cgroup_procs_path, "w");
     if(cg == NULL){
        return;
@@ -123,18 +123,18 @@ void cgroup_init(char* subsystem_path){
     fclose(cg);
 }
 
-void cgroup_kill(char* subsystem_path){
+void cgroup_kill(char* subsystem_name){
     if(getenv("LSL_NOCGROUP") != NULL){
         return;
     }
     char cgroup_path[1024];
-    snprintf(cgroup_path, sizeof(cgroup_path), "%s/sys/fs/cgroup/subsystem/", subsystem_path);
+    snprintf(cgroup_path, sizeof(cgroup_path), "/sys/fs/cgroup/%s/", subsystem_name);
     if(!isdir(cgroup_path)){
         return;
     }
 
     char cgroup_kill_path[1024];
-    snprintf(cgroup_kill_path, sizeof(cgroup_kill_path), "%s/sys/fs/cgroup/subsystem/cgroup.kill", subsystem_path);
+    snprintf(cgroup_kill_path, sizeof(cgroup_kill_path), "/sys/fs/cgroup/%s/cgroup.kill", subsystem_name);
     FILE* cg = fopen(cgroup_kill_path, "w");
     if(cg == NULL){
        return;
