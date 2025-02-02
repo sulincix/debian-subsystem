@@ -4,5 +4,5 @@ Comment=Enter Debian subsystem terminal
 Exec=/bin/lsl /bin/bash
 Terminal=true
 Type=Application
-Icon=subsystem
+Icon=subsystem-debian
 Categories=System;

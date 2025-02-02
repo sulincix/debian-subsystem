@@ -4,5 +4,5 @@ Comment=Enter Voidlinux subsystem terminal
 Exec=/bin/lsl /bin/bash
 Terminal=true
 Type=Application
-Icon=subsystem
+Icon=subsystem-void
 Categories=System;

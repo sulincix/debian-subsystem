@@ -4,5 +4,5 @@ Comment=Enter Archlinux subsystem terminal as root
 Exec=pkexec /bin/lsl /bin/bash
 Terminal=true
 Type=Application
-Icon=subsystem
+Icon=subsystem-archlinux
 Categories=System;
