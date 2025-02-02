@@ -27,7 +27,7 @@ install: install_lsl install_data install_distro installmo
 
 install_data:
 	install -Dm644 data/subsystem.menu $(DESTDIR)/etc/xdg/menus/
-	install -Dm644data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/
+	install -Dm644 data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/
 	install -Dm755 data/lsl.env $(DESTDIR)/etc/profile.d/lsl.sh
 	install -Dm755 data/bash-completion.sh $(DESTDIR)/usr/share/bash-completion/completions/lsl
 	if [ -d /var/lib/dpkg/info ] ; then \
@@ -47,7 +47,7 @@ install_distro:
 	install -Dm644 distro/$(DISTRO)/subsystem-init.sh $(DESTDIR)/usr/libexec/
 	install -Dm644 distro/$(DISTRO)/logo.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/subsystem-$(DISTRO).svg
 	install -Dm755 distro/$(DISTRO)/lsl.desktop $(DESTDIR)/usr/share/applications/
-	install -Dm755distro/$(DISTRO)/lsl-root.desktop $(DESTDIR)/usr/share/applications/
+	install -Dm755 distro/$(DISTRO)/lsl-root.desktop $(DESTDIR)/usr/share/applications/
 
 buildmo:
 	@echo "Building the mo files"
