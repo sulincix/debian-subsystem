@@ -10,7 +10,9 @@ function run_xdg_autostart(){
     fi
     lsl $(grep ^Exec= "$file" | cut -f2 -d"=")
 }
-
+if [ ! -d /var/lib/subsystem/etc/xdg/autostart/ ] ; then
+    exit 0
+fi
 for file in /var/lib/subsystem/etc/xdg/autostart/*.desktop ; do
     run_xdg_autostart "$file"
 done
