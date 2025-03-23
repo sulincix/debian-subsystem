@@ -2,7 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <dirent.h>
+
+#include <sys/stat.h>
+#include <time.h>
 
 #include <lsl.h>
 
@@ -10,6 +14,30 @@
 
 void msg(const char *action, const char *info) {
     printf("%s: %s\n", action, info);
+}
+
+bool is_need_sync(const char* dir1, const char* dir2){
+    struct stat stat1, stat2;
+    if(!isdir(dir1) && !isfile(dir1)){
+        create_dir(dir1);
+    };
+    if(!isdir(dir2) && !isfile(dir2)){
+        create_dir(dir2);
+    };
+        
+     if (stat(dir1, &stat1) != 0) {
+        puts(dir1);
+        perror("stat failed for first directory");
+        return 1;
+    }
+
+    // Get the status of the second directory
+    if (stat(dir2, &stat2) != 0) {
+        puts(dir2);
+        perror("stat failed for second directory");
+        return 1;
+    }
+    return stat2.st_ctime < stat1.st_ctime;
 }
 
 void sync_gid(char* subsystem_path) {
@@ -94,6 +122,10 @@ int sync_desktop(char* subsystem_path) {
     
     for(size_t i = 0; i < (sizeof(dirs) / sizeof(char*)); i++) {
         snprintf(path, sizeof(path), "%s/var/lib/lsl/exports/%s", subsystem_path, dirs[i]);
+        snprintf(path2, sizeof(path2), "%s/usr/share/%s", subsystem_path, dirs[i]);
+        if(!is_need_sync(path2, path)){
+            continue;
+        }
         dp = opendir(path);
         if (dp != NULL) {
             while ((ep = readdir(dp)) != NULL) {

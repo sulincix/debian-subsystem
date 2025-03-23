@@ -28,12 +28,26 @@ int isdir(const char *path){
     }
 }
 
+int isfile(const char *path){
+    if(path == NULL){
+        return 0;
+    }
+    FILE* file = fopen(path,"r");
+    if(file){
+        fclose(file);
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+
 #define c_mkdir(A, B) \
     if (mkdir(A, B) < 0) { \
         fprintf(stderr, "Error: %s %s\n", "failed to create directory.", A); \
 }
 
-void create_dir(char *dir) {
+void create_dir(const char *dir) {
     char tmp[1024];
     char *p = NULL;
     size_t len;
