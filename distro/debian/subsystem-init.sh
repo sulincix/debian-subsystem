@@ -74,7 +74,7 @@ EOF
     fi
     # convert to nosystemd
     chroot /var/lib/subsystem/ apt install libpam-elogind -yq
-    chroot /var/lib/subsystem/ apt-mark hold systemd
+    chroot /var/lib/subsystem/ apt-mark hold systemd libsystemd0 libsystemd-shared
     ln -s true /var/lib/subsystem/bin/systemctl || true
     # update hook
 cat > /var/lib/subsystem/etc/apt/apt.conf.d/99subsystem << EOF
