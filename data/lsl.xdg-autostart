@@ -1,0 +1,16 @@
+#!/bin/bash
+set -o pipefail
+function run_xdg_autostart(){
+    file="$1"
+    if grep ^NotShowIn "$file" | grep $XDG_CURRENT_DESKTOP &>/dev/null; then
+        return 0
+    fi
+    if grep ^OnlyShowIn "$file" | grep -v $XDG_CURRENT_DESKTOP &>/dev/null; then
+        return 0
+    fi
+    lsl $(grep ^Exec= "$file" | cut -f2 -d"=")
+}
+
+for file in /var/lib/subsystem/etc/xdg/autostart/*.desktop ; do
+    run_xdg_autostart "$file"
+done

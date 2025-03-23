@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Subsystem Autostart
+Comment=Subsystem autostart
+Exec=/usr/libexec/lsl-xdg-autostart
+Terminal=false
+Type=Application
+Icon=subsystem
+Categories=System;

@@ -29,6 +29,8 @@ install_data:
 	install -Dm644 data/subsystem.menu $(DESTDIR)/etc/xdg/menus/
 	install -Dm644 data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/
 	install -Dm755 data/lsl.env $(DESTDIR)/etc/profile.d/lsl.sh
+	install -Dm755 data/lsl.xdg-autostart $(DESTDIR)/usr/libexec/lsl-xdg-autostart
+	install -Dm755 data/lsl-xdg-autostart.desktop $(DESTDIR)/etc/xdg/autostart/lsl-xdg-autostart.desktop
 	install -Dm755 data/bash-completion.sh $(DESTDIR)/usr/share/bash-completion/completions/lsl
 	if [ -d /var/lib/dpkg/info ] ; then \
 	    install -Dm755 data/lsl.xinit  $(DESTDIR)/etc/X11/Xsession.d/91-lsl ;\
