@@ -8,7 +8,7 @@ function run_xdg_autostart(){
     if grep ^OnlyShowIn "$file" | grep -v $XDG_CURRENT_DESKTOP &>/dev/null; then
         return 0
     fi
-    lsl $(grep ^Exec= "$file" | cut -f2 -d"=")
+    lsl $(grep ^Exec= "$file" | cut -f2 -d"=") &
 }
 if [ ! -d /var/lib/subsystem/etc/xdg/autostart/ ] ; then
     exit 0
