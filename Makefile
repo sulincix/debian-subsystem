@@ -26,8 +26,8 @@ clean:
 install: install_lsl install_data install_distro installmo
 
 install_data:
-	install -Dm644 data/subsystem.menu $(DESTDIR)/etc/xdg/menus/
-	install -Dm644 data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/
+	install -Dm644 data/subsystem.menu $(DESTDIR)/etc/xdg/menus/subsystem.menu
+	install -Dm644 data/subsystem.directory $(DESTDIR)/usr/share/desktop-directories/subsystem.directory
 	install -Dm755 data/lsl.env $(DESTDIR)/etc/profile.d/lsl.sh
 	install -Dm755 data/lsl.xdg-autostart $(DESTDIR)/usr/libexec/lsl-xdg-autostart
 	install -Dm755 data/lsl-xdg-autostart.desktop $(DESTDIR)/etc/xdg/autostart/lsl-xdg-autostart.desktop
