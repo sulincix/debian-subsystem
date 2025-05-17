@@ -41,7 +41,7 @@ install_data:
 install_lsl:
 	install -Dm755 build/lsl $(DESTDIR)/bin/lsl
 	install -Dm755 build/lsl-sandbox $(DESTDIR)/bin/lsl-sandbox
-	install -Dm755 build/liblsl.so $(DESTDIR)/$(LIBDIR)
+	install -Dm755 build/liblsl.so $(DESTDIR)/$(LIBDIR)/liblsl.so
 	chmod u+s $(DESTDIR)/bin/lsl || true
 	chmod u+s $(DESTDIR)/bin/lsl-sandbox || true
 
