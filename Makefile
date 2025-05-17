@@ -48,8 +48,8 @@ install_lsl:
 install_distro:
 	install -Dm644 distro/$(DISTRO)/subsystem-init.sh $(DESTDIR)/usr/libexec/
 	install -Dm644 distro/$(DISTRO)/logo.svg $(DESTDIR)/usr/share/icons/hicolor/scalable/apps/subsystem-$(DISTRO).svg
-	install -Dm755 distro/$(DISTRO)/lsl.desktop $(DESTDIR)/usr/share/applications/
-	install -Dm755 distro/$(DISTRO)/lsl-root.desktop $(DESTDIR)/usr/share/applications/
+	install -Dm755 distro/$(DISTRO)/lsl.desktop $(DESTDIR)/usr/share/applications/lsl.desktop
+	install -Dm755 distro/$(DISTRO)/lsl-root.desktop $(DESTDIR)/usr/share/applications/lsl-root.desktop
 
 buildmo:
 	@echo "Building the mo files"
