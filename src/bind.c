@@ -95,7 +95,9 @@ void mount_all(char* subsystem_dir){
         exit(EXIT_FAILURE);
     }
 #endif
-    const char* debian_dirs[] = {"/dev", "/sys", "/run", "/tmp",
+    char curdir[1024];
+    getcwd(curdir, sizeof(curdir));
+    const char* debian_dirs[] = {"/dev", "/sys", "/run", "/tmp",curdir,
 #ifdef NOUNBIND
         "/proc",
 #endif
