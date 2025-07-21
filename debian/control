@@ -2,12 +2,12 @@ Source: lsl
 Section: utils
 Priority: optional
 Maintainer: Your Name <you@example.org>
-Build-Depends: make, libpam-dev
+Build-Depends: make
 Standards-Version: 4.3.0
 Homepage: https://gitlab.com/sulincix/debian-subsystem
 
 Package: lsl
 Architecture: any
-Depends: libc6, xz-utils, debootstrap
+Depends: libc6, xz-utils
 Description: linux subsystem for linux
   lsl for debian
