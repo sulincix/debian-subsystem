@@ -47,7 +47,7 @@ void sync_gid(char* subsystem_path) {
     char dest_path[1024];
     strcpy(dest_path, subsystem_path);
     strcat(dest_path, "/etc/group");
-    char* ctx = malloc(1024*1024*1024*sizeof(char));
+    char* ctx = malloc(1024*1024*sizeof(char));
     strcpy(ctx,"");
     FILE *dest_file = fopen(dest_path, "r");
 
@@ -111,6 +111,7 @@ void sync_gid(char* subsystem_path) {
     fflush(dest_file);
     fclose(source_file);
     fclose(dest_file);
+    free(ctx);
 }
 
 int sync_desktop(char* subsystem_path) {
@@ -171,7 +172,7 @@ void sync_uid(char* subsystem_path) {
     char dest_path[1024];
     strcpy(dest_path, subsystem_path);
     strcat(dest_path, "/etc/passwd");
-    char* ctx = malloc(1024*1024*1024*sizeof(char));
+    char* ctx = malloc(1024*1024*sizeof(char));
     strcpy(ctx,"");
     FILE *dest_file = fopen(dest_path, "r");
 
@@ -248,5 +249,6 @@ void sync_uid(char* subsystem_path) {
     fflush(dest_file);
     fclose(source_file);
     fclose(dest_file);
+    free(ctx);
 }
 
