@@ -156,6 +156,7 @@ int sync_desktop(char* subsystem_path) {
                         fclose(out);
                     }
                 }
+                free(ctx);
             }
             closedir(dp);
         }
