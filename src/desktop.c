@@ -24,7 +24,7 @@ int is_symlink(char* path){
 
 #define MAX_LINE_LENGTH 1024*1024
 char* generate_desktop(char* path, char* subsystem_path) {
-    char* ctx = malloc(1024*1024*1024*sizeof(char));
+    char* ctx = malloc(11024*1024*sizeof(char));
     strcpy(ctx,"");
     char line[MAX_LINE_LENGTH];
     if (is_symlink(path)){
@@ -72,5 +72,7 @@ char* generate_desktop(char* path, char* subsystem_path) {
             }
         }
     }
-    return strdup(ctx);
+    char* ret = strdup(ctx);
+    free(ctx);
+    return ret;
 }
