@@ -19,7 +19,6 @@ int is_symlink(char* path){
         return 0;
     }
     return S_ISLNK(fileStat.st_mode);
-    
 }
 
 #define MAX_LINE_LENGTH 1024*1024
@@ -48,8 +47,8 @@ char* generate_desktop(char* path, char* subsystem_path) {
         }
         char* areas[] = {"Name=", "Version=", "Type=",
             "GenericName=","Comment=", "Keywords=","NoDisplay=",
-            "Icon=", "Terminal=", "MimeType=", "Exec=", "Categories="};
-        for(size_t i=0; i<sizeof(areas)/sizeof(char*); i++){
+            "Icon=", "Terminal=", "MimeType=", "Exec=", "Categories=", NULL};
+        for(size_t i=0; areas[i]; i++){
             if(startswith(line, areas[i])){
                 line[strlen(line)-1] = '\0';
                 if(startswith(line, "Exec=")){

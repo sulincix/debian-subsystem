@@ -12,11 +12,7 @@
 
 #define MAX_LINE_LENGTH 1024
 
-void msg(const char *action, const char *info) {
-    printf("%s: %s\n", action, info);
-}
-
-bool is_need_sync(const char* dir1, const char* dir2){
+static bool is_need_sync(const char* dir1, const char* dir2){
     struct stat stat1, stat2;
     if(!isdir(dir1) && !isfile(dir1)){
         create_dir(dir1);
@@ -24,7 +20,7 @@ bool is_need_sync(const char* dir1, const char* dir2){
     if(!isdir(dir2) && !isfile(dir2)){
         create_dir(dir2);
     };
-        
+
      if (stat(dir1, &stat1) != 0) {
         puts(dir1);
         perror("stat failed for first directory");
@@ -40,7 +36,7 @@ bool is_need_sync(const char* dir1, const char* dir2){
     return stat2.st_ctime < stat1.st_ctime;
 }
 
-void sync_gid(char* subsystem_path) {
+void sync_gid(const char* subsystem_path) {
     char line[MAX_LINE_LENGTH];
     char line_orig[MAX_LINE_LENGTH];
     FILE *source_file = fopen("/etc/group", "r");
@@ -114,14 +110,14 @@ void sync_gid(char* subsystem_path) {
     free(ctx);
 }
 
-int sync_desktop(char* subsystem_path) {
+int sync_desktop(const char* subsystem_path) {
     DIR *dp;
     struct dirent *ep;
     char path[1024];
     char path2[1024];
-    char* dirs[] = {"applications/", "xsessions/"};
-    
-    for(size_t i = 0; i < (sizeof(dirs) / sizeof(char*)); i++) {
+    char* dirs[] = {"applications/", "xsessions/", NULL};
+
+    for(size_t i = 0; dirs[i]; i++) {
         snprintf(path, sizeof(path), "%s/var/lib/lsl/exports/%s", subsystem_path, dirs[i]);
         snprintf(path2, sizeof(path2), "%s/usr/share/%s", subsystem_path, dirs[i]);
         if(!is_need_sync(path2, path)){
@@ -165,7 +161,7 @@ int sync_desktop(char* subsystem_path) {
     return 0;
 }
 
-void sync_uid(char* subsystem_path) {
+void sync_uid(const char* subsystem_path) {
     char line[MAX_LINE_LENGTH];
     char line_orig[MAX_LINE_LENGTH];
     FILE *source_file = fopen("/etc/passwd", "r");

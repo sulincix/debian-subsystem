@@ -67,7 +67,7 @@ void create_dir(const char *dir) {
         c_mkdir(tmp, 0755);
 }
 
-void directory_init(char* subsystem_path){
+void directory_init(const char* subsystem_path){
     // install and run debootstrap if does not exist
     char subsystem_etc_path[1024];
     snprintf(subsystem_etc_path, sizeof(subsystem_etc_path), "%s/etc/", subsystem_path);
@@ -92,8 +92,8 @@ void directory_init(char* subsystem_path){
         create_dir(imports_path);
     }
 
-    char* dirs[] = {"themes", "icons", "fonts", "pixmaps"};
-    for(size_t i=0; i<sizeof(dirs)/sizeof(char*) ;i++){
+    char* dirs[] = {"themes", "icons", "fonts", "pixmaps", NULL};
+    for(size_t i=0; dirs[i] ;i++){
         char path[1024];
         snprintf(path, sizeof(path), "%s/var/lib/lsl/exports/%s", subsystem_path, dirs[i]);
         if(access(path, F_OK) == -1){
@@ -119,7 +119,7 @@ void directory_init(char* subsystem_path){
     }
 }
 
-void cgroup_init(char* subsystem_name){
+void cgroup_init(const char* subsystem_name){
     if(getenv("LSL_NOCGROUP") != NULL){
         return;
     }
@@ -137,7 +137,7 @@ void cgroup_init(char* subsystem_name){
     fclose(cg);
 }
 
-void cgroup_kill(char* subsystem_name){
+void cgroup_kill(const char* subsystem_name){
     if(getenv("LSL_NOCGROUP") != NULL){
         return;
     }

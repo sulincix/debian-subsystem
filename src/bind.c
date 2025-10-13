@@ -46,7 +46,7 @@ int is_mount(const char *path) {
 }
 
 #define startswith(A,B) strncmp(A, B, strlen(A))
-static void umount_path(char* path){
+static void umount_path(const char* path){
     FILE *fp = fopen(MOUNTS_FILE, "r");
     if (fp == NULL) {
         perror("fopen");
@@ -67,20 +67,20 @@ static void umount_path(char* path){
     fclose(fp);
 }
 
-void umount_all(char* subsystem_dir){
+void umount_all(const char* subsystem_dir){
     char path[1024];
     strcpy(path, subsystem_dir);
     umount_path(path);
 }
 
-void umount_run_user(char* subsystem_dir){
+void umount_run_user(const char* subsystem_dir){
     char path[1024];
     strcpy(path, subsystem_dir);
     strcat(path, "/run");
     umount_path(path);
 }
 
-void mount_all(char* subsystem_dir){
+void mount_all(const char* subsystem_dir){
     if(unshare(CLONE_NEWNS)) {
         perror("unshare");
         exit(EXIT_FAILURE);
@@ -101,7 +101,7 @@ void mount_all(char* subsystem_dir){
 #ifdef NOUNBIND
         "/proc",
 #endif
-        getenv("XDG_RUNTIME_DIR"), getenv("HOME")};
+        getenv("XDG_RUNTIME_DIR"), getenv("HOME"), NULL};
 #ifndef NOUNBIND
     if(getenv("LSL_NOSANDBOX") != NULL){
         char debian_dir[1024];
@@ -116,10 +116,7 @@ void mount_all(char* subsystem_dir){
         }
     }
 #endif
-    for (size_t i = 0; i < sizeof(debian_dirs) / sizeof(char*); ++i) {
-        if(debian_dirs[i] == NULL){
-            continue;
-        }
+    for (size_t i = 0; debian_dirs[i]; ++i) {
         char debian_dir[1024];
         strcpy(debian_dir, subsystem_dir);
         strcat(debian_dir, debian_dirs[i]);

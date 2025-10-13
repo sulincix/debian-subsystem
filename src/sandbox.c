@@ -39,7 +39,7 @@ static int execsnd() {
     return -1;
 }
 
-void visible execute_sandbox(char* cmd, char** argv){
+void visible execute_sandbox(const char* cmd, char* argv[]){
     if(cur_uid == -1){
         cur_uid = getuid();
         setuid(0);
@@ -53,7 +53,7 @@ void visible execute_sandbox(char* cmd, char** argv){
             perror("setuid");
             return;
         }
-        unsetenv("LSL_NOSANDBOX");        
+        unsetenv("LSL_NOSANDBOX");
         execvp(cmd, argv);
         perror("execvp");
     }
@@ -66,7 +66,7 @@ void visible execute_sandbox(char* cmd, char** argv){
     }
     args[len] = NULL;
     pid_t pid = clone(execsnd,
-        child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS | 
+        child_stack+1024*1024, CLONE_NEWPID | CLONE_NEWUTS |
 #ifndef NOUNBIND
         CLONE_NEWNS |
 #endif
