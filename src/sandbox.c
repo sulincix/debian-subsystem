@@ -14,7 +14,8 @@ static char child_stack[1024*1024];
 
 static char* command;
 static char** args;
-static int execsnd() {
+static int execsnd(void* args) {
+    (void)args;
     if (sethostname("sandbox", 7) != 0) {
         perror("sethostname");
         return -1;
