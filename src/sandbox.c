@@ -14,8 +14,7 @@ static char child_stack[1024*1024];
 
 static char* command;
 static char** args;
-static int execsnd(void* args) {
-    (void)args;
+static int execsnd(void*) {
     if (sethostname("sandbox", 7) != 0) {
         perror("sethostname");
         return -1;
@@ -41,6 +40,9 @@ static int execsnd(void* args) {
 }
 
 void visible execute_sandbox(const char* cmd, char* argv[]){
+    for(size_t i=0; argv[i];i++){
+        printf("%s\n", argv[i]);
+    }
     if(cur_uid == -1){
         cur_uid = getuid();
         setuid(0);

@@ -70,7 +70,7 @@ int visible debrun_main(int argc, char **argv) {
     setenv("DEBCONF_NONINTERACTIVE_SEEN", "true",1);
     setenv("TERM", "linux",1);
     umask(u);
-    execute_sandbox(argv[1], &argv[1]);
+    execute_sandbox(argv[1], argv+1);
     return 1;
 }
 
