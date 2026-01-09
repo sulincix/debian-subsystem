@@ -40,9 +40,6 @@ static int execsnd(void*) {
 }
 
 void visible execute_sandbox(const char* cmd, char* argv[]){
-    for(size_t i=0; argv[i];i++){
-        printf("%s\n", argv[i]);
-    }
     if(cur_uid == -1){
         cur_uid = getuid();
         setuid(0);
