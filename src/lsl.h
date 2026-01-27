@@ -14,8 +14,6 @@ int sync_desktop(const char* subsystem_path);
 int debrun_main(int argc_main, char **argv_main);
 char* generate_desktop(const char* path, const char* subsystem_path);
 void mount_all(const char* subsystem_dir);
-void umount_all(const char* subsystem_dir);
-void umount_run_user(const char* subsystem_dir);
 int isdir(const char* path);
 int isfile(const char* path);
 void create_dir(const char* path);
