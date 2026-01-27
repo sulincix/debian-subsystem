@@ -15,8 +15,6 @@ debootstrap --arch=amd64 stable /var/lib/subsystem
 
 **Note:** If you have issue about undefined symbols you must use `make CFLAGS=-DNODLOPEN` for building.
 
-**Note:** If you use systemd distribution. you must use `make CFLAGS=-DNOUNBIND` for building. unbinding on systemd is broken (yet).
-
 
 ## How to use
 For creating shell:
@@ -71,14 +69,13 @@ export PULSE_SERVER=127.0.0.1
 
 * If you want to remove subsystem you must unbind before. Then check /proc/mounts and remove:
 ```sh
-# unbind
+# kill subsystem
 lsl -u
 # check: empty output is normal.
 mount | grep "/var/lib/subsystem"
 # remove rootfs
 rm -rf /var/lib/subsystem
 ```
-* If your distribution uses systemd. You cannot unbind. You can use live system for removing rootfs.
 
 ### Bug report:
 https://gitlab.com/sulincix/debian-subsystem/-/issues

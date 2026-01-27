@@ -13,7 +13,7 @@
 
 #include <lsl.h>
 extern char* subsystem_path;
-
+extern int cur_uid;
 
 int isdir(const char *path){
     if(path == NULL){
@@ -124,11 +124,11 @@ void cgroup_init(const char* subsystem_name){
         return;
     }
     char cgroup_path[1024];
-    snprintf(cgroup_path, sizeof(cgroup_path), "/sys/fs/cgroup/%s", subsystem_name);
+    snprintf(cgroup_path, sizeof(cgroup_path), "/sys/fs/cgroup/%s.%d", subsystem_name, cur_uid);
     create_dir(cgroup_path);
 
     char cgroup_procs_path[1024];
-    snprintf(cgroup_procs_path, sizeof(cgroup_procs_path), "/sys/fs/cgroup/%s/cgroup.procs", subsystem_name);
+    snprintf(cgroup_procs_path, sizeof(cgroup_procs_path), "/sys/fs/cgroup/%s.%d/cgroup.procs", subsystem_name, cur_uid);
     FILE* cg = fopen(cgroup_procs_path, "w");
     if(cg == NULL){
        return;
@@ -142,13 +142,13 @@ void cgroup_kill(const char* subsystem_name){
         return;
     }
     char cgroup_path[1024];
-    snprintf(cgroup_path, sizeof(cgroup_path), "/sys/fs/cgroup/%s/", subsystem_name);
+    snprintf(cgroup_path, sizeof(cgroup_path), "/sys/fs/cgroup/%s.%d", subsystem_name, cur_uid);
     if(!isdir(cgroup_path)){
         return;
     }
 
     char cgroup_kill_path[1024];
-    snprintf(cgroup_kill_path, sizeof(cgroup_kill_path), "/sys/fs/cgroup/%s/cgroup.kill", subsystem_name);
+    snprintf(cgroup_kill_path, sizeof(cgroup_kill_path), "/sys/fs/cgroup/%s.%d/cgroup.kill", subsystem_name, cur_uid);
     FILE* cg = fopen(cgroup_kill_path, "w");
     if(cg == NULL){
        return;
