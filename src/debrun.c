@@ -51,10 +51,10 @@ int visible debrun_main(int argc, char **argv) {
     disable_selinux();
     directory_init(subsystem_path);
     cgroup_init("subsystem");
-    mount_all(subsystem_path);
     sync_uid(subsystem_path);
     sync_gid(subsystem_path);
     sync_desktop(subsystem_path);
+    mount_all(subsystem_path);
     if (chroot(subsystem_path) != 0) {
         perror("chroot");
         exit(EXIT_FAILURE);
