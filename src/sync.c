@@ -11,29 +11,45 @@
 #include <lsl.h>
 
 #define MAX_LINE_LENGTH 1024
+#define PATH_MAX 2048
+
+static long int stat_r(const char* dir_path){
+    DIR *dir;
+    struct stat stat1;
+    struct dirent *ent;
+    char path[PATH_MAX];
+    long int time1 = 0;
+
+    if ((dir = opendir (dir_path)) != NULL) {
+        while ((ent = readdir (dir)) != NULL) {
+            if(ent->d_name[0] == '.'){
+                continue;
+            }
+            sprintf (path, "%s%s", dir_path, ent->d_name);
+            if (stat(path, &stat1) != 0) {
+                printf("Failed to stat: %s\n", path);
+                continue;
+            }
+            if(stat1.st_ctime > time1){
+                time1 = stat1.st_ctime;
+            }
+        }
+    }
+    return time1;
+}
 
 static bool is_need_sync(const char* dir1, const char* dir2){
-    struct stat stat1, stat2;
     if(!isdir(dir1) && !isfile(dir1)){
         create_dir(dir1);
     };
     if(!isdir(dir2) && !isfile(dir2)){
         create_dir(dir2);
     };
+    long int time1 = stat_r(dir1);
+    long int time2 = stat_r(dir2);
 
-     if (stat(dir1, &stat1) != 0) {
-        puts(dir1);
-        perror("stat failed for first directory");
-        return 1;
-    }
-
-    // Get the status of the second directory
-    if (stat(dir2, &stat2) != 0) {
-        puts(dir2);
-        perror("stat failed for second directory");
-        return 1;
-    }
-    return stat2.st_ctime < stat1.st_ctime;
+    
+    return time2 < time1;
 }
 
 void sync_gid(const char* subsystem_path) {
