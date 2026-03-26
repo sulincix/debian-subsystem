@@ -56,10 +56,17 @@ void sync_gid(const char* subsystem_path) {
     char line[MAX_LINE_LENGTH];
     char line_orig[MAX_LINE_LENGTH];
     FILE *source_file = fopen("/etc/group", "r");
-    char dest_path[1024];
+    if(!source_file){
+        return;
+    }
+    char dest_path[1024] = "";
     strcpy(dest_path, subsystem_path);
     strcat(dest_path, "/etc/group");
     char* ctx = malloc(1024*1024*sizeof(char));
+    if(!ctx){
+        fclose(source_file);
+        return;
+    }
     strcpy(ctx,"");
     FILE *dest_file = fopen(dest_path, "r");
 
@@ -119,10 +126,12 @@ void sync_gid(const char* subsystem_path) {
     }
     fclose(dest_file);
     dest_file = fopen(dest_path, "w");
-    fprintf(dest_file,"%s", ctx);
-    fflush(dest_file);
+    if(dest_file){
+        fprintf(dest_file,"%s", ctx);
+        fflush(dest_file);
+        fclose(dest_file);
+    }
     fclose(source_file);
-    fclose(dest_file);
     free(ctx);
 }
 
@@ -181,10 +190,17 @@ void sync_uid(const char* subsystem_path) {
     char line[MAX_LINE_LENGTH];
     char line_orig[MAX_LINE_LENGTH];
     FILE *source_file = fopen("/etc/passwd", "r");
-    char dest_path[1024];
+    if(!source_file){
+        exit(EXIT_FAILURE);
+    }
+    char dest_path[1024] = "";
     strcpy(dest_path, subsystem_path);
     strcat(dest_path, "/etc/passwd");
     char* ctx = malloc(1024*1024*sizeof(char));
+    if(!ctx){
+        fclose(source_file);
+        exit(EXIT_FAILURE);
+    }
     strcpy(ctx,"");
     FILE *dest_file = fopen(dest_path, "r");
 
@@ -257,10 +273,12 @@ void sync_uid(const char* subsystem_path) {
     }
     fclose(dest_file);
     dest_file = fopen(dest_path, "w");
-    fprintf(dest_file,"%s", ctx);
-    fflush(dest_file);
+    if(dest_file){
+        fprintf(dest_file,"%s", ctx);
+        fflush(dest_file);
+        fclose(dest_file);
+    }
     fclose(source_file);
-    fclose(dest_file);
     free(ctx);
 }
 

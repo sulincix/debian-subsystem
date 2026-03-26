@@ -95,12 +95,15 @@ void mount_all(const char* subsystem_dir){
             exit(EXIT_FAILURE);
         }
     }
-    char lsl_resolvconf[1024];
+    char lsl_resolvconf[1024] = "";
     strcpy(lsl_resolvconf, subsystem_dir);
     strcat(lsl_resolvconf, "/etc/resolv.conf");
     FILE *resolvconf = fopen(lsl_resolvconf, "r");
     if (!resolvconf){
         resolvconf = fopen(lsl_resolvconf, "w");
+        if(!resolvconf){
+            exit(EXIT_FAILURE);
+        }
     }
     fclose(resolvconf);
     if (mount("/etc/resolv.conf", lsl_resolvconf, NULL, MS_SILENT | MS_BIND | MS_PRIVATE | MS_RDONLY, NULL) != 0) {

@@ -61,6 +61,9 @@ void visible execute_sandbox(const char* cmd, char* argv[]){
     for(len=0;argv[len] != NULL; len++);
     command = strdup(cmd);
     args = calloc(len+1,sizeof(char*));
+    if(!args){
+        exit(EXIT_FAILURE);
+    }
     for(size_t i=0;i<len; i++){
         args[i] = strdup(argv[i]);
     }
