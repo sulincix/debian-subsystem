@@ -13,8 +13,6 @@ chmod u+s /bin/lsl
 debootstrap --arch=amd64 stable /var/lib/subsystem
 ```
 
-**Note:** If you have issue about undefined symbols you must use `make CFLAGS=-DNODLOPEN` for building.
-
 
 ## How to use
 For creating shell:
