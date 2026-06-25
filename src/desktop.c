@@ -21,14 +21,31 @@ int is_symlink(const char* path){
     return S_ISLNK(fileStat.st_mode);
 }
 
-#define MAX_LINE_LENGTH 1024*1024
+#define INIT_BUF_SIZE 4096
+#define LINE_BUF_SIZE 4096
+
+#define APPEND_BUF(buf, len, cap, src) do { \
+    size_t _add = strlen(src); \
+    size_t _need = (len) + _add + 1; \
+    if (_need > (cap)) { \
+        (cap) = _need + 4096; \
+        char* _new = realloc((buf), (cap)); \
+        if (!_new) { free(buf); return NULL; } \
+        (buf) = _new; \
+    } \
+    memcpy((buf) + (len), (src), _add + 1); \
+    (len) += _add; \
+} while(0)
+
 char* generate_desktop(const char* path, const char* subsystem_path) {
-    char* ctx = malloc(11024*1024*sizeof(char));
+    size_t ctx_len = 0;
+    size_t ctx_cap = INIT_BUF_SIZE;
+    char* ctx = malloc(ctx_cap);
     if(!ctx){
         return NULL;
     }
-    strcpy(ctx,"");
-    char line[MAX_LINE_LENGTH];
+    ctx[0] = '\0';
+    char line[LINE_BUF_SIZE];
     char fpath[1024];
     if (is_symlink(path)){
         char link[1024];
@@ -52,7 +69,7 @@ char* generate_desktop(const char* path, const char* subsystem_path) {
     }
     while (fgets(line, sizeof(line), source_file)) {
         if(line[0] == '[') {
-            strcat(ctx,line);
+            APPEND_BUF(ctx, ctx_len, ctx_cap, line);
         }
         char* areas[] = {"Name=", "Version=", "Type=",
             "GenericName=","Comment=", "Keywords=","NoDisplay=",
@@ -61,25 +78,26 @@ char* generate_desktop(const char* path, const char* subsystem_path) {
             if(startswith(line, areas[i])){
                 line[strlen(line)-1] = '\0';
                 if(startswith(line, "Exec=")){
-                    strcat(ctx, areas[i]);
-                    strcat(ctx, "lsl ");
-                    strcat(ctx, line+strlen(areas[i]));
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, areas[i]);
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, "lsl ");
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, line+strlen(areas[i]));
                 }else if(startswith(line, "Categories=")) {
-                    strcat(ctx, areas[i]);
-                    strcat(ctx, "subsystem;");
-                    strcat(ctx, line+strlen(areas[i]));
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, areas[i]);
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, "subsystem;");
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, line+strlen(areas[i]));
                 } else {
-                    strcat(ctx, areas[i]);
-                    strcat(ctx, line+strlen(areas[i]));
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, areas[i]);
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, line+strlen(areas[i]));
                 }
                 if(startswith(line, "Name=") || startswith(line, "GenericName=") ) {
-                    strcat(ctx, " (on subsystem)\n");
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, " (on subsystem)\n");
                 } else {
-                    strcat(ctx, "\n");
+                    APPEND_BUF(ctx, ctx_len, ctx_cap, "\n");
                 }
             }
         }
     }
+    fclose(source_file);
     char* ret = strdup(ctx);
     free(ctx);
     return ret;
