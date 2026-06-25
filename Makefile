@@ -2,21 +2,26 @@ DESTDIR=/
 LIBDIR=/lib
 DISTRO=debian
 SHELL=bash -e
+
+CFLAGS= -fno-plt -O3 -Isrc -fPIC -g3 \
+  -Wall -Wextra -Werror -Wno-unused-result \
+  -s -fvisibility=hidden
+
+
+OBJS=$(addsuffix .o, $(basename $(wildcard src/*.c)))
+
 build: clean lsl buildmo
 
-lsl:
-	mkdir -p build
-	$(CC) -o build/liblsl.so $(wildcard src/*.c) \
-	    -fno-plt -O3 -s -fvisibility=hidden -Isrc -shared \
-	    -fPIC -g3 -Wall -Wextra -Werror -Wno-unused-result \
-	    -nostdlib -lc $(CFLAGS)
-	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl \
-	    -fno-plt -O3 -s -fvisibility=hidden -Isrc -g3 \
-	    -Wall -Wextra -Werror $(CFLAGS)
-	$(CC) -o build/lsl-sandbox src/cli/lsl-sandbox.c -Lbuild -llsl \
-	    -fno-plt -O3 -s -fvisibility=hidden -Isrc -g3 \
-	    -Wall -Wextra -Werror $(CFLAGS)
-	$(CC) -o build/test src/cli/test.c $(wildcard src/*.c) -Isrc -g3 -Wall -Wextra -Werror
+%.o: %.c
+	mkdir -p build ; $(CC) -c $^ -o build/$(shell basename $@) $(CFLAGS)
+
+liblsl: $(OBJS)
+	$(CC) -o build/liblsl.so $(wildcard build/*.o) -shared -nostdlib -lc $(CFLAGS)
+
+lsl: liblsl
+	$(CC) -o build/lsl src/cli/lsl.c -Lbuild -llsl $(CFLAGS)
+	$(CC) -o build/lsl-sandbox src/cli/lsl-sandbox.c -Lbuild -llsl $(CFLAGS)
+	$(CC) -o build/test src/cli/test.c $(wildcard build/*.o) $(CFLAGS)
 
 
 clean:

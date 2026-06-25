@@ -77,6 +77,11 @@ void visible execute_sandbox(const char* cmd, char* argv[]){
     );
     if (pid == -1) {
         perror("clone");
+        for (size_t j = 0; j < len; j++) {
+            free(args[j]);
+        }
+        free(args);
+        free(command);
         exit(EXIT_FAILURE);
     }
     int status;
@@ -85,5 +90,6 @@ void visible execute_sandbox(const char* cmd, char* argv[]){
         free(args[j]);
     }
     free(args);
+    free(command);
     exit(status / 256);
 }

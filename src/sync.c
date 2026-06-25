@@ -73,8 +73,10 @@ void sync_gid(const char* subsystem_path) {
     strcpy(ctx,"");
     FILE *dest_file = fopen(dest_path, "r");
 
-    if (source_file == NULL || dest_file == NULL) {
+    if (dest_file == NULL) {
         perror("Error opening files");
+        free(ctx);
+        fclose(source_file);
         exit(EXIT_FAILURE);
     }
 
@@ -207,8 +209,10 @@ void sync_uid(const char* subsystem_path) {
     strcpy(ctx,"");
     FILE *dest_file = fopen(dest_path, "r");
 
-    if (source_file == NULL || dest_file == NULL) {
+    if (dest_file == NULL) {
         perror("Error opening files");
+        free(ctx);
+        fclose(source_file);
         exit(EXIT_FAILURE);
     }
 

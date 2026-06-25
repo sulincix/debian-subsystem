@@ -32,7 +32,12 @@ char* generate_desktop(const char* path, const char* subsystem_path) {
     char fpath[1024];
     if (is_symlink(path)){
         char link[1024];
-        (void)readlink(path, link, sizeof(link) - 1);
+        ssize_t link_len = readlink(path, link, sizeof(link) - 1);
+        if (link_len == -1) {
+            free(ctx);
+            return NULL;
+        }
+        link[link_len] = '\0';
         if(link[0] == '/'){
             strcpy(fpath, subsystem_path);
             strcat(fpath, link);
