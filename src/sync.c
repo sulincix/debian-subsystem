@@ -11,7 +11,10 @@
 #include <lsl.h>
 
 #define MAX_LINE_LENGTH 1024
+
+#ifndef PATH_MAX
 #define PATH_MAX 2048
+#endif
 
 static long int stat_r(const char* dir_path){
     DIR *dir;

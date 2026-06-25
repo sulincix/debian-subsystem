@@ -5,14 +5,14 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-int startswith(char* line, char* msg) {
+int startswith(const char* line, const char* msg) {
     if (strlen(line) < strlen(msg)) {
         return 0;
     }
     return 0 == strncmp(line, msg, strlen(msg));
 }
 
-int is_symlink(char* path){
+int is_symlink(const char* path){
     struct stat fileStat;
     if (lstat(path, &fileStat) < 0) {
         perror("lstat");
@@ -22,18 +22,18 @@ int is_symlink(char* path){
 }
 
 #define MAX_LINE_LENGTH 1024*1024
-char* generate_desktop(char* path, char* subsystem_path) {
+char* generate_desktop(const char* path, const char* subsystem_path) {
     char* ctx = malloc(11024*1024*sizeof(char));
     if(!ctx){
         return NULL;
     }
     strcpy(ctx,"");
     char line[MAX_LINE_LENGTH];
+    char fpath[1024];
     if (is_symlink(path)){
         char link[1024];
         (void)readlink(path, link, sizeof(link) - 1);
         if(link[0] == '/'){
-            char fpath[1024];
             strcpy(fpath, subsystem_path);
             strcat(fpath, link);
             path = fpath;
